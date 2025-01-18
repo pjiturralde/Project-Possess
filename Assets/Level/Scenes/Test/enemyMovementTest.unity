@@ -408,10 +408,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a8a4d6389daba49a28a6eb9c0b137d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 10
+  Speed: 5
   playerTransform: {fileID: 495519956}
   rb: {fileID: 0}
-  playerDirection: {x: 0, y: 0}
 --- !u!212 &1172982370
 SpriteRenderer:
   m_ObjectHideFlags: 0
