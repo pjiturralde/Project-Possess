@@ -1,8 +1,9 @@
+using Unity.Jobs;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class EnemyBehaviour : MonoBehaviour {
+public class MeleeEnemyBehaviour : MonoBehaviour {
 
     public float Speed = 5;
     public Transform playerTransform;
@@ -34,13 +35,11 @@ public class EnemyBehaviour : MonoBehaviour {
         numEnemies = 0;
 
         foreach (GameObject enemy in enemies) {
-            if (enemy != gameObject) {
-                Vector2 direction = playerTransform.position - enemy.transform.position;
-                float distance = direction.magnitude;
+            Vector2 direction = playerTransform.position - enemy.transform.position;
+            float distance = direction.magnitude;
 
-                if (distance < minDistance) {
-                    numEnemies++;
-                }
+            if (distance < minDistance + 0.5f) {
+                numEnemies++;
             }
         }
 
@@ -49,8 +48,9 @@ public class EnemyBehaviour : MonoBehaviour {
             isCircling = false;
         } else if (!directionClear() && isCircling == false) {
             if ((blocking.position - transform.position).magnitude <= mindDistance) {
-                if (numEnemies < 12) {
+                if (numEnemies < 13) {
                     isCircling = true;
+                    Debug.Log(numEnemies);
                 }
 
                 if (timer <= 0) {
@@ -68,37 +68,43 @@ public class EnemyBehaviour : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!isCircling) {
-            float radius = (playerTransform.position - transform.position).magnitude;
-            if (radius >= minDistance && numEnemies < 12) {
-                Vector2 seperationForce = Vector2.zero;
-                float minsDistance = 10;
+        float radius = (playerTransform.position - transform.position).magnitude;
+        if (radius <= minDistance - 0.5f) {
+            rb.linearVelocity = -playerDirection * Speed;
+        } else {
+            if (!isCircling) {
 
-                foreach (GameObject enemy in enemies) {
-                    if (enemy != gameObject) {
-                        Vector2 direction = transform.position - enemy.transform.position;
-                        float distance = direction.magnitude;
+                if (radius >= minDistance && numEnemies < 13) {
+                    Vector2 seperationForce = Vector2.zero;
+                    float minsDistance = 3;
 
-                        if (distance < minsDistance) {
-                            seperationForce += direction.normalized / distance;
+                    foreach (GameObject enemy in enemies) {
+                        if (enemy != gameObject) {
+                            Vector2 direction = transform.position - enemy.transform.position;
+                            float distance = direction.magnitude;
+
+                            if (distance < minsDistance) {
+                                seperationForce += direction.normalized / distance;
+                            }
                         }
                     }
-                }
 
-                rb.linearVelocity = playerDirection * Speed + seperationForce;
+                    rb.linearVelocity = playerDirection * Speed + seperationForce * 3;
+                } else {
+                    rb.linearVelocity = Vector2.zero;
+                    timer = 0;
+                }
             } else {
                 rb.linearVelocity = Vector2.zero;
-                timer = 0;
-            }
-        } else {
-            rb.linearVelocity = Vector2.zero;
 
-            if (numEnemies >= 12) {
-                isCircling = false;
-                Debug.Log(numEnemies);
+                if (numEnemies >= 13) {
+                    isCircling = false;
+                    Debug.Log(numEnemies);
+                }
+                rb.MovePosition(calculateNextPosition());
             }
-            rb.MovePosition(calculateNextPosition());
         }
+
     }
 
     private bool directionClear() {
