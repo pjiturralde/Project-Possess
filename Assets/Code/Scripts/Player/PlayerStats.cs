@@ -39,6 +39,7 @@ public class PlayerStats : MonoBehaviour {
     }
 
     void Update() {
+        Debug.Log(Money);
         // Checks if invulnerability frames are up
         HandleInvulnerability();
     }
