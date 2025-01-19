@@ -11,11 +11,12 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     public float Speed = 5;
     private Vector2 playerDirection;
-    private float minDistance = 3; // From player
+    private float minDistance = 2; // From player
     private float enemyCircleDist = 1.5f; // Distance from enemy in front that dictates when to start circling around that enemy
     private float timer; // Timer so that this enemy doesn't change circling directions too often
     private Transform blockingObject; // Any object that blocks the path of this enemy
     private int numEnemies; // Number of enemies surrounding player that are within minimum distance
+    private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
 
     // Augment behaviour
     public float raycastDistance = 2; 
@@ -32,6 +33,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     void Update() {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
 
@@ -48,9 +51,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             isCircling = false;
         } else if (!isFrontClear() && isCircling == false) {
             if ((blockingObject.position - transform.position).magnitude <= enemyCircleDist) {
-                if (numEnemies < 13) {
+                if (numEnemies < maxEnemies) {
                     isCircling = true;
-                    Debug.Log(numEnemies);
                 }
 
                 if (timer <= 0) {
@@ -74,9 +76,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         } else {
             if (!isCircling) {
 
-                if (radius >= minDistance && numEnemies < 13) {
-                    enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
+                if (radius >= minDistance && numEnemies < maxEnemies) {
                     Vector2 seperationForce = Vector2.zero;
                     float applyForceDistance = 3;
 
@@ -99,9 +99,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             } else {
                 rb.linearVelocity = Vector2.zero;
 
-                if (numEnemies >= 13) {
+                if (numEnemies >= maxEnemies) {
                     isCircling = false;
-                    Debug.Log(numEnemies);
                 }
                 rb.MovePosition(calculateNextPosition());
             }

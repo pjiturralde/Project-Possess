@@ -7,8 +7,9 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     public float Speed = 5;
     private Vector2 playerDirection;
     private float timer; // Timer to roll to retreat
+    private float timerStart = 1;
     public float minDistance = 6; // If player gets closer than this roll to move
-    public float maxDistance = 10;
+    public float maxDistance = 12;
     private float targetDistance; // Between minDistance and maxDistance
     private bool retreating;
     private bool reTarget;
@@ -17,7 +18,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
-        timer = 3;
+        timer = timerStart;
         reTarget = true;
         retreating = false;
     }
@@ -37,43 +38,41 @@ public class RangedEnemyBehaviour : MonoBehaviour {
             timer -= Time.deltaTime;
 
             if (timer <= 0 && !retreating) {
-                timer = 3;
+                timer = timerStart;
                 retreating = Random.Range(0, 2) == 1;
                 targetDistance = Random.Range(minDistance + 1, maxDistance + 1);
             }
         } else {
-            timer = 3;
+            timer = timerStart;
         }
     }
 
     private void FixedUpdate() {
         float playerDistance = (playerTransform.position - transform.position).magnitude;
 
+        rb.linearVelocity = Vector2.zero;
+
         if (playerDistance > targetDistance && !reTarget) {
-            rb.linearVelocity = playerDirection * Speed + calculateSeperationForce();
-            Debug.Log(rb.linearVelocity);
+            rb.linearVelocity = playerDirection * Speed + calculateSeperationForce(6, 4);
         } else if (playerDistance <= targetDistance) {
             if (!reTarget) {
                 reTarget = true;
-                rb.linearVelocity = Vector2.zero;
             }
         }
 
         if (playerDistance <= targetDistance && retreating) {
-            rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce();
+            rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce(2, 3);
         } else {
             if (retreating) {
                 retreating = false;
-                rb.linearVelocity = Vector2.zero;
             }
         }
     }
 
-    private Vector2 calculateSeperationForce() {
+    private Vector2 calculateSeperationForce(float applyForceDistance, float seperationFactor) {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         Vector2 seperationForce = Vector2.zero;
-        float applyForceDistance = 3;
 
         foreach (GameObject enemy in enemies) {
             if (enemy != gameObject) {
@@ -86,6 +85,6 @@ public class RangedEnemyBehaviour : MonoBehaviour {
             }
         }
 
-        return seperationForce * 3;
+        return seperationForce * seperationFactor;
     }
 }
