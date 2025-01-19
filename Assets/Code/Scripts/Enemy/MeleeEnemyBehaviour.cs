@@ -29,7 +29,6 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
         timer = 0f;
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
     }
 
     void Update() {
@@ -76,15 +75,17 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             if (!isCircling) {
 
                 if (radius >= minDistance && numEnemies < 13) {
+                    enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
                     Vector2 seperationForce = Vector2.zero;
-                    float minsDistance = 3;
+                    float applyForceDistance = 3;
 
                     foreach (GameObject enemy in enemies) {
                         if (enemy != gameObject) {
                             Vector2 direction = transform.position - enemy.transform.position;
                             float distance = direction.magnitude;
 
-                            if (distance < minsDistance) {
+                            if (distance < applyForceDistance) {
                                 seperationForce += direction.normalized / distance;
                             }
                         }
