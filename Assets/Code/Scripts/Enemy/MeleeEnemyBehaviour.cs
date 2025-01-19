@@ -27,6 +27,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private GameObject[] enemies;
 
     void Start() {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
         timer = 0f;

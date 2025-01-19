@@ -17,6 +17,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     private GameObject[] enemies;
 
     void Start() {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
         rb = GetComponent<Rigidbody2D>();
         timer = timerStart;
         reTarget = true;

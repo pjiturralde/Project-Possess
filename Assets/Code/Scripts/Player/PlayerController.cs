@@ -9,11 +9,12 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update() {
         inputDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         inputDir = inputDir.normalized;
+    }
 
+    private void FixedUpdate() {
         rb.linearVelocity = inputDir * moveSpeed;
     }
 }
