@@ -4,25 +4,26 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class MeleeEnemyBehaviour : MonoBehaviour {
-
-    public float Speed = 5;
+    // References
+    public LayerMask layerMask; // For player (exclude)
     public Transform playerTransform;
     public Rigidbody2D rb;
+
+    public float Speed = 5;
     private Vector2 playerDirection;
     private float minDistance = 3; // From player
-    private float mindDistance = 1.5f; // from ENEMY
-    public LayerMask layerMask;
-    private float timer;
-    private Transform blocking;
-    private int numEnemies;
+    private float enemyCircleDist = 1.5f; // Distance from enemy in front that dictates when to start circling around that enemy
+    private float timer; // Timer so that this enemy doesn't change circling directions too often
+    private Transform blockingObject; // Any object that blocks the path of this enemy
+    private int numEnemies; // Number of enemies surrounding player that are within minimum distance
 
     // Augment behaviour
-    public float raycastDistance = 20;
-    public float raycastSeperationDist = 2; // From center of enemy
+    public float raycastDistance = 2; 
+    public float raycastSeperationDist = 0.4f; // offset perpendicular to playerDirection
     private bool isCircling;
     private int perpendicularDir;
 
-    GameObject[] enemies;
+    private GameObject[] enemies;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -32,6 +33,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     void Update() {
+        playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
 
         foreach (GameObject enemy in enemies) {
@@ -43,11 +45,10 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             }
         }
 
-        playerDirection = (playerTransform.position - transform.position).normalized;
-        if (directionClear() && isCircling == true) {
+        if (isFrontClear() && isCircling == true) {
             isCircling = false;
-        } else if (!directionClear() && isCircling == false) {
-            if ((blocking.position - transform.position).magnitude <= mindDistance) {
+        } else if (!isFrontClear() && isCircling == false) {
+            if ((blockingObject.position - transform.position).magnitude <= enemyCircleDist) {
                 if (numEnemies < 13) {
                     isCircling = true;
                     Debug.Log(numEnemies);
@@ -60,7 +61,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             }
         }
 
-        if (directionClear()) {
+        if (isFrontClear()) {
             if (timer > 0) {
                 timer -= Time.deltaTime;
             }
@@ -107,7 +108,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     }
 
-    private bool directionClear() {
+    // Checks if front of the enemy is obstructed
+    private bool isFrontClear() {
         Vector2 origin = transform.position;
         Vector2 offset1 = origin + Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .5f;
         Vector2 offset2 = origin - Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .5f;
@@ -120,9 +122,9 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
         if (hit1.collider != null ||  hit2.collider != null) {
             if (hit1.collider != null) {
-                blocking = hit1.transform;
+                blockingObject = hit1.transform;
             } else {
-                blocking = hit2.transform;
+                blockingObject = hit2.transform;
             }
 
             return false;
@@ -131,8 +133,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         return true;
     }
 
+    // Calculates next orbit position when circling an obstacle
     private Vector2 calculateNextPosition() {
-        // first find orbit percent
         float radius = (playerTransform.position - transform.position).magnitude;
         float currentAngle = Mathf.Atan2(-playerDirection.x, -playerDirection.y) * Mathf.Rad2Deg;
 
