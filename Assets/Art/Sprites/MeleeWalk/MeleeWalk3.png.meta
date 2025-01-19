@@ -116,10 +116,10 @@ TextureImporter:
       name: MeleeWalk3_0
       rect:
         serializedVersion: 2
-        x: 19
+        x: 1
         y: 0
-        width: 212
-        height: 221
+        width: 23
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      MeleeWalk3_0: 5414961620752703090
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

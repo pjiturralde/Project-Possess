@@ -116,10 +116,10 @@ TextureImporter:
       name: MageWalk5_0
       rect:
         serializedVersion: 2
-        x: 29
+        x: 2
         y: 0
-        width: 192
-        height: 240
+        width: 21
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      MageWalk5_0: 7410038241589198275
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
