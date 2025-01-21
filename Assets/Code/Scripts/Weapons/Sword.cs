@@ -5,18 +5,22 @@ public class Sword : MonoBehaviour {
     private Transform player;
     private Vector3[] path = new Vector3[6];
     private Quaternion lookAtRotation;
+    private WeaponStats stats;
     private float damage;
     private bool attacking;
+    private float cdTimer;
 
     void Start() {
         player = transform.parent;
         attacking = false;
         damage = 10;
+        stats = GetComponent<WeaponStats>();
+        cdTimer = 0;
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
             new Vector3(-1f, 1.5f, 0),
-            new Vector3(0, 2, 0),
+            new Vector3(0, 3, 0),
             new Vector3(1f, 1.5f, 0),
             new Vector3(0.5f, 0, 0),
             new Vector3(0, 0, 0)
@@ -36,22 +40,27 @@ public class Sword : MonoBehaviour {
 
         Vector3[] newPath = new Vector3[path.Length];
 
-        for (int i = 0; i < path.Length; i++) {
-            newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i];
-        }
-
         if (Input.GetMouseButtonDown(0)) {
             if (!attacking) {
+                for (int i = 0; i < path.Length; i++) {
+                    newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i];
+                    path[i] = new Vector3(path[i].x * -1, path[i].y, 0);
+                }
+
                 attacking = true;
                 transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
 
                 Invoke(nameof(StopAttacking), 0.6f);
             }
         }
+
+        if (cdTimer > 0) {
+            cdTimer -= Time.deltaTime;
+        }
     }
 
     void StopAttacking() {
-        attacking = false;
+        cdTimer = stats.cooldown;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

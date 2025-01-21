@@ -3,9 +3,10 @@ using UnityEngine;
 public class WeaponStats : MonoBehaviour {
     // Core stats
     public int MaxDurability = 50;
+    public float cooldown;
 
     // Current stats
-    public int Durability;
+    public float Durability;
     public float Damage;
 
     // Cooldowns
@@ -17,7 +18,6 @@ public class WeaponStats : MonoBehaviour {
         Durability = MaxDurability;
         Invulnerable = false;
         Damage = 10;
-        AttackRate = 1;
     }
 
     void Update() {
@@ -40,7 +40,7 @@ public class WeaponStats : MonoBehaviour {
             return;
         }
 
-        //LoseDurability
+        LoseDurability(damage);
         TriggerInvulnerability();
     }
 
@@ -49,7 +49,7 @@ public class WeaponStats : MonoBehaviour {
         invulnerabilityDuration = 0.5D;
     }
 
-    private void LoseDurability(int amount) {
+    private void LoseDurability(float amount) {
         Durability -= amount;
 
         if (Durability <= 0) {
