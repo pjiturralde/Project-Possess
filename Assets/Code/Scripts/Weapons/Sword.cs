@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour {
     private Transform player;
-    private int slashDirection;
     private Vector3[] path = new Vector3[6];
     private Quaternion lookAtRotation;
+    private float damage;
     private bool attacking;
 
     void Start() {
-        slashDirection = -1;
         player = transform.parent;
         attacking = false;
+        damage = 10;
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
@@ -44,12 +44,7 @@ public class Sword : MonoBehaviour {
             if (!attacking) {
                 attacking = true;
                 transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
-                /*            transform.localEulerAngles = new Vector3(0, 0, 45 * slashDirection);*/
-                /*            transform.DORotate(new Vector3(0, 0, -90 * slashDirection), 0.6f, RotateMode.LocalAxisAdd);*/
-                /*            for (int i = 0; i < path.Length; i++) {
-                                path[i] = new Vector3(path[i].x * -1, path[i].y, path[i].z);
-                            }*/
-                slashDirection *= -1;
+
                 Invoke(nameof(StopAttacking), 0.6f);
             }
         }
@@ -57,5 +52,13 @@ public class Sword : MonoBehaviour {
 
     void StopAttacking() {
         attacking = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.CompareTag("Enemy")) {
+            EnemyStats enemy = collision.GetComponent<EnemyStats>();
+
+            enemy.TakeDamage(damage);
+        }
     }
 }
