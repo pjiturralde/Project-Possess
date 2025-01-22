@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Axe : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Axe : MonoBehaviour
     private float damage;
     private bool attacking;
     private bool canAttack;
+    private bool holdingClick;
     private float cdTimer;
 
     void Start() {
@@ -17,15 +19,9 @@ public class Axe : MonoBehaviour
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
         canAttack = true;
+        holdingClick = false;
 
-        path = new Vector3[] {
-            new Vector3(-0.5f, 0, 0),
-            new Vector3(-1f, 1.5f, 0),
-            new Vector3(0, 3, 0),
-            new Vector3(1f, 1.5f, 0),
-            new Vector3(0.5f, 0, 0),
-            new Vector3(0, 0, 0)
-        };
+        path = GenerateCirclePoints(1, 10);
     }
 
     void Update() {
@@ -41,11 +37,19 @@ public class Axe : MonoBehaviour
 
         Vector3[] newPath = new Vector3[path.Length];
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0) && !holdingClick) {
+            holdingClick = true;
+        }
+
+        if (Input.GetMouseButtonUp(0) && holdingClick) {
+            holdingClick = false;
+        }
+
+        if (holdingClick) {
             if (canAttack) {
                 for (int i = 0; i < path.Length; i++) {
                     newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i];
-                    path[i] = new Vector3(path[i].x * -1, path[i].y, 0);
+                    //path[i] = new Vector3(path[i].x * -1, path[i].y, 0);
                 }
 
                 attacking = true;
@@ -77,4 +81,22 @@ public class Axe : MonoBehaviour
             enemy.TakeDamage(damage);
         }
     }
+
+    private Vector3[] GenerateCirclePoints(float radius, int numSegments) {
+        Vector3[] points = new Vector3[numSegments+1];
+
+        for (int i = 0; i < numSegments+1; i++) {
+            float angle = i * Mathf.PI * 2 / numSegments;
+            float x = Mathf.Sin(angle) * radius;
+            float y = -Mathf.Cos(angle) * radius;
+            if (i == numSegments-1) {
+                Debug.Log(angle * Mathf.Rad2Deg);
+                Debug.Log(x);
+                Debug.Log(y);
+            }
+            points[i] = new Vector3(x, y, 0);
+        }
+
+        return points;
+    } 
 }
