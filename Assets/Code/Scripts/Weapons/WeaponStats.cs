@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class EnemyStats : MonoBehaviour {
+public class WeaponStats : MonoBehaviour {
     // Core stats
-    public int MaxHealth = 50;
+    public int MaxDurability = 50;
+    public float cooldown;
 
     // Current stats
-    public int Health;
-    public float DamageMultiplier;
-    public float AttackRate;
+    public float Durability;
+    public float Damage;
 
     // Cooldowns
     private bool Invulnerable;
@@ -15,10 +15,9 @@ public class EnemyStats : MonoBehaviour {
 
     void Start() {
         // Initialize starting values
-        Health = MaxHealth;
+        Durability = MaxDurability;
         Invulnerable = false;
-        DamageMultiplier = 1;
-        AttackRate = 1;
+        Damage = 10;
     }
 
     void Update() {
@@ -37,11 +36,11 @@ public class EnemyStats : MonoBehaviour {
 
     public void TakeDamage(float damage) {
         if (Invulnerable) {
-            Debug.Log("Player Invulnerable");
+            Debug.Log("Weapon Invulnerable");
             return;
         }
 
-        //LoseHealth
+        LoseDurability(damage);
         TriggerInvulnerability();
     }
 
@@ -50,16 +49,16 @@ public class EnemyStats : MonoBehaviour {
         invulnerabilityDuration = 0.5D;
     }
 
-    private void LoseHealth(int amount) {
-        Health -= amount;
+    private void LoseDurability(float amount) {
+        Durability -= amount;
 
-        if (Health <= 0) {
-            Die();
+        if (Durability <= 0) {
+            Break();
         }
     }
 
-    private void Die() {
-        Debug.Log("Enemy has died");
-        // Add death handling here
+    private void Break() {
+        Debug.Log("Weapon has been broken");
+        // Add break handling here
     }
 }
