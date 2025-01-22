@@ -8,6 +8,7 @@ public class Sword : MonoBehaviour {
     private WeaponStats stats;
     private float damage;
     private bool attacking;
+    private bool canAttack;
     private float cdTimer;
 
     void Start() {
@@ -16,6 +17,7 @@ public class Sword : MonoBehaviour {
         damage = 10;
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
+        canAttack = true;
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
@@ -41,13 +43,14 @@ public class Sword : MonoBehaviour {
         Vector3[] newPath = new Vector3[path.Length];
 
         if (Input.GetMouseButtonDown(0)) {
-            if (!attacking) {
+            if (canAttack) {
                 for (int i = 0; i < path.Length; i++) {
                     newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i];
                     path[i] = new Vector3(path[i].x * -1, path[i].y, 0);
                 }
 
                 attacking = true;
+                canAttack = false;
                 transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
 
                 Invoke(nameof(StopAttacking), 0.6f);
@@ -56,15 +59,20 @@ public class Sword : MonoBehaviour {
 
         if (cdTimer > 0) {
             cdTimer -= Time.deltaTime;
+
+            if (cdTimer <= 0) {
+                canAttack = true;
+            }
         }
     }
 
     void StopAttacking() {
+        attacking = false;
         cdTimer = stats.cooldown;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Enemy")) {
+        if (collision.CompareTag("Enemy") && attacking) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
             enemy.TakeDamage(damage);

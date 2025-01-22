@@ -1167,7 +1167,7 @@ GameObject:
   - component: {fileID: 1972203971}
   m_Layer: 0
   m_Name: Sword
-  m_TagString: Untagged
+  m_TagString: PlayerWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1310,6 +1310,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8144f88fa5e253042a1e87af1b31593b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxDurability: 50
+  cooldown: 1
+  Durability: 0
+  Damage: 0
 --- !u!1 &1980247270
 GameObject:
   m_ObjectHideFlags: 0

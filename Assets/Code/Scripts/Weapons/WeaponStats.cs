@@ -58,7 +58,7 @@ public class WeaponStats : MonoBehaviour {
     }
 
     private void Break() {
-        Debug.Log("Enemy has died");
+        Debug.Log("Weapon has been broken");
         // Add break handling here
     }
 }
