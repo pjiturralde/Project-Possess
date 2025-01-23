@@ -46,7 +46,8 @@ public class Spear : MonoBehaviour {
             if (Input.GetMouseButton(0)) {
                 timeHeld += Time.deltaTime;
                 line.enabled = true;
-                line.SetPosition(1, new Vector2(0, ATTACK_RANGE * charge / 2));
+                line.SetPosition(0, weaponPosition);
+                line.SetPosition(1, targetPosition);
             } 
             //If left click is released
             else if (timeHeld != 0) {
