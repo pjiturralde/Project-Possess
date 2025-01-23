@@ -54,9 +54,17 @@ public class Axe : MonoBehaviour
 
                 attacking = true;
                 canAttack = false;
-                transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
 
-                Invoke(nameof(StopAttacking), 0.6f);
+                Sequence sequence1 = DOTween.Sequence();
+                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, -1, 0), 0.3f));
+                sequence1.Append(transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom));
+                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, 0, 0), 0.3f));
+
+                Sequence sequence2 = DOTween.Sequence();
+                sequence2.AppendInterval(0.3f);
+                sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 360), 0.6f, RotateMode.LocalAxisAdd));
+
+                Invoke(nameof(StopAttacking), 1.2f);
             }
         }
 
