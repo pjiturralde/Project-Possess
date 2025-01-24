@@ -971,7 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1642512073}
   MaxHealth: 50
-  MovementSpeed: 10
+  MovementSpeed: 6
   Health: 0
   DamageMultiplier: 0
   AttackRate: 0

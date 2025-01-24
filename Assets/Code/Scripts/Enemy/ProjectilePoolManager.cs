@@ -22,8 +22,8 @@ public class ProjectilePoolManager : MonoBehaviour {
 
     void Start() {
         for (int i = 0; i < poolSize; i++) {
-            GameObject projectileInstance = Instantiate(projectilePrefab);
-            projectileInstance.transform.SetParent(transform);
+            GameObject projectileInstance = Instantiate(projectilePrefab, transform);
+            /*            projectileInstance.transform.SetParent(transform);*/
             DisableInstance(projectileInstance);
             pool.Add(projectileInstance);
         }
@@ -52,7 +52,7 @@ public class ProjectilePoolManager : MonoBehaviour {
         SpriteRenderer sprite = instance.GetComponent<SpriteRenderer>();
         Projectile projectile = instance.GetComponent<Projectile>();
 
-        projectile.SetDirection(Vector2.zero);
+        Debug.Log(projectile.name);
         rb.bodyType = RigidbodyType2D.Static;
         collider.enabled = false;
         sprite.enabled = false;

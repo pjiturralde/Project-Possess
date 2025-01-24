@@ -10,9 +10,7 @@ public class Projectile : MonoBehaviour {
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         poolManager = ProjectilePoolManager.instance;
-        speed = 0.5f;
         direction = Vector2.zero;
-        rb.linearVelocity = direction * speed;
         mainCamera = Camera.main;
     }
 
@@ -21,12 +19,16 @@ public class Projectile : MonoBehaviour {
         rb.linearVelocity = direction * speed;
     }
 
+    public void SetSpeed(float speed) {
+        this.speed = speed;
+    }
+
     private void Update() {
         Vector3 viewportPosition = mainCamera.WorldToViewportPoint(transform.position);
 
         // check if off player screen
-        if (viewportPosition.x < -0.1f || viewportPosition.x > 1.1f ||
-            viewportPosition.y < -0.1f || viewportPosition.y > 1.1f) {
+        if (viewportPosition.x < -0.5f || viewportPosition.x > 1.5f ||
+            viewportPosition.y < -0.5f || viewportPosition.y > 1.5f) {
             // Send back to le pool
             poolManager.DisableInstance(gameObject);
         }
