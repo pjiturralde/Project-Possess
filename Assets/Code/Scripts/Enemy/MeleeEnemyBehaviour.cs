@@ -8,12 +8,15 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     public LayerMask layerMask; // For player (exclude)
     public Transform playerTransform;
     public Rigidbody2D rb;
+    private SpriteRenderer renderer;
+    private EnemyAxe axe;
 
     public float Speed = 5;
     private Vector2 playerDirection;
     private float minDistance = 2; // From player
     private float enemyCircleDist = 1.5f; // Distance from enemy in front that dictates when to start circling around that enemy
-    private float timer; // Timer so that this enemy doesn't change circling directions too often
+    private float changeCirclingDirTimer; // Timer so that this enemy doesn't change circling directions too often
+    private float attackTimer; // Timer for when to attack!! raaahhh!!!
     private Transform blockingObject; // Any object that blocks the path of this enemy
     private int numEnemies; // Number of enemies surrounding player that are within minimum distance
     private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
@@ -28,9 +31,12 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     void Start() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        renderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
-        timer = 0f;
+        changeCirclingDirTimer = 0f;
+        attackTimer = 0f;
+        axe = GetComponentInChildren<EnemyAxe>();
     }
 
     void Update() {
@@ -38,6 +44,14 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
+
+        if (playerDirection.x < 0 && !renderer.flipX) {
+            renderer.flipX = true;
+            axe.ChangeDirection();
+        } else if (playerDirection.x >= 0 && renderer.flipX) {
+            renderer.flipX = false;
+            axe.ChangeDirection();
+        }
 
         foreach (GameObject enemy in enemies) {
             Vector2 direction = playerTransform.position - enemy.transform.position;
@@ -56,22 +70,23 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     isCircling = true;
                 }
 
-                if (timer <= 0) {
+                if (changeCirclingDirTimer <= 0) {
                     perpendicularDir = Random.Range(0, 2) == 0 ? 1 : -1;
-                    timer = 2;
+                    changeCirclingDirTimer = 2;
                 }
             }
         }
 
         if (isFrontClear()) {
-            if (timer > 0) {
-                timer -= Time.deltaTime;
+            if (changeCirclingDirTimer > 0) {
+                changeCirclingDirTimer -= Time.deltaTime;
             }
         }
     }
 
     private void FixedUpdate() {
         float radius = (playerTransform.position - transform.position).magnitude;
+        // if too close, retreat, if far, circle around obstacles and get near
         if (radius <= minDistance - 0.5f) {
             rb.linearVelocity = -playerDirection * Speed;
         } else {
@@ -95,7 +110,19 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     rb.linearVelocity = playerDirection * Speed + seperationForce * 3;
                 } else {
                     rb.linearVelocity = Vector2.zero;
-                    timer = 0;
+                    changeCirclingDirTimer = 0;
+
+                    // ATTACK!
+                    if (attackTimer > 0) {
+                        attackTimer -= Time.deltaTime;
+
+                        if (attackTimer <= 0) {
+                            attackTimer = 3;
+
+
+                            // DAMAGE PLAYER RAAHHH!!
+                        }
+                    }
                 }
             } else {
                 rb.linearVelocity = Vector2.zero;
