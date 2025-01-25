@@ -118,7 +118,7 @@ TextureImporter:
         serializedVersion: 2
         x: 1
         y: 0
-        width: 23
+        width: 22
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      MageWalk8_0: 4503770572140599033
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
