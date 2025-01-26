@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f6a6f91c3dc91144aadf64d9ae6ced32
+guid: 7f0ed92c6cc5da541984ecdaaf679a2f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7410038241589198275
-    second: MageWalk5_0
+      213: 6108012597462862368
+    second: Spear_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MageWalk5_0
+      name: Spear_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 0
         y: 0
-        width: 21
-        height: 24
+        width: 8
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3cdfbf9458eb5d660800000000000000
-      internalID: 7410038241589198275
+      spriteID: 02a8263881504c450800000000000000
+      internalID: 6108012597462862368
       vertices: []
       indices: 
       edges: []

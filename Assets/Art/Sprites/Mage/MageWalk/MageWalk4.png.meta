@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3e172c245d651c6458ead95284b1ec96
+guid: 5f3bd671a8833ac4d913e3560c4473a7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2804053903515136772
-    second: PP_Sword_0
+      213: -7726164007374851712
+    second: MageWalk4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PP_Sword_0
+      name: MageWalk4_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 0
-        width: 16
-        height: 40
+        width: 22
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 40331123b200ae620800000000000000
-      internalID: 2804053903515136772
+      spriteID: 081730035c627c490800000000000000
+      internalID: -7726164007374851712
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      PP_Sword_0: 2804053903515136772
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
