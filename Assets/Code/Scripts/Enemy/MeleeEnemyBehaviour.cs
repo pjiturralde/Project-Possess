@@ -8,7 +8,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     public LayerMask layerMask; // For player (exclude)
     public Transform playerTransform;
     public Rigidbody2D rb;
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
     private EnemyAxe axe;
 
     public float Speed = 5;
@@ -31,7 +31,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     void Start() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        renderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
         changeCirclingDirTimer = 0f;
@@ -45,11 +45,11 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
 
-        if (playerDirection.x < 0 && !renderer.flipX) {
-            renderer.flipX = true;
+        if (playerDirection.x < 0 && !spriteRenderer.flipX) {
+            spriteRenderer.flipX = true;
             axe.ChangeDirection();
-        } else if (playerDirection.x >= 0 && renderer.flipX) {
-            renderer.flipX = false;
+        } else if (playerDirection.x >= 0 && spriteRenderer.flipX) {
+            spriteRenderer.flipX = false;
             axe.ChangeDirection();
         }
 

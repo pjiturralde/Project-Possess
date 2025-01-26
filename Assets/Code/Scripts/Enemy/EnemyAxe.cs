@@ -15,13 +15,13 @@ public class EnemyAxe : MonoBehaviour {
         enemyRenderer = meleeEnemyBehaviour.GetComponent<SpriteRenderer>();
 
         // set first position and rotation
-        transform.localPosition = new Vector2(0, 0.05f);
-        transform.localRotation = Quaternion.Euler(0, 0, 55);
+        transform.localPosition = new Vector2(0.07f, 0.02f);
+        transform.localRotation = Quaternion.Euler(0, 0, 145);
     }
 
     public void PlayAttackAnimation() {
         transform.localPosition = new Vector2(0, 0.05f);
-        transform.localRotation = Quaternion.Euler(0, 0, 55);
+        transform.localRotation = Quaternion.Euler(0, 0, 145);
 
         Sequence sequence1 = DOTween.Sequence();
         sequence1.Append(transform.DOLocalPath(path, 0.4f, PathType.CatmullRom));
@@ -47,11 +47,11 @@ public class EnemyAxe : MonoBehaviour {
             xDirection = -1;
         }
 
-        transform.localPosition = new Vector2(0.1f * xDirection, 0);
-        transform.localRotation = Quaternion.Euler(0, 0, -90 * xDirection);
+        transform.localPosition = new Vector2(0.15f * xDirection, 0);
+        transform.localRotation = Quaternion.Euler(0, 0, -90 + (90 * xDirection));
 
-        transform.DOLocalMove(new Vector2(0, 0.05f), 0.2f);
-        transform.DOLocalRotate(new Vector3(0, 0, 55 * xDirection), 0.2f);
+        transform.DOLocalMove(new Vector2(0.07f * xDirection, 0.02f), 0.2f);
+        transform.DOLocalRotate(new Vector3(0, 0, 90 + 55 * xDirection), 0.2f);
     }
 
     private void ReverseZOrder() {

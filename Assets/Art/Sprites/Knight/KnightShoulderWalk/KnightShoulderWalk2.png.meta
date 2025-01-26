@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      KnightShoulderWalk2_0: 5829637690574088113
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
