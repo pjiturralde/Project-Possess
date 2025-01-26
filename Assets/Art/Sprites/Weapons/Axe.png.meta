@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3e172c245d651c6458ead95284b1ec96
+guid: 2ba5f87f37941a14ca79642ba5454e24
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2804053903515136772
-    second: PP_Sword_0
+      213: -5825250732961213246
+    second: Axe_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PP_Sword_0
+      name: Axe_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 40
+        width: 20
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 40331123b200ae620800000000000000
-      internalID: 2804053903515136772
+      spriteID: 2c45346625d882fa0800000000000000
+      internalID: -5825250732961213246
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PP_Sword_0: 2804053903515136772
+      Axe_0: -5825250732961213246
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

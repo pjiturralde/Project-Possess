@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9d82920688380d5409a0543f94d90166
+guid: b52e39217726369459f149b487224644
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4072608811904563830
-    second: PP_Axe_0
+      213: -6853395850157021437
+    second: MageWalk2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PP_Axe_0
+      name: MageWalk2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 20
-        height: 32
+        width: 24
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a858d49fcdf2b77c0800000000000000
-      internalID: -4072608811904563830
+      spriteID: 307214ef8c8d3e0a0800000000000000
+      internalID: -6853395850157021437
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PP_Axe_0: -4072608811904563830
+      MageWalk2_0: -6853395850157021437
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

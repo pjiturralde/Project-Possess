@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f1be0e35ba1ec7b41990a40d2916a58c
+guid: d3853b61295f7b043b90589e9e617fb0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 118126353655649180
-    second: MageWalk1_0
+      213: -5684364713028744254
+    second: MageWalk6_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MageWalk1_0
+      name: MageWalk6_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 0
-        width: 24
-        height: 24
+        width: 20
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c93d144fa4ba3a100800000000000000
-      internalID: 118126353655649180
+      spriteID: 2cb082a19641d11b0800000000000000
+      internalID: -5684364713028744254
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MageWalk1_0: 118126353655649180
+      MageWalk6_0: -5684364713028744254
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
