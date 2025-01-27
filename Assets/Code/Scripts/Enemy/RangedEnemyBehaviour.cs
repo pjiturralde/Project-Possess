@@ -1,13 +1,18 @@
 using UnityEngine;
+using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
 public class RangedEnemyBehaviour : MonoBehaviour {
     public Transform playerTransform;
     public Rigidbody2D rb;
+    private SpriteRenderer bodySpriteRenderer;
+    public Animator animator;
 
     public float Speed = 5;
     private Vector2 playerDirection;
     private float timer; // Timer to roll to retreat
-    private float timerStart = 1;
+    private float runTime; // HOW LONG THE MAGE HAS BEEN RUNNING!
+    public float maxRunTime = 3; // HOW LONG THE MAGE CAN RUN!
+    private float timerStart = 2;
     public float minDistance = 6; // If player gets closer than this roll to move
     public float maxDistance = 12;
     private float targetDistance; // Between minDistance and maxDistance
@@ -19,8 +24,10 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     void Start() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         rb = GetComponent<Rigidbody2D>();
+        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
         timer = timerStart;
         reTarget = true;
+        runTime = maxRunTime;
         retreating = false;
     }
 
@@ -35,7 +42,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
             }
         }
 
-        if (playerDistance < minDistance) {
+        if (playerDistance < minDistance && !retreating) {
             timer -= Time.deltaTime;
 
             if (timer <= 0 && !retreating) {
@@ -46,15 +53,31 @@ public class RangedEnemyBehaviour : MonoBehaviour {
         } else {
             timer = timerStart;
         }
+
+        if (rb.linearVelocity.x < 0 && !bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = true;
+        } else if (rb.linearVelocity.x > 0 && bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = false;
+        } else if (rb.linearVelocity.x == 0) {
+            if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
+                bodySpriteRenderer.flipX = true;
+            } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
+                bodySpriteRenderer.flipX = false;
+            }
+        }
     }
 
     private void FixedUpdate() {
+        animator.SetFloat("Speed", 0); // set le speed to 0 for animation
+
         float playerDistance = (playerTransform.position - transform.position).magnitude;
 
         rb.linearVelocity = Vector2.zero;
 
         if (playerDistance > targetDistance && !reTarget) {
+            runTime = maxRunTime;
             rb.linearVelocity = playerDirection * Speed + calculateSeperationForce(6, 4);
+            animator.SetFloat("Speed", 1);
         } else if (playerDistance <= targetDistance) {
             if (!reTarget) {
                 reTarget = true;
@@ -63,6 +86,16 @@ public class RangedEnemyBehaviour : MonoBehaviour {
 
         if (playerDistance <= targetDistance && retreating) {
             rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce(2, 3);
+            animator.SetFloat("Speed", 1);
+
+            if (runTime > 0) {
+                runTime -= Time.deltaTime;
+
+                if (runTime <= 0) {
+                    runTime = maxRunTime;
+                    retreating = false;
+                }
+            }
         } else {
             if (retreating) {
                 retreating = false;

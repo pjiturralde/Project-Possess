@@ -116,12 +116,12 @@ TextureImporter:
       name: KnightShoulderWalk1_0
       rect:
         serializedVersion: 2
-        x: 13
-        y: 7
-        width: 11
-        height: 10
+        x: 0
+        y: 0
+        width: 24
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 9ecea9e5b2af2634a94064030596c939
     internalID: 0
     vertices: []
     indices: 

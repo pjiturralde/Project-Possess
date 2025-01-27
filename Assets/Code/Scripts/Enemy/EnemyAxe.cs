@@ -5,14 +5,16 @@ using UnityEngine;
 public class EnemyAxe : MonoBehaviour {
     private PlayerManager playerManager;
     private MeleeEnemyBehaviour meleeEnemyBehaviour;
-    private SpriteRenderer enemyRenderer;
+    private SpriteRenderer bodySpriteRenderer;
+    private SpriteRenderer shoulderSpriteRenderer;
     private Vector3[] path;
 
     void Start() {
         path = GeneratePartCirclePoints(0.11f, 5);
         playerManager = PlayerManager.instance;
         meleeEnemyBehaviour = transform.parent.GetComponent<MeleeEnemyBehaviour>();
-        enemyRenderer = meleeEnemyBehaviour.GetComponent<SpriteRenderer>();
+        bodySpriteRenderer = transform.parent.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
+        shoulderSpriteRenderer = transform.parent.Find("Shoulder").GetComponent<SpriteRenderer>();
 
         // set first position and rotation
         transform.localPosition = new Vector2(0.07f, 0.02f);
@@ -41,14 +43,14 @@ public class EnemyAxe : MonoBehaviour {
         int xDirection;
 
         DOTween.Kill(transform);
-        if (!enemyRenderer.flipX) {
+        if (!bodySpriteRenderer.flipX) {
             xDirection = 1;
         } else {
             xDirection = -1;
         }
 
         transform.localPosition = new Vector2(0.15f * xDirection, 0);
-        transform.localRotation = Quaternion.Euler(0, 0, -90 + (90 * xDirection));
+        transform.localRotation = Quaternion.Euler(0, 0, -90 + (80 * xDirection));
 
         transform.DOLocalMove(new Vector2(0.07f * xDirection, 0.02f), 0.2f);
         transform.DOLocalRotate(new Vector3(0, 0, 90 + 55 * xDirection), 0.2f);

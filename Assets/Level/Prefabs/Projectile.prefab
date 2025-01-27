@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9033696856568693770}
   - component: {fileID: 6428464638696415628}
   - component: {fileID: 315813545388203373}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 902965303b29f934fb66555c0cdc6b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}
 --- !u!58 &6428464638696415628
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -5,10 +5,12 @@ using UnityEngine.UIElements;
 
 public class MeleeEnemyBehaviour : MonoBehaviour {
     // References
+    public Animator animator;
     public LayerMask layerMask; // For player (exclude)
     public Transform playerTransform;
     public Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer bodySpriteRenderer;
+    private SpriteRenderer shoulderSpriteRenderer;
     private EnemyAxe axe;
 
     public float Speed = 5;
@@ -31,7 +33,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     void Start() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
+        shoulderSpriteRenderer = transform.Find("Shoulder").GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
         changeCirclingDirTimer = 0f;
@@ -45,11 +48,13 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
 
-        if (playerDirection.x < 0 && !spriteRenderer.flipX) {
-            spriteRenderer.flipX = true;
+        if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = true;
+            shoulderSpriteRenderer.flipX = true;
             axe.ChangeDirection();
-        } else if (playerDirection.x >= 0 && spriteRenderer.flipX) {
-            spriteRenderer.flipX = false;
+        } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = false;
+            shoulderSpriteRenderer.flipX = false;
             axe.ChangeDirection();
         }
 
@@ -85,6 +90,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        animator.SetFloat("Speed", 1); // set le speed to 1 for animation
+
         float radius = (playerTransform.position - transform.position).magnitude;
         // if too close, retreat, if far, circle around obstacles and get near
         if (radius <= minDistance - 0.5f) {
@@ -92,7 +99,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         } else {
             if (!isCircling) {
 
-                if (radius >= minDistance && numEnemies < maxEnemies) {
+                if (radius >= minDistance && numEnemies < maxEnemies) { // check if not within range of player and number of enemies around player is less than max enemies allowed
                     Vector2 seperationForce = Vector2.zero;
                     float applyForceDistance = 3;
 
@@ -111,6 +118,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                 } else {
                     rb.linearVelocity = Vector2.zero;
                     changeCirclingDirTimer = 0;
+
+                    animator.SetFloat("Speed", 0); // set le speed to 0 for animation
 
                     // ATTACK!
                     if (attackTimer > 0) {

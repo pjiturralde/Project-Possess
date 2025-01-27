@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Knight_Run
+  m_Name: Idle_Armed_Knight
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,27 +21,22 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -704650391072566032, guid: 2df597597d2becd43871201055bbc99b, type: 3}
-    - time: 0.083333336
-      value: {fileID: 4974766191092615428, guid: 1a512bbcef7581841bba411aad0b9293, type: 3}
-    - time: 0.16666667
       value: {fileID: -4568672755714478359, guid: 0d0f949833d2e294985337b82ca1a68a, type: 3}
-    - time: 0.25
-      value: {fileID: 8491863810886848828, guid: 01ad7a214308b1d4497e391a9696a782, type: 3}
-    - time: 0.33333334
-      value: {fileID: -9148126615700985601, guid: 42c888614e510ea44b9247aaf1a4d941, type: 3}
-    - time: 0.41666666
-      value: {fileID: 7552870943146748767, guid: d04fc6aad86eb174a8a77f576f276736, type: 3}
-    - time: 0.5
-      value: {fileID: 1615429611980943903, guid: 600dca26e853e674aa3f799358969c28, type: 3}
-    - time: 0.5833333
-      value: {fileID: 3282914347283564342, guid: b89251a85b8d1eb438a2a7657928ab52, type: 3}
     attribute: m_Sprite
-    path: 
+    path: Body
     classID: 212
     script: {fileID: 0}
     flags: 2
-  m_SampleRate: 24
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: 21657927914428106, guid: eba000a4b730f0a43954337e68d7b7d2, type: 3}
+    attribute: m_Sprite
+    path: Shoulder
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
+  m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -49,7 +44,16 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
+      path: 2073732236
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 1458397003
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -58,20 +62,14 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -704650391072566032, guid: 2df597597d2becd43871201055bbc99b, type: 3}
-    - {fileID: 4974766191092615428, guid: 1a512bbcef7581841bba411aad0b9293, type: 3}
     - {fileID: -4568672755714478359, guid: 0d0f949833d2e294985337b82ca1a68a, type: 3}
-    - {fileID: 8491863810886848828, guid: 01ad7a214308b1d4497e391a9696a782, type: 3}
-    - {fileID: -9148126615700985601, guid: 42c888614e510ea44b9247aaf1a4d941, type: 3}
-    - {fileID: 7552870943146748767, guid: d04fc6aad86eb174a8a77f576f276736, type: 3}
-    - {fileID: 1615429611980943903, guid: 600dca26e853e674aa3f799358969c28, type: 3}
-    - {fileID: 3282914347283564342, guid: b89251a85b8d1eb438a2a7657928ab52, type: 3}
+    - {fileID: 21657927914428106, guid: eba000a4b730f0a43954337e68d7b7d2, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.625
+    m_StopTime: 0.016666668
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
