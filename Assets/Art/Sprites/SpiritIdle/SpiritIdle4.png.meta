@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c9ba6b2c6cbdf424487803353f6502b9
+guid: b961cb9fbb4c8374c914a0c6f96fafb0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5558761476158919123
-    second: SpiritBob7_0
+      213: -5717706972896220168
+    second: SpiritIdle4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpiritBob7_0
+      name: SpiritIdle4_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d2eeb6693ef4bd2b0800000000000000
-      internalID: -5558761476158919123
+      spriteID: 8fb2fb64dcf96a0b0800000000000000
+      internalID: -5717706972896220168
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 911537327bded8f47a8049f5cc93afa1
+    spriteID: ae478ebf6c057364da9d85df9cdf6258
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SpiritBob7_0: -5558761476158919123
+      SpiritIdle4_0: -5717706972896220168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

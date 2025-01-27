@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2d037bc3611c01c4390ec4d73cc4a61d
+guid: 4d957a2f1d53a5c4ab38c8030443fc8c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2023857180699705360
-    second: SpiritBob5_0
+      213: -7916135102169123697
+    second: MageCast2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpiritBob5_0
+      name: MageCast2_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 19
         y: 0
-        width: 12
-        height: 16
+        width: 272
+        height: 221
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0ff3544fd90d9e3e0800000000000000
-      internalID: -2023857180699705360
+      spriteID: f847539e01d342290800000000000000
+      internalID: -7916135102169123697
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 84d07f3675673fa4da5c91e81136be4b
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SpiritBob5_0: -2023857180699705360
+      MageCast2_0: -7916135102169123697
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

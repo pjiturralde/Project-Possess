@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d7692cc0edc30c44e95cfa764ae96892
+guid: 44c418515ec8f1344880d0cf60bb480f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6874137169268793843
-    second: SpiritBob8_0
+      213: 8046562467424895855
+    second: SwordNoOutline_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpiritBob8_0
+      name: SwordNoOutline_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 12
-        height: 16
+        width: 16
+        height: 40
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d0e9c605aa82a90a0800000000000000
-      internalID: -6874137169268793843
+      spriteID: f630add7ee12baf60800000000000000
+      internalID: 8046562467424895855
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b0855d1f84fd2f14892029290d000501
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SpiritBob8_0: -6874137169268793843
+      SwordNoOutline_0: 8046562467424895855
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
