@@ -7,6 +7,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     // References
     public Animator animator;
     public LayerMask layerMask; // For player (exclude)
+    private PlayerManager playerManager;
+    private PlayerStats playerStats;
     public Transform playerTransform;
     public Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
@@ -15,11 +17,12 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     public float Speed = 5;
     private Vector2 playerDirection;
-    private float minDistance = 2; // From player
+    private float minDistance = 1; // From player
     private float enemyCircleDist = 1.5f; // Distance from enemy in front that dictates when to start circling around that enemy
     private float changeCirclingDirTimer; // Timer so that this enemy doesn't change circling directions too often
     private float attackTimer; // Timer for when to attack!! raaahhh!!!
     private bool isAttacking; // is he attacking or is he not cuzzy?
+    private bool isWindingUp; // is he winding up for the attack?
     private Transform blockingObject; // Any object that blocks the path of this enemy
     private int numEnemies; // Number of enemies surrounding player that are within minimum distance
     private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
@@ -34,12 +37,15 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
     void Start() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
+        playerTransform = playerManager.transform;
         bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
         shoulderSpriteRenderer = transform.Find("Shoulder").GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
         changeCirclingDirTimer = 0f;
-        attackTimer = 3;
+        attackTimer = 0;
         axe = GetComponentInChildren<EnemyAxe>();
     }
 
@@ -49,7 +55,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
 
-        if (!isAttacking) {
+        if (!isAttacking && !isWindingUp) {
             if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
                 bodySpriteRenderer.flipX = true;
                 shoulderSpriteRenderer.flipX = true;
@@ -95,8 +101,13 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private void FixedUpdate() {
         animator.SetFloat("Speed", 1); // set le speed to 1 for animation
 
+        if (attackTimer >= 0 && !isAttacking) {
+            attackTimer -= Time.fixedDeltaTime;
+        }
+
         float radius = (playerTransform.position - transform.position).magnitude;
         // if too close, retreat, if far, circle around obstacles and get near
+
         if (radius <= minDistance - 0.5f) {
             rb.linearVelocity = -playerDirection * Speed;
         } else {
@@ -123,23 +134,6 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     changeCirclingDirTimer = 0;
 
                     animator.SetFloat("Speed", 0); // set le speed to 0 for animation
-
-                    // ATTACK!
-                    if (attackTimer > 0 && !isAttacking) {
-                        attackTimer -= Time.deltaTime;
-
-                        if (attackTimer <= 0) {
-                            isAttacking = true;
-                            attackTimer = 3;
-
-                            float windUpTime = 1;
-
-                            axe.PlayAttackAnimation(windUpTime);
-                            Invoke(nameof(stopAttacking), 1 + windUpTime);
-                            // DAMAGE PLAYER RAAHHH!!
-                            
-                        }
-                    }
                 }
             } else {
                 rb.linearVelocity = Vector2.zero;
@@ -151,9 +145,42 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             }
         }
 
+        if (radius <= minDistance + 0.5f) {
+            // ATTACK!
+            if (attackTimer <= 0) {
+                isWindingUp = true;
+                float windUpTime = 1;
+
+                attackTimer = 3 + windUpTime;
+
+                axe.PlayAttackAnimation(windUpTime);
+                Invoke(nameof(startAttack), windUpTime - 0.01f);
+                Invoke(nameof(stopAttacking), 1 + windUpTime);
+                // DAMAGE PLAYER RAAHHH!!)
+            }
+        }
+
         if (isAttacking) {
             rb.linearVelocity = Vector3.zero;
             animator.SetFloat("Speed", 0);
+        }
+    }
+
+    private void startAttack() {
+        float radius = (playerTransform.position - transform.position).magnitude;
+
+        isWindingUp = false;
+        isAttacking = true;
+        if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = true;
+            shoulderSpriteRenderer.flipX = true;
+        } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = false;
+            shoulderSpriteRenderer.flipX = false;
+        }
+
+        if (radius <= minDistance + 0.4f) {
+            playerStats.TakeDamage(10);
         }
     }
 

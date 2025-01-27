@@ -7,6 +7,9 @@ public class EnemyAxe : MonoBehaviour {
     private MeleeEnemyBehaviour meleeEnemyBehaviour;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer shoulderSpriteRenderer;
+    private Sequence mySequence1;
+    private Sequence mySequence2;
+    private int xDirection;
     private Vector3[] path;
 
     void Start() {
@@ -23,10 +26,30 @@ public class EnemyAxe : MonoBehaviour {
     }
 
     public void PlayAttackAnimation(float windUpTime) { // wind up time for le epic attack!
-        int xDirection = GetXDirection();
+        xDirection = GetXDirection();
 
         transform.localPosition = new Vector2(0.07f * xDirection, 0.02f);
         transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 + 55 * xDirection));
+
+        mySequence1 = DOTween.Sequence();
+        mySequence1.Append(transform.DOLocalMove(new Vector2(0, 0.07f), windUpTime));
+
+
+        mySequence2 = DOTween.Sequence();
+        mySequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 90 + 95 * xDirection), windUpTime));
+
+        Invoke(nameof(ReverseZOrder), windUpTime + 0.08f);
+        Invoke(nameof(ReverseZOrder), windUpTime + 0.75f);
+        Invoke(nameof(UpdateSwingPosition), windUpTime);
+    }
+
+    private void UpdateSwingPosition() {
+        xDirection = GetXDirection();
+
+        transform.localPosition = new Vector2(0.07f * xDirection, 0.02f);
+        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 + 55 * xDirection));
+
+        Sequence sequence1 = DOTween.Sequence();
 
         Vector3[] editedPath = new Vector3[path.Length];
 
@@ -34,8 +57,6 @@ public class EnemyAxe : MonoBehaviour {
             editedPath[i] = new Vector3(path[i].x * xDirection, path[i].y, path[i].z);
         }
 
-        Sequence sequence1 = DOTween.Sequence();
-        sequence1.Append(transform.DOLocalMove(new Vector2(0, 0.07f), windUpTime));
         sequence1.Append(transform.DOLocalPath(editedPath, 0.2f, PathType.CatmullRom).SetEase(Ease.OutCirc));
         System.Array.Reverse(editedPath);
         sequence1.AppendInterval(0.2f);
@@ -53,17 +74,18 @@ public class EnemyAxe : MonoBehaviour {
         sequence1.Append(transform.DOLocalPath(editedPath, 0.6f, PathType.CatmullRom).SetEase(Ease.InOutSine));
 
         Sequence sequence2 = DOTween.Sequence();
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 90 + 95 * xDirection), windUpTime));
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, -380 * xDirection), 0.2f, RotateMode.LocalAxisAdd).SetEase(Ease.OutCirc));
-        sequence2.AppendInterval(0.2f);
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 380 * xDirection), 0.6f, RotateMode.LocalAxisAdd).SetEase(Ease.InOutSine));
 
-        Invoke(nameof(ReverseZOrder), windUpTime + 0.08f);
-        Invoke(nameof(ReverseZOrder), windUpTime + 0.75f);
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, -390 * xDirection), 0.2f, RotateMode.LocalAxisAdd).SetEase(Ease.OutCirc));
+        sequence2.AppendInterval(0.2f);
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 390 * xDirection), 0.6f, RotateMode.LocalAxisAdd).SetEase(Ease.InOutSine));
+    }
+
+    public void UpdateXDirection() {
+        xDirection = GetXDirection();
     }
 
     public void ChangeDirection() {
-        int xDirection = GetXDirection();
+        UpdateXDirection();
 
         DOTween.Kill(transform);
 
