@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 20b3eafed728a4d41a82b338ede0ed1a
+guid: 9498776aaa84c714888617246c873798
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5383200904569877441
-    second: SpiritBob4_0
+      213: -4064549812339139537
+    second: SpiritIdle3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpiritBob4_0
+      name: SpiritIdle3_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 2
+        y: 3
         width: 12
-        height: 14
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1c3f27783b8f4ba40800000000000000
-      internalID: 5383200904569877441
+      spriteID: f2c15a70b71d797c0800000000000000
+      internalID: -4064549812339139537
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SpiritBob4_0: 5383200904569877441
+      SpiritIdle3_0: -4064549812339139537
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
