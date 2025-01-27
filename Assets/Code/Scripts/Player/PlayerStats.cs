@@ -12,7 +12,7 @@ public class PlayerStats : MonoBehaviour {
     public float MovementSpeed = 300.0f;
 
     // Current stats
-    public int Health;
+    public float Health;
     public float DamageMultiplier;
     public float AttackRate;
     public int Money;
@@ -73,7 +73,7 @@ public class PlayerStats : MonoBehaviour {
             return;
         }
 
-        //LoseHealth
+        LoseHealth(damage);
         TriggerInvulnerability();
     }
 
@@ -82,7 +82,7 @@ public class PlayerStats : MonoBehaviour {
         invulnerabilityDuration = 0.5D;
     }
 
-    private void LoseHealth(int amount) {
+    private void LoseHealth(float amount) {
         Health -= amount;
         
         if (Health <= 0) {

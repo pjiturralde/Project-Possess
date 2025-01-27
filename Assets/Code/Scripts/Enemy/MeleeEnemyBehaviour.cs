@@ -38,7 +38,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         isCircling = false;
         changeCirclingDirTimer = 0f;
-        attackTimer = 0f;
+        attackTimer = 3;
         axe = GetComponentInChildren<EnemyAxe>();
     }
 
@@ -128,8 +128,9 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                         if (attackTimer <= 0) {
                             attackTimer = 3;
 
-
+                            axe.PlayAttackAnimation(1);
                             // DAMAGE PLAYER RAAHHH!!
+                            
                         }
                     }
                 }

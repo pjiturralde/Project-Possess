@@ -10,7 +10,8 @@ public class EnemyAxe : MonoBehaviour {
     private Vector3[] path;
 
     void Start() {
-        path = GeneratePartCirclePoints(0.11f, 5);
+        path = GeneratePartCirclePoints(0.08f, 5);
+
         playerManager = PlayerManager.instance;
         meleeEnemyBehaviour = transform.parent.GetComponent<MeleeEnemyBehaviour>();
         bodySpriteRenderer = transform.parent.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
@@ -21,22 +22,39 @@ public class EnemyAxe : MonoBehaviour {
         transform.localRotation = Quaternion.Euler(0, 0, 145);
     }
 
-    public void PlayAttackAnimation() {
-        transform.localPosition = new Vector2(0, 0.05f);
-        transform.localRotation = Quaternion.Euler(0, 0, 145);
+    public void PlayAttackAnimation(float windUpTime) { // wind up time for le epic attack!
+        transform.localPosition = new Vector2(0.07f, 0.02f);
+        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 145));
 
         Sequence sequence1 = DOTween.Sequence();
-        sequence1.Append(transform.DOLocalPath(path, 0.4f, PathType.CatmullRom));
+        sequence1.Append(transform.DOLocalMove(new Vector2(0.0f, 0.07f), windUpTime));
+        sequence1.Append(transform.DOLocalPath(path, 0.2f, PathType.CatmullRom).SetEase(Ease.OutCirc));
         System.Array.Reverse(path);
-        sequence1.Append(transform.DOLocalPath(path, 0.4f, PathType.CatmullRom));
+        sequence1.AppendInterval(0.2f);
+
+        Vector3[] newPath = new Vector3[path.Length];
+
+        for (int i = 0; i < path.Length; i++) {
+            if (i < path.Length - 2) {
+                newPath[i] = path[i];
+            } else if (i == path.Length - 2) {
+                newPath[i] = path[i] - new Vector3(0, 0.01f, 0);
+            } else {
+                newPath[i] = new Vector3(0.07f, 0.02f, 0);
+            }
+        }
+
+        sequence1.Append(transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom).SetEase(Ease.InOutSine));
         System.Array.Reverse(path);
 
         Sequence sequence2 = DOTween.Sequence();
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, -370), 0.4f, RotateMode.LocalAxisAdd));
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 370), 0.4f, RotateMode.LocalAxisAdd));
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 185), windUpTime));
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, -390), 0.2f, RotateMode.LocalAxisAdd).SetEase(Ease.OutCirc));
+        sequence2.AppendInterval(0.2f);
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 350), 0.6f, RotateMode.LocalAxisAdd).SetEase(Ease.InOutSine));
 
-        Invoke(nameof(ReverseZOrder), 0.2f);
-        Invoke(nameof(ReverseZOrder), 0.45f);
+        Invoke(nameof(ReverseZOrder), windUpTime + 0.08f);
+        Invoke(nameof(ReverseZOrder), windUpTime + 0.75f);
     }
 
     public void ChangeDirection() {
@@ -59,7 +77,7 @@ public class EnemyAxe : MonoBehaviour {
     private void ReverseZOrder() {
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
-        int order = renderer.sortingOrder == 0 ? 1 : 0;
+        int order = renderer.sortingOrder == 0 ? 2 : 0;
         renderer.sortingOrder = order;
     }
 
@@ -74,9 +92,9 @@ public class EnemyAxe : MonoBehaviour {
         Vector3[] points = new Vector3[numSegments + 1];
 
         for (int i = 0; i < numSegments + 1; i++) {
-            float angle = i * Mathf.PI * 1.5f / numSegments;
-            float x = Mathf.Sin(angle) * radius;
-            float y = Mathf.Cos(angle) * radius;
+            float angle = i * Mathf.PI * 1.1f / numSegments;
+            float x = Mathf.Sin(angle) * radius * 2f;
+            float y = Mathf.Cos(angle) * radius - 0.01f;
             if (i == numSegments - 1) {
                 Debug.Log(angle * Mathf.Rad2Deg);
                 Debug.Log(x);

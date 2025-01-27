@@ -6,10 +6,14 @@ public class Projectile : MonoBehaviour {
     private float speed;
     private ProjectilePoolManager poolManager;
     private Camera mainCamera;
+    private PlayerManager playerManager;
+    private PlayerStats playerStats;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         poolManager = ProjectilePoolManager.instance;
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
         direction = Vector2.zero;
         mainCamera = Camera.main;
     }
@@ -38,6 +42,7 @@ public class Projectile : MonoBehaviour {
         if (collision.CompareTag("Player")) {
             // HIT!
             // take damage and send back to le poole!
+            playerStats.TakeDamage(10);
             poolManager.DisableInstance(gameObject);
         }
     }
