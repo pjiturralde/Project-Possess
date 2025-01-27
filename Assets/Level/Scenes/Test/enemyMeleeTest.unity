@@ -574,6 +574,53 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &695679308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 695679309}
+  - component: {fileID: 695679310}
+  m_Layer: 0
+  m_Name: SpriteManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &695679309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695679308}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0991867, y: 0.40661865, z: 0.04275887}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &695679310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695679308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c7bc71a4744c2468870668fb889fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAxeSprite: {fileID: 8677342440581314244, guid: 3f9dc71c9f0c6814583bbde95dd61151, type: 3}
+  enemySwordSprite: {fileID: 2370355454625071448, guid: 420c370393177384cbbc1586939ba826, type: 3}
+  enemySpearSprite: {fileID: -8633070582686018229, guid: cfa3a632a0532794086daafc5a9c4051, type: 3}
 --- !u!1 &711900048
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +1001,7 @@ GameObject:
   - component: {fileID: 905172957}
   - component: {fileID: 905172956}
   m_Layer: 0
-  m_Name: Axe
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -972,6 +1019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a8fb87ed7523c44b1f3ab453171b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponIndex: 2
 --- !u!212 &905172957
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2318,3 +2366,4 @@ SceneRoots:
   - {fileID: 2139044533}
   - {fileID: 207870874}
   - {fileID: 65604605}
+  - {fileID: 695679309}

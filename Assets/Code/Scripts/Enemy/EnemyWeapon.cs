@@ -2,38 +2,58 @@ using DG.Tweening;
 using UnityEditor.EditorTools;
 using UnityEngine;
 
-public class EnemyAxe : MonoBehaviour {
+public class EnemyWeapon : MonoBehaviour {
     private PlayerManager playerManager;
     private MeleeEnemyBehaviour meleeEnemyBehaviour;
+    private SpriteManager spriteManager;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer shoulderSpriteRenderer;
+    private SpriteRenderer weaponSpriteRenderer;
     private Sequence mySequence1;
     private Sequence mySequence2;
+    public int weaponIndex; // AXE IS 0, SWORD IS 1, SPEAR IS 2 RANDOMIZE!
+    private string[] weaponArray = new string[3];
+    private Vector3 weaponOffset;
     private int xDirection;
     private Vector3[] path;
 
     void Start() {
+        if (weaponIndex == 0) {
+            weaponOffset = Vector3.zero;
+        } else if (weaponIndex == 1) {
+            weaponOffset = new Vector3(-0.045f, 0.02f);
+        } else if (weaponIndex == 2) {
+            weaponOffset = new Vector3(-0.045f, 0.02f);
+        }
+
         path = GeneratePartCirclePoints(0.08f, 5);
 
+        spriteManager = SpriteManager.instance;
         playerManager = PlayerManager.instance;
+        weaponSpriteRenderer = GetComponent<SpriteRenderer>();
         meleeEnemyBehaviour = transform.parent.GetComponent<MeleeEnemyBehaviour>();
         bodySpriteRenderer = transform.parent.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
         shoulderSpriteRenderer = transform.parent.Find("Shoulder").GetComponent<SpriteRenderer>();
 
         // set first position and rotation
-        transform.localPosition = new Vector2(0.07f, 0.02f);
+        transform.localPosition = new Vector2(0.07f + weaponOffset.x, 0.02f + weaponOffset.y);
         transform.localRotation = Quaternion.Euler(0, 0, 145);
+
+        weaponArray[0] = "EnemyAxe";
+        weaponArray[1] = "EnemySword";
+        weaponArray[2] = "EnemySpear";
+
+        weaponSpriteRenderer.sprite = spriteManager.GetSprite(weaponArray[weaponIndex]);
     }
 
     public void PlayAttackAnimation(float windUpTime) { // wind up time for le epic attack!
         xDirection = GetXDirection();
 
-        transform.localPosition = new Vector2(0.07f * xDirection, 0.02f);
+        transform.localPosition = new Vector2((0.07f + weaponOffset.x) * xDirection, 0.02f + weaponOffset.y);
         transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 + 55 * xDirection));
 
         mySequence1 = DOTween.Sequence();
-        mySequence1.Append(transform.DOLocalMove(new Vector2(0, 0.07f), windUpTime));
-
+        mySequence1.Append(transform.DOLocalMove(new Vector2(weaponOffset.x * xDirection, 0.07f), windUpTime));
 
         mySequence2 = DOTween.Sequence();
         mySequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 90 + 95 * xDirection), windUpTime));
@@ -46,7 +66,7 @@ public class EnemyAxe : MonoBehaviour {
     private void UpdateSwingPosition() {
         xDirection = GetXDirection();
 
-        transform.localPosition = new Vector2(0.07f * xDirection, 0.02f);
+        transform.localPosition = new Vector2((0.07f + weaponOffset.x) * xDirection, 0.02f + weaponOffset.y);
         transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 + 55 * xDirection));
 
         Sequence sequence1 = DOTween.Sequence();
@@ -54,7 +74,7 @@ public class EnemyAxe : MonoBehaviour {
         Vector3[] editedPath = new Vector3[path.Length];
 
         for (int i = 0; i < path.Length; i++) {
-            editedPath[i] = new Vector3(path[i].x * xDirection, path[i].y, path[i].z);
+            editedPath[i] = new Vector3((path[i].x + weaponOffset.x) * xDirection, path[i].y + weaponOffset.y, path[i].z);
         }
 
         sequence1.Append(transform.DOLocalPath(editedPath, 0.2f, PathType.CatmullRom).SetEase(Ease.OutCirc));
@@ -67,7 +87,7 @@ public class EnemyAxe : MonoBehaviour {
             } else if (i == editedPath.Length - 2) {
                 editedPath[i] = editedPath[i] - new Vector3(0, 0.01f, 0);
             } else {
-                editedPath[i] = new Vector3(0.07f * xDirection, 0.02f, 0);
+                editedPath[i] = new Vector3((0.07f + weaponOffset.x) * xDirection, 0.02f + weaponOffset.y, 0);
             }
         }
 
@@ -89,10 +109,10 @@ public class EnemyAxe : MonoBehaviour {
 
         DOTween.Kill(transform);
 
-        transform.localPosition = new Vector2(0.15f * xDirection, 0);
+        transform.localPosition = new Vector2((0.15f + weaponOffset.x) * xDirection, weaponOffset.y);
         transform.localRotation = Quaternion.Euler(0, 0, -90 + (80 * xDirection));
 
-        transform.DOLocalMove(new Vector2(0.07f * xDirection, 0.02f), 0.2f);
+        transform.DOLocalMove(new Vector2((0.07f + weaponOffset.x) * xDirection, 0.02f + weaponOffset.y), 0.2f);
         transform.DOLocalRotate(new Vector3(0, 0, 90 + 55 * xDirection), 0.2f);
     }
 

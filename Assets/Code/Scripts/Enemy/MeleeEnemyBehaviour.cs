@@ -13,11 +13,11 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     public Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer shoulderSpriteRenderer;
-    private EnemyAxe axe;
+    private EnemyWeapon weapon;
 
     public float Speed = 5;
     private Vector2 playerDirection;
-    private float minDistance = 1; // From player
+    private float minDistance = 1.2f; // From player
     private float enemyCircleDist = 1.5f; // Distance from enemy in front that dictates when to start circling around that enemy
     private float changeCirclingDirTimer; // Timer so that this enemy doesn't change circling directions too often
     private float attackTimer; // Timer for when to attack!! raaahhh!!!
@@ -28,8 +28,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
 
     // Augment behaviour
-    public float raycastDistance = 2; 
-    public float raycastSeperationDist = 0.4f; // offset perpendicular to playerDirection
+    public float raycastDistance = 1; 
+    public float raycastSeperationDist = 0.6f; // offset perpendicular to playerDirection
     private bool isCircling;
     private int perpendicularDir;
 
@@ -46,7 +46,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         isCircling = false;
         changeCirclingDirTimer = 0f;
         attackTimer = 0;
-        axe = GetComponentInChildren<EnemyAxe>();
+        weapon = GetComponentInChildren<EnemyWeapon>();
     }
 
     void Update() {
@@ -59,11 +59,11 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
                 bodySpriteRenderer.flipX = true;
                 shoulderSpriteRenderer.flipX = true;
-                axe.ChangeDirection();
+                weapon.ChangeDirection();
             } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
                 bodySpriteRenderer.flipX = false;
                 shoulderSpriteRenderer.flipX = false;
-                axe.ChangeDirection();
+                weapon.ChangeDirection();
             }
         }
 
@@ -153,7 +153,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
                 attackTimer = 3 + windUpTime;
 
-                axe.PlayAttackAnimation(windUpTime);
+                weapon.PlayAttackAnimation(windUpTime);
                 Invoke(nameof(startAttack), windUpTime - 0.01f);
                 Invoke(nameof(stopAttacking), 1 + windUpTime);
                 // DAMAGE PLAYER RAAHHH!!)
@@ -191,17 +191,22 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     // Checks if front of the enemy is obstructed
     private bool isFrontClear() {
         Vector2 origin = transform.position;
-        Vector2 offset1 = origin + Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .5f;
-        Vector2 offset2 = origin - Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .5f;
+        Vector2 offset0 = origin + playerDirection * .6f;
+        Vector2 offset1 = origin + Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .8f;
+        Vector2 offset2 = origin - Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .8f;
 
+        RaycastHit2D hit0 = Physics2D.Raycast(offset0, playerDirection, raycastDistance, ~layerMask);
         RaycastHit2D hit1 = Physics2D.Raycast(offset1, playerDirection, raycastDistance, ~layerMask);
         RaycastHit2D hit2 = Physics2D.Raycast(offset2, playerDirection, raycastDistance, ~layerMask);
 
+        Debug.DrawRay(offset0, playerDirection * raycastDistance);
         Debug.DrawRay(offset1, playerDirection * raycastDistance);
         Debug.DrawRay(offset2, playerDirection * raycastDistance);
 
-        if (hit1.collider != null ||  hit2.collider != null) {
-            if (hit1.collider != null) {
+        if (hit0.collider != null || hit1.collider != null ||  hit2.collider != null) {
+            if (hit0.collider != null) {
+                blockingObject = hit0.transform;
+            } else if (hit1.collider != null) {
                 blockingObject = hit1.transform;
             } else {
                 blockingObject = hit2.transform;
