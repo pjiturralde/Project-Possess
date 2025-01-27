@@ -23,55 +23,67 @@ public class EnemyAxe : MonoBehaviour {
     }
 
     public void PlayAttackAnimation(float windUpTime) { // wind up time for le epic attack!
-        transform.localPosition = new Vector2(0.07f, 0.02f);
-        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 145));
+        int xDirection = GetXDirection();
 
-        Sequence sequence1 = DOTween.Sequence();
-        sequence1.Append(transform.DOLocalMove(new Vector2(0.0f, 0.07f), windUpTime));
-        sequence1.Append(transform.DOLocalPath(path, 0.2f, PathType.CatmullRom).SetEase(Ease.OutCirc));
-        System.Array.Reverse(path);
-        sequence1.AppendInterval(0.2f);
+        transform.localPosition = new Vector2(0.07f * xDirection, 0.02f);
+        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 + 55 * xDirection));
 
-        Vector3[] newPath = new Vector3[path.Length];
+        Vector3[] editedPath = new Vector3[path.Length];
 
         for (int i = 0; i < path.Length; i++) {
-            if (i < path.Length - 2) {
-                newPath[i] = path[i];
-            } else if (i == path.Length - 2) {
-                newPath[i] = path[i] - new Vector3(0, 0.01f, 0);
+            editedPath[i] = new Vector3(path[i].x * xDirection, path[i].y, path[i].z);
+        }
+
+        Sequence sequence1 = DOTween.Sequence();
+        sequence1.Append(transform.DOLocalMove(new Vector2(0, 0.07f), windUpTime));
+        sequence1.Append(transform.DOLocalPath(editedPath, 0.2f, PathType.CatmullRom).SetEase(Ease.OutCirc));
+        System.Array.Reverse(editedPath);
+        sequence1.AppendInterval(0.2f);
+
+        for (int i = 0; i < editedPath.Length; i++) {
+            if (i < editedPath.Length - 2) {
+                editedPath[i] = editedPath[i];
+            } else if (i == editedPath.Length - 2) {
+                editedPath[i] = editedPath[i] - new Vector3(0, 0.01f, 0);
             } else {
-                newPath[i] = new Vector3(0.07f, 0.02f, 0);
+                editedPath[i] = new Vector3(0.07f * xDirection, 0.02f, 0);
             }
         }
 
-        sequence1.Append(transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom).SetEase(Ease.InOutSine));
-        System.Array.Reverse(path);
+        sequence1.Append(transform.DOLocalPath(editedPath, 0.6f, PathType.CatmullRom).SetEase(Ease.InOutSine));
 
         Sequence sequence2 = DOTween.Sequence();
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 185), windUpTime));
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, -390), 0.2f, RotateMode.LocalAxisAdd).SetEase(Ease.OutCirc));
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 90 + 95 * xDirection), windUpTime));
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, -380 * xDirection), 0.2f, RotateMode.LocalAxisAdd).SetEase(Ease.OutCirc));
         sequence2.AppendInterval(0.2f);
-        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 350), 0.6f, RotateMode.LocalAxisAdd).SetEase(Ease.InOutSine));
+        sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 380 * xDirection), 0.6f, RotateMode.LocalAxisAdd).SetEase(Ease.InOutSine));
 
         Invoke(nameof(ReverseZOrder), windUpTime + 0.08f);
         Invoke(nameof(ReverseZOrder), windUpTime + 0.75f);
     }
 
     public void ChangeDirection() {
-        int xDirection;
+        int xDirection = GetXDirection();
 
         DOTween.Kill(transform);
-        if (!bodySpriteRenderer.flipX) {
-            xDirection = 1;
-        } else {
-            xDirection = -1;
-        }
 
         transform.localPosition = new Vector2(0.15f * xDirection, 0);
         transform.localRotation = Quaternion.Euler(0, 0, -90 + (80 * xDirection));
 
         transform.DOLocalMove(new Vector2(0.07f * xDirection, 0.02f), 0.2f);
         transform.DOLocalRotate(new Vector3(0, 0, 90 + 55 * xDirection), 0.2f);
+    }
+
+    private int GetXDirection() { // returns an int pertaining to the direction the enemy is facing
+        int xDirection;
+
+        if (!bodySpriteRenderer.flipX) {
+            xDirection = 1;
+        } else {
+            xDirection = -1;
+        }
+
+        return xDirection;
     }
 
     private void ReverseZOrder() {

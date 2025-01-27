@@ -19,6 +19,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private float enemyCircleDist = 1.5f; // Distance from enemy in front that dictates when to start circling around that enemy
     private float changeCirclingDirTimer; // Timer so that this enemy doesn't change circling directions too often
     private float attackTimer; // Timer for when to attack!! raaahhh!!!
+    private bool isAttacking; // is he attacking or is he not cuzzy?
     private Transform blockingObject; // Any object that blocks the path of this enemy
     private int numEnemies; // Number of enemies surrounding player that are within minimum distance
     private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
@@ -48,14 +49,16 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
 
-        if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
-            bodySpriteRenderer.flipX = true;
-            shoulderSpriteRenderer.flipX = true;
-            axe.ChangeDirection();
-        } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
-            bodySpriteRenderer.flipX = false;
-            shoulderSpriteRenderer.flipX = false;
-            axe.ChangeDirection();
+        if (!isAttacking) {
+            if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
+                bodySpriteRenderer.flipX = true;
+                shoulderSpriteRenderer.flipX = true;
+                axe.ChangeDirection();
+            } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
+                bodySpriteRenderer.flipX = false;
+                shoulderSpriteRenderer.flipX = false;
+                axe.ChangeDirection();
+            }
         }
 
         foreach (GameObject enemy in enemies) {
@@ -122,13 +125,17 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     animator.SetFloat("Speed", 0); // set le speed to 0 for animation
 
                     // ATTACK!
-                    if (attackTimer > 0) {
+                    if (attackTimer > 0 && !isAttacking) {
                         attackTimer -= Time.deltaTime;
 
                         if (attackTimer <= 0) {
+                            isAttacking = true;
                             attackTimer = 3;
 
-                            axe.PlayAttackAnimation(1);
+                            float windUpTime = 1;
+
+                            axe.PlayAttackAnimation(windUpTime);
+                            Invoke(nameof(stopAttacking), 1 + windUpTime);
                             // DAMAGE PLAYER RAAHHH!!
                             
                         }
@@ -144,6 +151,14 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             }
         }
 
+        if (isAttacking) {
+            rb.linearVelocity = Vector3.zero;
+            animator.SetFloat("Speed", 0);
+        }
+    }
+
+    private void stopAttacking() { // sets isAttacking to false
+        isAttacking = false;
     }
 
     // Checks if front of the enemy is obstructed
