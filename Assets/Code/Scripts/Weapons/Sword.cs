@@ -19,7 +19,7 @@ public class Sword : MonoBehaviour {
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
         canAttack = true;
-        scale = 0.2f;
+        scale = 0.1f;
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),

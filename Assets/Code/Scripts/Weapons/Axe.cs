@@ -12,6 +12,7 @@ public class Axe : MonoBehaviour
     private bool canAttack;
     private bool holdingClick;
     private float cdTimer;
+    private float radius;
 
     void Start() {
         attacking = false;
@@ -20,8 +21,9 @@ public class Axe : MonoBehaviour
         cdTimer = 0;
         canAttack = true;
         holdingClick = false;
+        radius = 0.1f;
 
-        path = GenerateCirclePoints(1, 10);
+        path = GenerateCirclePoints(radius, 10);
     }
 
     void Update() {
@@ -56,7 +58,7 @@ public class Axe : MonoBehaviour
                 canAttack = false;
 
                 Sequence sequence1 = DOTween.Sequence();
-                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, -1, 0), 0.3f));
+                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, -radius, 0), 0.3f));
                 sequence1.Append(transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom));
                 sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, 0, 0), 0.3f));
 

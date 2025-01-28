@@ -1,7 +1,6 @@
 using UnityEngine;
-using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
-public class RangedEnemyBehaviour : MonoBehaviour {
+public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
     private PlayerManager playerManager;
     private Transform playerTransform;
     public Rigidbody2D rb;

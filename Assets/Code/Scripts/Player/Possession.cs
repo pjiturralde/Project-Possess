@@ -58,13 +58,23 @@ public class Possession : MonoBehaviour {
 
             if (currentHit != null && Input.GetMouseButtonDown(0)) {
                 playerStats.isPossessing = true;
-
-                Debug.Log("HELLOOOO??");
-                Instantiate(playerAxe, playerManager.transform);
+                playerStats.GetComponent<CircleCollider2D>().enabled = false;
+                playerStats.transform.Find("Body").GetComponent<SpriteRenderer>().enabled = false; // pls don't change name of body
 
                 foreach (Transform child in currentHit.transform) {
                     if (child.CompareTag("EnemyWeapon")) {
                         currentWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
+                        EnemyWeapon enemyWeapon = child.GetComponent<EnemyWeapon>();
+
+                        int weaponIndex = enemyWeapon.weaponIndex;
+
+                        if (weaponIndex == 0) {
+                            Instantiate(playerAxe, playerManager.transform);
+                        } else if (weaponIndex == 1) {
+                            Instantiate(playerSword, playerManager.transform);
+                        } else {
+                            Instantiate(playerSpear, playerManager.transform);
+                        }
 
                         currentWeaponSpriteRenderer.material = defaultMaterial;
                         break;
