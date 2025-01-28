@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7517080052497397386}
   - component: {fileID: 5904774767884418738}
   - component: {fileID: 3321798178191305464}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UnarmedMeleeEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 198323365777459846}
   - component: {fileID: 8460610313539812296}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

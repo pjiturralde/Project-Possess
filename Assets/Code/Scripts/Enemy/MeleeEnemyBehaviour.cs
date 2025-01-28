@@ -202,7 +202,25 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         }
 
         if (radius <= minDistance + 0.4f) {
-            playerStats.TakeDamage(10);
+            if (!playerStats.isPossessing) {
+                playerStats.TakeDamage(10);
+            } else {
+                GameObject weapon = null;
+
+                foreach (Transform child in playerManager.transform) {
+                    if (child.CompareTag("PlayerWeapon")) {
+                        weapon = child.gameObject;
+                    }
+                }
+
+                WeaponStats weaponStats = null;
+
+                if (weapon != null) {
+                    weaponStats = weapon.GetComponent<WeaponStats>();
+                }
+
+                weaponStats.TakeDamage(30);
+            }
         }
     }
 

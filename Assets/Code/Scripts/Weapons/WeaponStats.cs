@@ -1,6 +1,10 @@
 using UnityEngine;
 
 public class WeaponStats : MonoBehaviour {
+    private PlayerManager playerManager;
+    private PlayerStats playerStats;
+    private DurabilityManager durabilityManager;
+
     // Core stats
     public int MaxDurability = 50;
     public float cooldown;
@@ -11,10 +15,13 @@ public class WeaponStats : MonoBehaviour {
 
     // Cooldowns
     private bool Invulnerable;
-    private double invulnerabilityDuration = 0.5D;
+    private double invulnerabilityDuration = 0.2D;
 
     void Start() {
         // Initialize starting values
+        durabilityManager = DurabilityManager.instance;
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
         Durability = MaxDurability;
         Invulnerable = false;
         Damage = 10;
@@ -58,7 +65,12 @@ public class WeaponStats : MonoBehaviour {
     }
 
     private void Break() {
-        Debug.Log("Weapon has been broken");
-        // Add break handling here
+        playerStats.isPossessing = false;
+        playerStats.GetComponent<CircleCollider2D>().enabled = true;
+        playerStats.transform.Find("Body").GetComponent<SpriteRenderer>().enabled = true; // pls don't change name of body
+
+        durabilityManager.DeactivateDurabilityBar();
+
+        Destroy(gameObject);
     }
 }

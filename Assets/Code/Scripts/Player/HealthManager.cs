@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour {
-    public Image healthBar;
+    public Image health;
 
     private PlayerManager playerManager;
     PlayerStats playerStats;
@@ -18,9 +18,11 @@ public class HealthManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (playerStats.Health != healthAmount) {
-            healthAmount = playerStats.Health;
-            healthBar.fillAmount = healthAmount / playerStats.MaxHealth;
+        if (!playerStats.isPossessing) {
+            if (playerStats.Health != healthAmount) {
+                healthAmount = playerStats.Health;
+                health.fillAmount = healthAmount / playerStats.MaxHealth;
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ public class QuickTimeEventManager : MonoBehaviour {
     public Transform pointB; // Reference to the ending point
     public RectTransform safeZone; // Reference to the safe zone RectTransform
     public float moveSpeed = 100f; // Speed of the pointer movement
+    private PlayerManager playerManager;
+    private Possession possessionScript;
 
     private bool isActive;
     public RectTransform pointerTransform;
@@ -24,12 +26,28 @@ public class QuickTimeEventManager : MonoBehaviour {
     private void Start() {
         isActive = false;
         targetPosition = pointB.localPosition;
+        playerManager = PlayerManager.instance;
+        possessionScript = playerManager.GetComponent<Possession>();
     }
 
     public void Activate() {
-        foreach (Transform t in transform) {
-
+        foreach (Transform element in transform) {
+            if (!element.gameObject.activeSelf) {
+                element.gameObject.SetActive(true);
+            }
         }
+
+        isActive = true;
+    }
+
+    public void Deactivate() {
+        foreach (Transform element in transform) {
+            if (element.gameObject.activeSelf) {
+                element.gameObject.SetActive(false);
+            }
+        }
+
+        isActive = false;
     }
 
     void Update() {
@@ -54,9 +72,11 @@ public class QuickTimeEventManager : MonoBehaviour {
     void CheckSuccess() {
         // Check if the pointer is within the safe zone
         if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerTransform.position, null)) {
-            Debug.Log("Success!");
+            possessionScript.StealWeapon();
+            Deactivate();
         } else {
-            Debug.Log("Fail!");
+            possessionScript.StopStealing();
+            Deactivate();
         }
     }
 }
