@@ -191,22 +191,17 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     // Checks if front of the enemy is obstructed
     private bool isFrontClear() {
         Vector2 origin = transform.position;
-        Vector2 offset0 = origin + playerDirection * .6f;
         Vector2 offset1 = origin + Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .8f;
         Vector2 offset2 = origin - Vector2.Perpendicular(playerDirection).normalized * raycastSeperationDist + playerDirection * .8f;
 
-        RaycastHit2D hit0 = Physics2D.Raycast(offset0, playerDirection, raycastDistance, ~layerMask);
         RaycastHit2D hit1 = Physics2D.Raycast(offset1, playerDirection, raycastDistance, ~layerMask);
         RaycastHit2D hit2 = Physics2D.Raycast(offset2, playerDirection, raycastDistance, ~layerMask);
 
-        Debug.DrawRay(offset0, playerDirection * raycastDistance);
         Debug.DrawRay(offset1, playerDirection * raycastDistance);
         Debug.DrawRay(offset2, playerDirection * raycastDistance);
 
-        if (hit0.collider != null || hit1.collider != null ||  hit2.collider != null) {
-            if (hit0.collider != null) {
-                blockingObject = hit0.transform;
-            } else if (hit1.collider != null) {
+        if (hit1.collider != null ||  hit2.collider != null) {
+            if (hit1.collider != null) {
                 blockingObject = hit1.transform;
             } else {
                 blockingObject = hit2.transform;

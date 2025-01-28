@@ -10,6 +10,7 @@ public class Sword : MonoBehaviour {
     private bool attacking;
     private bool canAttack;
     private float cdTimer;
+    public float scale;
 
     void Start() {
         player = transform.parent;
@@ -18,6 +19,7 @@ public class Sword : MonoBehaviour {
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
         canAttack = true;
+        scale = 0.2f;
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
@@ -45,7 +47,7 @@ public class Sword : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             if (canAttack) {
                 for (int i = 0; i < path.Length; i++) {
-                    newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i];
+                    newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i] * scale;
                     path[i] = new Vector3(path[i].x * -1, path[i].y, 0);
                 }
 
