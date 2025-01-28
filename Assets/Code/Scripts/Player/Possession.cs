@@ -7,6 +7,8 @@ public class Possession : MonoBehaviour {
     private SpriteRenderer currentWeaponSpriteRenderer;
     private PlayerManager playerManager;
     private PlayerStats playerStats;
+    private ArmedMeleeEnemyPool armedMeleeEnemyPool;
+    private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
 
     public GameObject playerAxe;
     public GameObject playerSword;
@@ -16,6 +18,8 @@ public class Possession : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         currentWeaponSpriteRenderer = null;
+        armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
+        unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
     }
 
     void Update() {
@@ -80,6 +84,12 @@ public class Possession : MonoBehaviour {
                         break;
                     }
                 }
+
+                GameObject armedEnemy = currentHit.gameObject;
+                GameObject unarmedEnemy = unarmedMeleeEnemyPool.GetInstance();
+                unarmedEnemy.transform.position = armedEnemy.transform.position;
+
+                armedMeleeEnemyPool.DisableInstance(armedEnemy);
 
                 currentHit = null;
             }

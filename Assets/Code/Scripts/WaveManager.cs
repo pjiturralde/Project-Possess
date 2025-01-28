@@ -7,7 +7,7 @@ public class WaveManager : MonoBehaviour {
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
 
         for (int i = 0; i < 2; i++) {
-            GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(2);
+            GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(0);
             armedEnemy.transform.position = new Vector2(i * 3, 0);
         }
     }
