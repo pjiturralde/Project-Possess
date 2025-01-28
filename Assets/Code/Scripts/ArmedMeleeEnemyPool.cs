@@ -25,7 +25,7 @@ public class ArmedMeleeEnemyPool : MonoBehaviour {
         }
     }
 
-    public GameObject GetInstance() {
+    public GameObject GetInstance(int weaponIndex) {
         for (int i = 0; i < pool.Count; i++) {
             if (!pool[i].activeSelf) {
                 EnableInstance(pool[i]);
@@ -39,6 +39,8 @@ public class ArmedMeleeEnemyPool : MonoBehaviour {
                     enemyStats.Initialize();
                     enemyWeapon.Initialize();
                 }
+
+                enemyWeapon.SetWeapon(weaponIndex);
 
                 return pool[i];
             }

@@ -6,10 +6,9 @@ public class WaveManager : MonoBehaviour {
     void Start() {
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
 
-        for (int i = 0; i < 10; i++) {
-            GameObject armedEnemy = armedMeleeEnemyPool.GetInstance();
+        for (int i = 0; i < 2; i++) {
+            GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(2);
             armedEnemy.transform.position = new Vector2(i * 3, 0);
-            Debug.Log("WHAT HTE SKIDIDI");
         }
     }
 

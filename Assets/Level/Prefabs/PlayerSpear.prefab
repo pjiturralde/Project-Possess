@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3607962958571572411}
   - component: {fileID: 8095236870294455235}
   - component: {fileID: 3948740553054887411}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerSpear
   m_TagString: PlayerWeapon
   m_Icon: {fileID: 0}

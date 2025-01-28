@@ -50,6 +50,24 @@ public class EnemyWeapon : MonoBehaviour {
         isInitialized = true;
     }
 
+    public void SetWeapon(int weaponIndex) {
+        this.weaponIndex = weaponIndex;
+        weaponSpriteRenderer.sprite = spriteManager.GetSprite(weaponArray[weaponIndex]);
+
+        if (weaponIndex == 0) {
+            weaponOffset = Vector3.zero;
+        } else if (weaponIndex == 1) {
+            weaponOffset = new Vector3(-0.045f, 0.02f);
+        } else if (weaponIndex == 2) {
+            weaponOffset = new Vector3(-0.045f, 0.02f);
+        }
+
+        xDirection = GetXDirection();
+
+        transform.localPosition = new Vector2((0.07f + weaponOffset.x) * xDirection, 0.02f + weaponOffset.y);
+        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 + 55 * xDirection));
+    }
+
     private void Awake() {
         isInitialized = false;
     }
