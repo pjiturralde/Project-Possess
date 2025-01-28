@@ -20,7 +20,27 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     private bool retreating;
     private bool reTarget;
 
+    public bool isInitialized;
+
     private GameObject[] enemies;
+
+    public void Initialize() {
+        playerManager = PlayerManager.instance;
+        playerTransform = playerManager.transform;
+
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        rb = GetComponent<Rigidbody2D>();
+        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
+        timer = timerStart;
+        reTarget = true;
+        runTime = maxRunTime;
+        retreating = false;
+        isInitialized = true;
+    }
+
+    private void Awake() {
+        isInitialized = false;
+    }
 
     void Start() {
         playerManager = PlayerManager.instance;
@@ -33,6 +53,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
         reTarget = true;
         runTime = maxRunTime;
         retreating = false;
+        isInitialized = true;
     }
 
     void Update() {

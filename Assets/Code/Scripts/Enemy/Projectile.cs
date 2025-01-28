@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
 
-    void Start() {
+    private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         poolManager = ProjectilePoolManager.instance;
         playerManager = PlayerManager.instance;

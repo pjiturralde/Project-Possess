@@ -33,7 +33,28 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private bool isCircling;
     private int perpendicularDir;
 
+    public bool isInitialized;
+
     private GameObject[] enemies;
+
+    public void Initialize() {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
+        playerTransform = playerManager.transform;
+        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
+        shoulderSpriteRenderer = transform.Find("Shoulder").GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        isCircling = false;
+        changeCirclingDirTimer = 0f;
+        attackTimer = 0;
+        weapon = GetComponentInChildren<EnemyWeapon>();
+        isInitialized = true;
+    }
+
+    private void Awake() {
+        isInitialized = false;
+    }
 
     void Start() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -47,6 +68,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         changeCirclingDirTimer = 0f;
         attackTimer = 0;
         weapon = GetComponentInChildren<EnemyWeapon>();
+        isInitialized = true;
     }
 
     void Update() {

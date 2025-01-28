@@ -13,12 +13,27 @@ public class EnemyStats : MonoBehaviour {
     private bool Invulnerable;
     private double invulnerabilityDuration = 0.5D;
 
+    public bool isInitialized;
+
+    public void Initialize() {
+        Health = MaxHealth;
+        Invulnerable = false;
+        DamageMultiplier = 1;
+        AttackRate = 1;
+        isInitialized = true;
+    }
+
+    private void Awake() {
+        isInitialized = false;
+    }
+
     void Start() {
         // Initialize starting values
         Health = MaxHealth;
         Invulnerable = false;
         DamageMultiplier = 1;
         AttackRate = 1;
+        isInitialized = true;
     }
 
     void Update() {

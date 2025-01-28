@@ -18,12 +18,9 @@ public class ProjectilePoolManager : MonoBehaviour {
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-    }
 
-    void Start() {
         for (int i = 0; i < poolSize; i++) {
             GameObject projectileInstance = Instantiate(projectilePrefab, transform);
-            /*            projectileInstance.transform.SetParent(transform);*/
             DisableInstance(projectileInstance);
             pool.Add(projectileInstance);
         }
@@ -31,9 +28,7 @@ public class ProjectilePoolManager : MonoBehaviour {
 
     public GameObject GetInstance() {
         for (int i = 0; i < pool.Count; i++) {
-            SpriteRenderer sprite = pool[i].GetComponent<SpriteRenderer>();
-
-            if (!sprite.enabled) {
+            if (!pool[i].activeSelf) {
                 EnableInstance(pool[i]);
                 return pool[i];
             }
@@ -43,32 +38,17 @@ public class ProjectilePoolManager : MonoBehaviour {
         GameObject projectileInstance = Instantiate(projectilePrefab);
         projectileInstance.transform.SetParent(transform);
         pool.Add(projectileInstance);
+        projectileInstance.transform.SetParent(null); // perhaps choose a different location
         return projectileInstance;
     }
 
     public void DisableInstance(GameObject instance) {
-        Rigidbody2D rb = instance.GetComponent<Rigidbody2D>();
-        CircleCollider2D collider = instance.GetComponent<CircleCollider2D>();
-        SpriteRenderer sprite = instance.GetComponent<SpriteRenderer>();
-        Projectile projectile = instance.GetComponent<Projectile>();
-
-        Debug.Log(projectile.name);
-        rb.bodyType = RigidbodyType2D.Static;
-        collider.enabled = false;
-        sprite.enabled = false;
-
         instance.transform.SetParent(transform);
+        instance.SetActive(false);
     }
 
     public void EnableInstance(GameObject instance) {
-        Rigidbody2D rb = instance.GetComponent<Rigidbody2D>();
-        CircleCollider2D collider = instance.GetComponent<CircleCollider2D>();
-        SpriteRenderer sprite = instance.GetComponent<SpriteRenderer>();
-
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        collider.enabled = true;
-        sprite.enabled = true;
-
+        instance.SetActive(true);
         instance.transform.SetParent(null); // perhaps choose a different location
     }
 }

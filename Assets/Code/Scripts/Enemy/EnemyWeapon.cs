@@ -1,6 +1,7 @@
 using DG.Tweening;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyWeapon : MonoBehaviour {
     private PlayerManager playerManager;
@@ -16,6 +17,42 @@ public class EnemyWeapon : MonoBehaviour {
     private Vector3 weaponOffset;
     private int xDirection;
     private Vector3[] path;
+
+    public bool isInitialized;
+
+    public void Initialize() {
+        if (weaponIndex == 0) {
+            weaponOffset = Vector3.zero;
+        } else if (weaponIndex == 1) {
+            weaponOffset = new Vector3(-0.045f, 0.02f);
+        } else if (weaponIndex == 2) {
+            weaponOffset = new Vector3(-0.045f, 0.02f);
+        }
+
+        path = GeneratePartCirclePoints(0.08f, 5);
+
+        spriteManager = SpriteManager.instance;
+        playerManager = PlayerManager.instance;
+        weaponSpriteRenderer = GetComponent<SpriteRenderer>();
+        meleeEnemyBehaviour = transform.parent.GetComponent<MeleeEnemyBehaviour>();
+        bodySpriteRenderer = transform.parent.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
+        shoulderSpriteRenderer = transform.parent.Find("Shoulder").GetComponent<SpriteRenderer>();
+
+        // set first position and rotation
+        transform.localPosition = new Vector2(0.07f + weaponOffset.x, 0.02f + weaponOffset.y);
+        transform.localRotation = Quaternion.Euler(0, 0, 145);
+
+        weaponArray[0] = "EnemyAxe";
+        weaponArray[1] = "EnemySword";
+        weaponArray[2] = "EnemySpear";
+
+        weaponSpriteRenderer.sprite = spriteManager.GetSprite(weaponArray[weaponIndex]);
+        isInitialized = true;
+    }
+
+    private void Awake() {
+        isInitialized = false;
+    }
 
     void Start() {
         if (weaponIndex == 0) {
@@ -44,6 +81,7 @@ public class EnemyWeapon : MonoBehaviour {
         weaponArray[2] = "EnemySpear";
 
         weaponSpriteRenderer.sprite = spriteManager.GetSprite(weaponArray[weaponIndex]);
+        isInitialized = true;
     }
 
     public void PlayAttackAnimation(float windUpTime) { // wind up time for le epic attack!

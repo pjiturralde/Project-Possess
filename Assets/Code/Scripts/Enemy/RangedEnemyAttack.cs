@@ -7,12 +7,28 @@ public class RangedEnemyAttack : MonoBehaviour {
     private float projectileSpeed;
     private float cooldown;
 
+    public bool isInitialized;
+
+    private void Awake() {
+        isInitialized = false;
+    }
+
+    public void Initialize() {
+        rb = GetComponent<Rigidbody2D>();
+        poolManager = ProjectilePoolManager.instance;
+        playerManager = PlayerManager.instance;
+        projectileSpeed = 7;
+        cooldown = 2f;
+        isInitialized = true;
+    }
+
     void Start(){
         rb = GetComponent<Rigidbody2D>();
         poolManager = ProjectilePoolManager.instance;
         playerManager = PlayerManager.instance;
         projectileSpeed = 7;
         cooldown = 2f;
+        isInitialized = true;
     }
 
     void Update() {
