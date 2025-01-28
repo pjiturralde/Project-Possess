@@ -1,3 +1,4 @@
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class Possession : MonoBehaviour {
@@ -85,11 +86,18 @@ public class Possession : MonoBehaviour {
                     }
                 }
 
+                MeleeEnemyBehaviour meleeEnemyBehaviour = currentHit.GetComponent<MeleeEnemyBehaviour>();
+                meleeEnemyBehaviour.CancelInvoke();
+
                 GameObject armedEnemy = currentHit.gameObject;
                 GameObject unarmedEnemy = unarmedMeleeEnemyPool.GetInstance();
                 unarmedEnemy.transform.position = armedEnemy.transform.position;
 
+                playerManager.transform.position = armedEnemy.transform.position;
+
                 armedMeleeEnemyPool.DisableInstance(armedEnemy);
+
+                // IMPORTANT** CHANGE THE NEW ENEMIES HEALTH TO THE OLD ONES ALSO SET HP TO FULL WHEN SPAWNING IN THESE ENEMIES
 
                 currentHit = null;
             }

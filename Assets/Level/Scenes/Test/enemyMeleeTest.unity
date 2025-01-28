@@ -363,13 +363,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 165929925}
+  - component: {fileID: 165929926}
   m_Layer: 5
   m_Name: QuickTimeEvent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &165929925
 RectTransform:
   m_ObjectHideFlags: 0
@@ -394,6 +395,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &165929926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165929924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4bf9ce6717d2df408e8536a1ef0fe34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointA: {fileID: 1154607431}
+  pointB: {fileID: 1206687538}
+  safeZone: {fileID: 2058143718}
+  moveSpeed: 100
+  pointerTransform: {fileID: 1617311767}
 --- !u!1 &207870873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1590,7 +1608,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1206687538}
   m_Layer: 5
-  m_Name: PointA
+  m_Name: PointB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2415,7 +2433,7 @@ RectTransform:
   m_GameObject: {fileID: 1617311766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.2, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 165929925}
