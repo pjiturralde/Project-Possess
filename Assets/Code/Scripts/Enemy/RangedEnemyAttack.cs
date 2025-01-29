@@ -25,12 +25,7 @@ public class RangedEnemyAttack : MonoBehaviour {
     }
 
     void Start(){
-        rb = GetComponent<Rigidbody2D>();
-        poolManager = ProjectilePoolManager.instance;
-        playerManager = PlayerManager.instance;
-        projectileSpeed = 7;
-        cooldown = 2f;
-        isInitialized = true;
+        Initialize();
     }
 
     void Update() {

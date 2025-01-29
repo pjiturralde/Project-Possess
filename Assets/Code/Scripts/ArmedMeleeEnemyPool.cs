@@ -34,11 +34,9 @@ public class ArmedMeleeEnemyPool : MonoBehaviour {
                 EnemyStats enemyStats = pool[i].GetComponent<EnemyStats>();
                 EnemyWeapon enemyWeapon = pool[i].transform.Find("Weapon").GetComponent<EnemyWeapon>();
 
-                if (!enemyBehaviour.isInitialized) {
-                    enemyBehaviour.Initialize();
-                    enemyStats.Initialize();
-                    enemyWeapon.Initialize();
-                }
+                enemyBehaviour.Initialize();
+                enemyStats.Initialize();
+                enemyWeapon.Initialize();
 
                 enemyWeapon.SetWeapon(weaponIndex);
 

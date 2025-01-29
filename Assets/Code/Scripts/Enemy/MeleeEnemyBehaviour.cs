@@ -34,8 +34,6 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private bool isCircling;
     private int perpendicularDir;
 
-    public bool isInitialized;
-
     private GameObject[] enemies;
 
     public void Initialize() {
@@ -51,27 +49,12 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         attackTimer = 0;
         weapon = GetComponentInChildren<EnemyWeapon>();
         isStunned = false;
-        isInitialized = true;
-    }
-
-    private void Awake() {
-        isInitialized = false;
+        isAttacking = false;
+        isWindingUp = false;
     }
 
     void Start() {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        playerManager = PlayerManager.instance;
-        playerStats = playerManager.GetComponent<PlayerStats>();
-        playerTransform = playerManager.transform;
-        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
-        shoulderSpriteRenderer = transform.Find("Shoulder").GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
-        isCircling = false;
-        changeCirclingDirTimer = 0f;
-        attackTimer = 0;
-        weapon = GetComponentInChildren<EnemyWeapon>();
-        isStunned = false;
-        isInitialized = true;
+        Initialize();
     }
 
     void Update() {
@@ -136,6 +119,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         if (!isStunned) {
             if (radius <= minDistance - 0.5f) {
                 rb.linearVelocity = -playerDirection * Speed;
+                Debug.Log(isAttacking);
             } else {
                 if (!isCircling) {
 
@@ -184,6 +168,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     weapon.PlayAttackAnimation(windUpTime);
                     Invoke(nameof(startAttack), windUpTime - 0.01f);
                     Invoke(nameof(stopAttacking), 1 + windUpTime);
+                    
                     // DAMAGE PLAYER RAAHHH!!)
                 }
             }
@@ -213,6 +198,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     weapon.PlayAttackAnimation(windUpTime);
                     Invoke(nameof(startAttack), windUpTime - 0.01f);
                     Invoke(nameof(stopAttacking), 1 + windUpTime);
+                    
                     // DAMAGE PLAYER RAAHHH!!)
                 }
             }
@@ -235,6 +221,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     private void startAttack() {
+        Debug.Log("NOOBIDII");
         float radius = (playerTransform.position - transform.position).magnitude;
 
         isWindingUp = false;
@@ -273,31 +260,10 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                 weaponStats.TakeDamage(30);
             }
         }
-
-/*        if (radius <= minDistance + 0.4f) {
-            if (!playerStats.isPossessing) {
-                playerStats.TakeDamage(10);
-            } else {
-                GameObject weapon = null;
-
-                foreach (Transform child in playerManager.transform) {
-                    if (child.CompareTag("PlayerWeapon")) {
-                        weapon = child.gameObject;
-                    }
-                }
-
-                WeaponStats weaponStats = null;
-
-                if (weapon != null) {
-                    weaponStats = weapon.GetComponent<WeaponStats>();
-                }
-
-                weaponStats.TakeDamage(30);
-            }
-        }*/
     }
 
     private void stopAttacking() { // sets isAttacking to false
+        Debug.Log("SCROBIDI");
         isAttacking = false;
     }
 

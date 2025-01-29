@@ -45,18 +45,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     }
 
     void Start() {
-        playerManager = PlayerManager.instance;
-        playerTransform = playerManager.transform;
-
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        rb = GetComponent<Rigidbody2D>();
-        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
-        timer = timerStart;
-        reTarget = true;
-        runTime = maxRunTime;
-        retreating = false;
-        isStunned = false;
-        isInitialized = true;
+        Initialize();
     }
 
     void Update() {

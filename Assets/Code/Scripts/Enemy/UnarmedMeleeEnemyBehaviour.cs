@@ -1,6 +1,9 @@
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
+    private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
+    private ArmedMeleeEnemyPool armedMeleeEnemyPool;
     private PlayerManager playerManager;
     private Transform playerTransform;
     public Rigidbody2D rb;
@@ -28,6 +31,8 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerTransform = playerManager.transform;
 
+        unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
+        armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         rb = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
@@ -44,18 +49,7 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
     }
 
     void Start() {
-        playerManager = PlayerManager.instance;
-        playerTransform = playerManager.transform;
-
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        rb = GetComponent<Rigidbody2D>();
-        bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
-        timer = timerStart;
-        reTarget = true;
-        runTime = maxRunTime;
-        retreating = false;
-        isStunned = false;
-        isInitialized = true;
+        Initialize();
     }
 
     void Update() {
@@ -99,34 +93,69 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
 
         float playerDistance = (playerTransform.position - transform.position).magnitude;
 
+        GameObject nearestWeapon = null;
+
+        foreach (GameObject child in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()) {
+            if (child.CompareTag("FreeWeapon")) {
+                if (nearestWeapon == null || (child.transform.position - transform.position).magnitude < (nearestWeapon.transform.position - transform.position).magnitude) {
+                    nearestWeapon = child;
+                }
+            }
+        }
+
         if (!isStunned) {
             rb.linearVelocity = Vector2.zero;
 
-            if (playerDistance > targetDistance && !reTarget) {
-                runTime = maxRunTime;
-                rb.linearVelocity = playerDirection * Speed + calculateSeperationForce(6, 4);
-                animator.SetFloat("Speed", 1);
-            } else if (playerDistance <= targetDistance) {
-                if (!reTarget) {
-                    reTarget = true;
+            if (nearestWeapon == null) {
+
+                if (playerDistance > targetDistance && !reTarget) {
+                    runTime = maxRunTime;
+                    rb.linearVelocity = playerDirection * Speed + calculateSeperationForce(6, 4);
+                    animator.SetFloat("Speed", 1);
+                } else if (playerDistance <= targetDistance) {
+                    if (!reTarget) {
+                        reTarget = true;
+                    }
                 }
-            }
 
-            if (playerDistance <= targetDistance && retreating) {
-                rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce(2, 3);
-                animator.SetFloat("Speed", 1);
+                if (playerDistance <= targetDistance && retreating) {
+                    rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce(2, 3);
+                    animator.SetFloat("Speed", 1);
 
-                if (runTime > 0) {
-                    runTime -= Time.deltaTime;
+                    if (runTime > 0) {
+                        runTime -= Time.deltaTime;
 
-                    if (runTime <= 0) {
-                        runTime = maxRunTime;
+                        if (runTime <= 0) {
+                            runTime = maxRunTime;
+                            retreating = false;
+                        }
+                    }
+                } else {
+                    if (retreating) {
                         retreating = false;
                     }
                 }
             } else {
-                if (retreating) {
-                    retreating = false;
+                Vector2 nearestWeaponDir = (nearestWeapon.transform.position - transform.position).normalized;
+                float nearestWeaponDistance = (nearestWeapon.transform.position - transform.position).magnitude;
+
+                rb.linearVelocity = nearestWeaponDir * Speed + calculateSeperationForce(2, 3);
+
+                Debug.Log(nearestWeapon.name);
+
+                animator.SetFloat("Speed", 1);
+
+                if (nearestWeaponDistance <= 0.1f) {
+                    FreeWeaponStats freeWeaponStats = nearestWeapon.GetComponent<FreeWeaponStats>();
+
+                    GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(freeWeaponStats.weaponIndex);
+                    armedEnemy.transform.position = transform.position;
+
+                    // copy all their stats over yo!
+                    armedEnemy.GetComponent<EnemyStats>().Health = GetComponent<EnemyStats>().Health;
+
+                    Destroy(nearestWeapon);
+                    unarmedMeleeEnemyPool.DisableInstance(gameObject);
                 }
             }
         }

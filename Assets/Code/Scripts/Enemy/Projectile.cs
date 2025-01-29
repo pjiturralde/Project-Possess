@@ -25,13 +25,7 @@ public class Projectile : MonoBehaviour {
     }
 
     private void Start() {
-        rb = GetComponent<Rigidbody2D>();
-        poolManager = ProjectilePoolManager.instance;
-        playerManager = PlayerManager.instance;
-        playerStats = playerManager.GetComponent<PlayerStats>();
-        direction = Vector2.zero;
-        mainCamera = Camera.main;
-        isInitialized = true;
+        Initialize();
     }
 
     public void SetDirection(Vector2 direction) {

@@ -6,6 +6,7 @@ public class EnemyStats : MonoBehaviour {
     private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
     private SpriteRenderer spriteRenderer;
     private PlayerManager playerManager;
+    private EnemyWeapon enemyWeapon;
 
     private Material defaultMaterial;
     public Material damagedMaterial;
@@ -43,6 +44,14 @@ public class EnemyStats : MonoBehaviour {
         Invulnerable = false;
         DamageMultiplier = 1;
         AttackRate = 1;
+        
+        if (gameObject.CompareTag("ArmedEnemy")) {
+            foreach (Transform t in  transform) {
+                if (t.CompareTag("EnemyWeapon")) {
+                    enemyWeapon = t.GetComponent<EnemyWeapon>();
+                }
+            }
+        }
         isInitialized = true;
     }
 
@@ -52,19 +61,7 @@ public class EnemyStats : MonoBehaviour {
 
     void Start() {
         // Initialize starting values
-        rangedEnemyPool = RangedEnemyPool.instance;
-        armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
-        unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
-        playerManager = PlayerManager.instance;
-
-        spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
-        defaultMaterial = spriteRenderer.material;
-
-        Health = MaxHealth;
-        Invulnerable = false;
-        DamageMultiplier = 1;
-        AttackRate = 1;
-        isInitialized = true;
+        Initialize();
     }
 
     void Update() {
@@ -124,6 +121,28 @@ public class EnemyStats : MonoBehaviour {
 
     private void Die() {
         Debug.Log("Enemy has died");
+        int dropRoll = Random.Range(1, 4);
+
+        if (dropRoll == 1) { // 25% chance to drop coins and 25% chance to drop weapon
+            GameObject droppedCoin = Instantiate(coinPrefab);
+            droppedCoin.transform.position = transform.position;
+        } else if (dropRoll > 1) {
+            if (gameObject.CompareTag("ArmedEnemy")) {
+                GameObject weapon = null;
+
+                if (enemyWeapon.weaponIndex == 0) { // AXE IS 0, SWORD IS 1, SPEAR IS 2 RANDOMIZE!
+                    weapon = Instantiate(axePrefab);
+                } else if (enemyWeapon.weaponIndex == 1) {
+                    weapon = Instantiate(swordPrefab);
+                } else if (enemyWeapon.weaponIndex == 2) {
+                    weapon = Instantiate(spearPrefab);
+                }
+
+                weapon.transform.position = transform.position;
+                weapon.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
+            }
+        }
+
         if (gameObject.CompareTag("RangedEnemy")) {
             rangedEnemyPool.DisableInstance(gameObject);
         } else if (gameObject.CompareTag("ArmedEnemy")) {
