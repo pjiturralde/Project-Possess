@@ -22,7 +22,7 @@ public class PlayerStats : MonoBehaviour {
 
     // Cooldowns
     private bool Invulnerable;
-    private double invulnerabilityDuration = 0.5D;
+    private double invulnerabilityDuration = 0.2D;
 
     void Start() {
         // Initialize starting values
@@ -79,7 +79,7 @@ public class PlayerStats : MonoBehaviour {
 
     private void TriggerInvulnerability() {
         Invulnerable = true;
-        invulnerabilityDuration = 0.5D;
+        invulnerabilityDuration = 0.2D;
     }
 
     private void LoseHealth(float amount) {

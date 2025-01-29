@@ -30,6 +30,13 @@ public class ProjectilePoolManager : MonoBehaviour {
         for (int i = 0; i < pool.Count; i++) {
             if (!pool[i].activeSelf) {
                 EnableInstance(pool[i]);
+
+                Projectile projectile = pool[i].GetComponent<Projectile>();
+
+                if (!projectile.isInitialized) {
+                    projectile.Initialize();
+                }
+
                 return pool[i];
             }
         }

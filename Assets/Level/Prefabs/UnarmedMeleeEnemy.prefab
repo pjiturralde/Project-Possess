@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3321798178191305464}
   m_Layer: 6
   m_Name: UnarmedMeleeEnemy
-  m_TagString: Enemy
+  m_TagString: UnarmedEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55d261f7cc62ad4f8d2921572291633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damagedMaterial: {fileID: 2100000, guid: e1369597f1f14994cb6f774dbfe5605b, type: 2}
   MaxHealth: 50
   Health: 0
   DamageMultiplier: 0

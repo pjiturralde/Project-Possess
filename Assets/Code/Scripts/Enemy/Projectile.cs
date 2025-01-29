@@ -8,14 +8,30 @@ public class Projectile : MonoBehaviour {
     private Camera mainCamera;
     private PlayerManager playerManager;
     private PlayerStats playerStats;
+    public bool isInitialized;
 
-    private void Awake() {
+    public void Initialize() {
         rb = GetComponent<Rigidbody2D>();
         poolManager = ProjectilePoolManager.instance;
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         direction = Vector2.zero;
         mainCamera = Camera.main;
+        isInitialized = true;
+    }
+
+    private void Awake() {
+        isInitialized = false;
+    }
+
+    private void Start() {
+        rb = GetComponent<Rigidbody2D>();
+        poolManager = ProjectilePoolManager.instance;
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
+        direction = Vector2.zero;
+        mainCamera = Camera.main;
+        isInitialized = true;
     }
 
     public void SetDirection(Vector2 direction) {
@@ -43,6 +59,23 @@ public class Projectile : MonoBehaviour {
             // HIT!
             // take damage and send back to le poole!
             playerStats.TakeDamage(10);
+            poolManager.DisableInstance(gameObject);
+        } else if (collision.CompareTag("PlayerWeapon")) {
+            GameObject playerWeapon = null;
+
+            foreach (Transform child in playerManager.transform) {
+                if (child.CompareTag("PlayerWeapon")) {
+                    playerWeapon = child.gameObject;
+                }
+            }
+
+            WeaponStats weaponStats = null;
+
+            if (playerWeapon != null) {
+                weaponStats = playerWeapon.GetComponent<WeaponStats>();
+            }
+
+            weaponStats.TakeDamage(5);
             poolManager.DisableInstance(gameObject);
         }
     }

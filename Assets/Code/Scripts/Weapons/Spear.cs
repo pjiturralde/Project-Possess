@@ -65,7 +65,7 @@ public class Spear : MonoBehaviour {
 
     // OnTriggerStay2D is called when a collider stays within trigger
     private void OnTriggerStay2D(Collider2D collision) {
-        if (collision.CompareTag("Enemy") && attacking) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
             enemy.TakeDamage(weaponStats.Damage);
         }

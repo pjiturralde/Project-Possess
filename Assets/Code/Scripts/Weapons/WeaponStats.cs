@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class WeaponStats : MonoBehaviour {
@@ -53,7 +54,7 @@ public class WeaponStats : MonoBehaviour {
 
     private void TriggerInvulnerability() {
         Invulnerable = true;
-        invulnerabilityDuration = 0.5D;
+        invulnerabilityDuration = 0.2D;
     }
 
     private void LoseDurability(float amount) {
@@ -70,7 +71,6 @@ public class WeaponStats : MonoBehaviour {
         playerStats.transform.Find("Body").GetComponent<SpriteRenderer>().enabled = true; // pls don't change name of body
 
         durabilityManager.DeactivateDurabilityBar();
-
         Destroy(gameObject);
     }
 }

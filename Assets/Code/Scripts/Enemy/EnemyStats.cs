@@ -1,11 +1,19 @@
 using UnityEngine;
 
 public class EnemyStats : MonoBehaviour {
+    private RangedEnemyPool rangedEnemyPool;
+    private ArmedMeleeEnemyPool armedMeleeEnemyPool;
+    private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
+    private SpriteRenderer spriteRenderer;
+
+    private Material defaultMaterial;
+    public Material damagedMaterial;
+
     // Core stats
     public int MaxHealth = 50;
 
     // Current stats
-    public int Health;
+    public float Health;
     public float DamageMultiplier;
     public float AttackRate;
 
@@ -16,6 +24,13 @@ public class EnemyStats : MonoBehaviour {
     public bool isInitialized;
 
     public void Initialize() {
+        rangedEnemyPool = RangedEnemyPool.instance;
+        armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
+        unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
+
+        spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
+        defaultMaterial = spriteRenderer.material;
+        
         Health = MaxHealth;
         Invulnerable = false;
         DamageMultiplier = 1;
@@ -29,6 +44,13 @@ public class EnemyStats : MonoBehaviour {
 
     void Start() {
         // Initialize starting values
+        rangedEnemyPool = RangedEnemyPool.instance;
+        armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
+        unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
+
+        spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
+        defaultMaterial = spriteRenderer.material;
+
         Health = MaxHealth;
         Invulnerable = false;
         DamageMultiplier = 1;
@@ -56,7 +78,7 @@ public class EnemyStats : MonoBehaviour {
             return;
         }
 
-        //LoseHealth
+        LoseHealth(damage);
         TriggerInvulnerability();
     }
 
@@ -65,16 +87,29 @@ public class EnemyStats : MonoBehaviour {
         invulnerabilityDuration = 0.5D;
     }
 
-    private void LoseHealth(int amount) {
+    private void LoseHealth(float amount) {
         Health -= amount;
+
+        spriteRenderer.material = damagedMaterial;
+        Invoke(nameof(ResetMaterial), 0.1f);
 
         if (Health <= 0) {
             Die();
         }
     }
 
+    private void ResetMaterial() {
+        spriteRenderer.material = defaultMaterial;
+    }
+
     private void Die() {
         Debug.Log("Enemy has died");
-        // Add death handling here
+        if (gameObject.CompareTag("RangedEnemy")) {
+            rangedEnemyPool.DisableInstance(gameObject);
+        } else if (gameObject.CompareTag("ArmedEnemy")) {
+            armedMeleeEnemyPool.DisableInstance(gameObject);
+        } else if (gameObject.CompareTag("UnarmedEnemy")) {
+            unarmedMeleeEnemyPool.DisableInstance(gameObject);
+        }
     }
 }

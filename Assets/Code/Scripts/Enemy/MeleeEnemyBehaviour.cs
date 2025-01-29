@@ -166,19 +166,49 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                 rb.MovePosition(calculateNextPosition());
             }
         }
+        if (!playerStats.isPossessing) {
+            if (radius <= minDistance + 0.5f) {
+                // ATTACK!
+                if (attackTimer <= 0) {
+                    isWindingUp = true;
+                    float windUpTime = 1;
 
-        if (radius <= minDistance + 0.5f) {
-            // ATTACK!
-            if (attackTimer <= 0) {
-                isWindingUp = true;
-                float windUpTime = 1;
+                    attackTimer = 3 + windUpTime;
 
-                attackTimer = 3 + windUpTime;
+                    weapon.PlayAttackAnimation(windUpTime);
+                    Invoke(nameof(startAttack), windUpTime - 0.01f);
+                    Invoke(nameof(stopAttacking), 1 + windUpTime);
+                    // DAMAGE PLAYER RAAHHH!!)
+                }
+            }
+        } else {
+            GameObject playerWeapon = null;
 
-                weapon.PlayAttackAnimation(windUpTime);
-                Invoke(nameof(startAttack), windUpTime - 0.01f);
-                Invoke(nameof(stopAttacking), 1 + windUpTime);
-                // DAMAGE PLAYER RAAHHH!!)
+            foreach (Transform child in playerManager.transform) {
+                if (child.CompareTag("PlayerWeapon")) {
+                    playerWeapon = child.gameObject;
+                }
+            }
+
+            float weaponRadius = 0; // some default number
+
+            if (playerWeapon != null) {
+                weaponRadius = (playerWeapon.transform.position - transform.position).magnitude;
+            }
+
+            if (weaponRadius <= minDistance + 0.6f) {
+                // ATTACK!
+                if (attackTimer <= 0) {
+                    isWindingUp = true;
+                    float windUpTime = 1;
+
+                    attackTimer = 3 + windUpTime;
+
+                    weapon.PlayAttackAnimation(windUpTime);
+                    Invoke(nameof(startAttack), windUpTime - 0.01f);
+                    Invoke(nameof(stopAttacking), 1 + windUpTime);
+                    // DAMAGE PLAYER RAAHHH!!)
+                }
             }
         }
 
@@ -193,15 +223,42 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
         isWindingUp = false;
         isAttacking = true;
-        if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
-            bodySpriteRenderer.flipX = true;
-            shoulderSpriteRenderer.flipX = true;
-        } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
-            bodySpriteRenderer.flipX = false;
-            shoulderSpriteRenderer.flipX = false;
+
+        if (!playerStats.isPossessing) {
+            if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
+                bodySpriteRenderer.flipX = true;
+                shoulderSpriteRenderer.flipX = true;
+            } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
+                bodySpriteRenderer.flipX = false;
+                shoulderSpriteRenderer.flipX = false;
+            }
+
+            if (radius <= minDistance + 0.4f) {
+                playerStats.TakeDamage(10);
+            }
+        } else {
+            GameObject playerWeapon = null;
+
+            foreach (Transform child in playerManager.transform) {
+                if (child.CompareTag("PlayerWeapon")) {
+                    playerWeapon = child.gameObject;
+                }
+            }
+
+            float weaponRadius = (playerWeapon.transform.position - transform.position).magnitude;
+
+            if (weaponRadius <= minDistance + 0.5f) {
+                WeaponStats weaponStats = null;
+
+                if (playerWeapon != null) {
+                    weaponStats = playerWeapon.GetComponent<WeaponStats>();
+                }
+
+                weaponStats.TakeDamage(30);
+            }
         }
 
-        if (radius <= minDistance + 0.4f) {
+/*        if (radius <= minDistance + 0.4f) {
             if (!playerStats.isPossessing) {
                 playerStats.TakeDamage(10);
             } else {
@@ -221,7 +278,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
 
                 weaponStats.TakeDamage(30);
             }
-        }
+        }*/
     }
 
     private void stopAttacking() { // sets isAttacking to false

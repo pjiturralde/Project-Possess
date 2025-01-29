@@ -9,6 +9,7 @@ public class Axe : MonoBehaviour
     private WeaponStats stats;
     private float damage;
     private bool attacking;
+    private bool canHit;
     private bool canAttack;
     private bool holdingClick;
     private float cdTimer;
@@ -16,6 +17,7 @@ public class Axe : MonoBehaviour
 
     void Start() {
         attacking = false;
+        canHit = false;
         damage = 10;
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
@@ -34,7 +36,9 @@ public class Axe : MonoBehaviour
         float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
 
         if (!attacking) {
-            transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            if ((mousePosition - transform.position).magnitude > 0.05f) {
+                transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            }
         }
 
         Vector3[] newPath = new Vector3[path.Length];
@@ -56,6 +60,8 @@ public class Axe : MonoBehaviour
 
                 attacking = true;
                 canAttack = false;
+                Invoke(nameof(StartAllowingHit), 0.3f);
+                Invoke(nameof(StopAllowingHit), 0.9f);
 
                 Sequence sequence1 = DOTween.Sequence();
                 sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, -radius, 0), 0.3f));
@@ -79,13 +85,21 @@ public class Axe : MonoBehaviour
         }
     }
 
+    void StartAllowingHit() {
+        canHit = true;
+    }
+
+    void StopAllowingHit() {
+        canHit = false;
+    }
+
     void StopAttacking() {
         attacking = false;
         cdTimer = stats.cooldown;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Enemy") && attacking) {
+    private void OnTriggerStay2D(Collider2D collision) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
             enemy.TakeDamage(damage);

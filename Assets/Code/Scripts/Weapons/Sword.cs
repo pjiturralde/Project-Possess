@@ -6,6 +6,7 @@ public class Sword : MonoBehaviour {
     private Vector3[] path = new Vector3[6];
     private Quaternion lookAtRotation;
     private WeaponStats stats;
+    private bool holdingClick;
     private float damage;
     private bool attacking;
     private bool canAttack;
@@ -20,6 +21,7 @@ public class Sword : MonoBehaviour {
         cdTimer = 0;
         canAttack = true;
         scale = 0.1f;
+        holdingClick = false;
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
@@ -39,12 +41,22 @@ public class Sword : MonoBehaviour {
         float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
 
         if (!attacking) {
-            transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            if ((mousePosition - transform.position).magnitude > 0.05f) {
+                transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            }
         }
 
         Vector3[] newPath = new Vector3[path.Length];
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0) && !holdingClick) {
+            holdingClick = true;
+        }
+
+        if (Input.GetMouseButtonUp(0) && holdingClick) {
+            holdingClick = false;
+        }
+
+        if (holdingClick) {
             if (canAttack) {
                 for (int i = 0; i < path.Length; i++) {
                     newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i] * scale;
@@ -73,8 +85,8 @@ public class Sword : MonoBehaviour {
         cdTimer = stats.cooldown;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Enemy") && attacking) {
+    private void OnTriggerStay2D(Collider2D collision) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
             enemy.TakeDamage(damage);

@@ -53,7 +53,7 @@ public class Possession : MonoBehaviour {
                 if (currentHit != null) {
                     SpriteRenderer enemyWeaponSpriteRenderer;
 
-                    if (hit.collider.CompareTag("Enemy")) {
+                    if (hit.collider.CompareTag("ArmedEnemy")) {
                         foreach (Transform child in hit.transform) {
                             if (child.CompareTag("EnemyWeapon")) {
                                 enemyWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
@@ -67,7 +67,7 @@ public class Possession : MonoBehaviour {
                 }
             }
 
-            if (currentHit != null && Input.GetMouseButtonDown(0)) {
+            if (currentHit != null && Input.GetMouseButtonDown(0) && currentHit.CompareTag("ArmedEnemy")) {
                 foreach (Transform child in currentHit.transform) {
                     if (child.CompareTag("EnemyWeapon")) {
                         currentWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
