@@ -5,7 +5,7 @@ public class QuickTimeEventManager : MonoBehaviour {
     public Transform pointA; // Reference to the starting point
     public Transform pointB; // Reference to the ending point
     public RectTransform safeZone; // Reference to the safe zone RectTransform
-    public float moveSpeed = 100f; // Speed of the pointer movement
+    private float moveSpeed = 100f; // Speed of the pointer movement
     private PlayerManager playerManager;
     private Possession possessionScript;
 
