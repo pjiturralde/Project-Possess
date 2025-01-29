@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UIBarsBackground_0: -4395879007466353504
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

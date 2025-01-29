@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4dfb5a142646e46b55e334b9984004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 5661292315553867757}
   isInitialized: 0
 --- !u!95 &5661292315553867757
 Animator:

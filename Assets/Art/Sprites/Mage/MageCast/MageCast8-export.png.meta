@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4d957a2f1d53a5c4ab38c8030443fc8c
+guid: 1df8b0cebacc29540b488a04ca2b216a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7916135102169123697
-    second: MageCast2_0
+      213: -5478137097008636649
+    second: MageCast8-export_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,40 +96,27 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MageCast2_0
+      name: MageCast8-export_0
       rect:
         serializedVersion: 2
-        x: 19
+        x: 0
         y: 0
-        width: 272
-        height: 221
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 32
+        height: 24
+      alignment: 9
+      pivot: {x: 0.375, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f847539e01d342290800000000000000
-      internalID: -7916135102169123697
+      spriteID: 71d19eda55fb9f3b0800000000000000
+      internalID: -5478137097008636649
       vertices: []
       indices: 
       edges: []
@@ -138,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ce9e1c785c3c5344885c2759e968d57c
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MageCast2_0: -7916135102169123697
+      MageCast8-export_0: -5478137097008636649
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

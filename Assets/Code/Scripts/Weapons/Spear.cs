@@ -59,14 +59,22 @@ public class Spear : MonoBehaviour {
                 attacking = true;
                 onCooldown = true;
                 line.enabled = false;
-                playerManager.transform.DOMove(targetPosition, attackTime).SetEase(Ease.InOutBack).OnComplete(StopAttacking);
+                playerManager.transform.DOMove(targetPosition, attackTime).SetEase(Ease.InOutBack);
+                Invoke(nameof(StopAttacking), attackTime - 0.1f);
                 Invoke(nameof(EndCooldown),weaponStats.cooldown);
             }
         }
     }
 
-    // OnTriggerStay2D is called when a collider stays within trigger
-    private void OnTriggerStay2D(Collider2D collision) {
+    // OnTriggerStay2D is called when a collider stays within trigger -- PISCES IMA TRY THIS WAY!
+    private void OnTriggerExit2D(Collider2D collision) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
+            EnemyStats enemy = collision.GetComponent<EnemyStats>();
+            enemy.TakeDamage(weaponStats.Damage);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
             enemy.TakeDamage(weaponStats.Damage);

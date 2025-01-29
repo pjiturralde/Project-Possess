@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6532fa734c9f2414b9460e053bdf8428
+guid: 90b886406e22f6d4cb923ef9a647da39
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7304949202303118983
-    second: MageCast3_0
+      213: -2431959938248434726
+    second: MageProjectile5-export_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MageCast3_0
+      name: MageProjectile5-export_0
       rect:
         serializedVersion: 2
-        x: 19
+        x: 0
         y: 0
-        width: 222
-        height: 231
+        width: 11
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 78eec81a894606560800000000000000
-      internalID: 7304949202303118983
+      spriteID: adb98bc3251ff3ed0800000000000000
+      internalID: -2431959938248434726
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MageCast3_0: 7304949202303118983
+      MageProjectile5-export_0: -2431959938248434726
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

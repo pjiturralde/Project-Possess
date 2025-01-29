@@ -26,6 +26,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private Transform blockingObject; // Any object that blocks the path of this enemy
     private int numEnemies; // Number of enemies surrounding player that are within minimum distance
     private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
+    private bool isStunned;
 
     // Augment behaviour
     public float raycastDistance = 1; 
@@ -49,6 +50,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         changeCirclingDirTimer = 0f;
         attackTimer = 0;
         weapon = GetComponentInChildren<EnemyWeapon>();
+        isStunned = false;
         isInitialized = true;
     }
 
@@ -68,6 +70,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         changeCirclingDirTimer = 0f;
         attackTimer = 0;
         weapon = GetComponentInChildren<EnemyWeapon>();
+        isStunned = false;
         isInitialized = true;
     }
 
@@ -130,42 +133,45 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         float radius = (playerTransform.position - transform.position).magnitude;
         // if too close, retreat, if far, circle around obstacles and get near
 
-        if (radius <= minDistance - 0.5f) {
-            rb.linearVelocity = -playerDirection * Speed;
-        } else {
-            if (!isCircling) {
+        if (!isStunned) {
+            if (radius <= minDistance - 0.5f) {
+                rb.linearVelocity = -playerDirection * Speed;
+            } else {
+                if (!isCircling) {
 
-                if (radius >= minDistance && numEnemies < maxEnemies) { // check if not within range of player and number of enemies around player is less than max enemies allowed
-                    Vector2 seperationForce = Vector2.zero;
-                    float applyForceDistance = 3;
+                    if (radius >= minDistance && numEnemies < maxEnemies) { // check if not within range of player and number of enemies around player is less than max enemies allowed
+                        Vector2 seperationForce = Vector2.zero;
+                        float applyForceDistance = 3;
 
-                    foreach (GameObject enemy in enemies) {
-                        if (enemy != gameObject) {
-                            Vector2 direction = transform.position - enemy.transform.position;
-                            float distance = direction.magnitude;
+                        foreach (GameObject enemy in enemies) {
+                            if (enemy != gameObject) {
+                                Vector2 direction = transform.position - enemy.transform.position;
+                                float distance = direction.magnitude;
 
-                            if (distance < applyForceDistance) {
-                                seperationForce += direction.normalized / distance;
+                                if (distance < applyForceDistance) {
+                                    seperationForce += direction.normalized / distance;
+                                }
                             }
                         }
-                    }
 
-                    rb.linearVelocity = playerDirection * Speed + seperationForce * 3;
+                        rb.linearVelocity = playerDirection * Speed + seperationForce * 3;
+                    } else {
+                        rb.linearVelocity = Vector2.zero;
+                        changeCirclingDirTimer = 0;
+
+                        animator.SetFloat("Speed", 0); // set le speed to 0 for animation
+                    }
                 } else {
                     rb.linearVelocity = Vector2.zero;
-                    changeCirclingDirTimer = 0;
 
-                    animator.SetFloat("Speed", 0); // set le speed to 0 for animation
+                    if (numEnemies >= maxEnemies) {
+                        isCircling = false;
+                    }
+                    rb.MovePosition(calculateNextPosition());
                 }
-            } else {
-                rb.linearVelocity = Vector2.zero;
-
-                if (numEnemies >= maxEnemies) {
-                    isCircling = false;
-                }
-                rb.MovePosition(calculateNextPosition());
             }
         }
+
         if (!playerStats.isPossessing) {
             if (radius <= minDistance + 0.5f) {
                 // ATTACK!
@@ -212,10 +218,20 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             }
         }
 
-        if (isAttacking) {
+        if (isAttacking && !isStunned) {
             rb.linearVelocity = Vector3.zero;
             animator.SetFloat("Speed", 0);
         }
+    }
+
+    public void Knockback(Vector2 knockbackDir) {
+        isStunned = true;
+        rb.linearVelocity = knockbackDir * 5;
+        Invoke(nameof(StopKnockback), 0.1f);
+    }
+
+    public void StopKnockback() {
+        isStunned = false;
     }
 
     private void startAttack() {

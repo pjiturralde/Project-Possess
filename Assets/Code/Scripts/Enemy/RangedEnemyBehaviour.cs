@@ -19,6 +19,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     private float targetDistance; // Between minDistance and maxDistance
     private bool retreating;
     private bool reTarget;
+    private bool isStunned;
 
     public bool isInitialized;
 
@@ -35,6 +36,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
         reTarget = true;
         runTime = maxRunTime;
         retreating = false;
+        isStunned = false;
         isInitialized = true;
     }
 
@@ -53,6 +55,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
         reTarget = true;
         runTime = maxRunTime;
         retreating = false;
+        isStunned = false;
         isInitialized = true;
     }
 
@@ -97,35 +100,47 @@ public class RangedEnemyBehaviour : MonoBehaviour {
 
         float playerDistance = (playerTransform.position - transform.position).magnitude;
 
-        rb.linearVelocity = Vector2.zero;
+        if (!isStunned) {
+            rb.linearVelocity = Vector2.zero;
 
-        if (playerDistance > targetDistance && !reTarget) {
-            runTime = maxRunTime;
-            rb.linearVelocity = playerDirection * Speed + calculateSeperationForce(6, 4);
-            animator.SetFloat("Speed", 1);
-        } else if (playerDistance <= targetDistance) {
-            if (!reTarget) {
-                reTarget = true;
+            if (playerDistance > targetDistance && !reTarget) {
+                runTime = maxRunTime;
+                rb.linearVelocity = playerDirection * Speed + calculateSeperationForce(6, 4);
+                animator.SetFloat("Speed", 1);
+            } else if (playerDistance <= targetDistance) {
+                if (!reTarget) {
+                    reTarget = true;
+                }
             }
-        }
 
-        if (playerDistance <= targetDistance && retreating) {
-            rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce(2, 3);
-            animator.SetFloat("Speed", 1);
+            if (playerDistance <= targetDistance && retreating) {
+                rb.linearVelocity = -playerDirection * Speed + calculateSeperationForce(2, 3);
+                animator.SetFloat("Speed", 1);
 
-            if (runTime > 0) {
-                runTime -= Time.deltaTime;
+                if (runTime > 0) {
+                    runTime -= Time.deltaTime;
 
-                if (runTime <= 0) {
-                    runTime = maxRunTime;
+                    if (runTime <= 0) {
+                        runTime = maxRunTime;
+                        retreating = false;
+                    }
+                }
+            } else {
+                if (retreating) {
                     retreating = false;
                 }
             }
-        } else {
-            if (retreating) {
-                retreating = false;
-            }
         }
+    }
+
+    public void Knockback(Vector2 knockbackDir) {
+        isStunned = true;
+        rb.linearVelocity = knockbackDir * 5;
+        Invoke(nameof(StopKnockback), 0.1f);
+    }
+
+    public void StopKnockback() {
+        isStunned = false;
     }
 
     private Vector2 calculateSeperationForce(float applyForceDistance, float seperationFactor) {

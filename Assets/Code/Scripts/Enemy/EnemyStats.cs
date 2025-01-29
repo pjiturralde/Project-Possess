@@ -5,9 +5,16 @@ public class EnemyStats : MonoBehaviour {
     private ArmedMeleeEnemyPool armedMeleeEnemyPool;
     private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
     private SpriteRenderer spriteRenderer;
+    private PlayerManager playerManager;
 
     private Material defaultMaterial;
     public Material damagedMaterial;
+
+    // Drops
+    public GameObject coinPrefab;
+    public GameObject axePrefab;
+    public GameObject swordPrefab;
+    public GameObject spearPrefab;
 
     // Core stats
     public int MaxHealth = 50;
@@ -27,6 +34,7 @@ public class EnemyStats : MonoBehaviour {
         rangedEnemyPool = RangedEnemyPool.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
+        playerManager = PlayerManager.instance;
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         defaultMaterial = spriteRenderer.material;
@@ -47,6 +55,7 @@ public class EnemyStats : MonoBehaviour {
         rangedEnemyPool = RangedEnemyPool.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
+        playerManager = PlayerManager.instance;
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         defaultMaterial = spriteRenderer.material;
@@ -92,6 +101,17 @@ public class EnemyStats : MonoBehaviour {
 
         spriteRenderer.material = damagedMaterial;
         Invoke(nameof(ResetMaterial), 0.1f);
+
+        if (gameObject.CompareTag("RangedEnemy")) {
+            RangedEnemyBehaviour rangedEnemyBehaviour = gameObject.GetComponent<RangedEnemyBehaviour>();
+            rangedEnemyBehaviour.Knockback(-(playerManager.transform.position - transform.position).normalized);
+        } else if (gameObject.CompareTag("ArmedEnemy")) {
+            MeleeEnemyBehaviour meleeEnemyBehaviour = gameObject.GetComponent<MeleeEnemyBehaviour>();
+            meleeEnemyBehaviour.Knockback(-(playerManager.transform.position - transform.position).normalized);
+        } else if (gameObject.CompareTag("UnarmedEnemy")) {
+            UnarmedMeleeEnemyBehaviour unarmedMeleeEnemyBehaviour = gameObject.GetComponent<UnarmedMeleeEnemyBehaviour>();
+            unarmedMeleeEnemyBehaviour.Knockback(-(playerManager.transform.position - transform.position).normalized);
+        }
 
         if (Health <= 0) {
             Die();

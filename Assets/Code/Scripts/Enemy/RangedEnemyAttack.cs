@@ -1,6 +1,8 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class RangedEnemyAttack : MonoBehaviour {
+    public Animator animator;
     private ProjectilePoolManager poolManager;
     private PlayerManager playerManager;
     private Rigidbody2D rb;
@@ -39,31 +41,40 @@ public class RangedEnemyAttack : MonoBehaviour {
                 cooldown -= Time.deltaTime;
 
                 if (cooldown <= 0) {
-                    cooldown = 2f;
-                    Vector2 playerPosition = playerManager.transform.position;
-                    Vector2 enemyPosition = transform.position;
+                    Invoke(nameof(Cast), 0.26f);
 
-                    Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
-                    Vector2 playerVelocity = playerManager.GetComponent<Rigidbody2D>().linearVelocity;
-
-                    GameObject instance = poolManager.GetInstance();
-                    Projectile projectile = instance.GetComponent<Projectile>();
-                    projectile.transform.position = enemyPosition;
-
-                    Vector2 predictedPlayerPos = predictedPosition(enemyPosition, projectileSpeed, playerPosition, playerVelocity);
-                    Vector2 predictedPlayerDir = (predictedPlayerPos - enemyPosition).normalized;
-
-                    float predictedPlayerDirAngle = Vector2.SignedAngle(playerDirection, predictedPlayerDir);
-
-                    // epically randomize !!
-                    float randomizedShootAngle = predictedPlayerDirAngle < 0 ? Random.Range(predictedPlayerDirAngle, 0) : Random.Range(0, predictedPlayerDirAngle);
-
-                    // set speed before direction
-                    projectile.SetSpeed(projectileSpeed);
-                    projectile.SetDirection(Quaternion.AngleAxis(randomizedShootAngle, Vector3.forward) * playerDirection);
+                    animator.SetTrigger("Cast");
                 }
             }
         }
+    }
+
+    private void Cast() {
+        cooldown = 2f;
+        Vector2 playerPosition = playerManager.transform.position;
+        Vector2 enemyPosition = transform.position;
+
+        Vector2 playerDirection = (playerPosition - enemyPosition).normalized;
+        Vector2 playerVelocity = playerManager.GetComponent<Rigidbody2D>().linearVelocity;
+
+        GameObject instance = poolManager.GetInstance();
+        Projectile projectile = instance.GetComponent<Projectile>();
+        projectile.transform.position = enemyPosition;
+
+        Vector2 predictedPlayerPos = predictedPosition(enemyPosition, projectileSpeed, playerPosition, playerVelocity);
+        Vector2 predictedPlayerDir = (predictedPlayerPos - enemyPosition).normalized;
+
+        float predictedPlayerDirAngle = Vector2.SignedAngle(playerDirection, predictedPlayerDir);
+
+        // epically randomize !!
+        float randomizedShootAngle = predictedPlayerDirAngle < 0 ? Random.Range(predictedPlayerDirAngle, 0) : Random.Range(0, predictedPlayerDirAngle);
+
+        // set speed before direction
+        projectile.SetSpeed(projectileSpeed);
+        Vector3 targetDir = Quaternion.AngleAxis(randomizedShootAngle + Random.Range(1, 3) * 90, Vector3.forward) * playerDirection;
+        float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        projectile.transform.rotation = Quaternion.Euler(0, 0, targetAngle);
+        projectile.SetDirection(Quaternion.AngleAxis(randomizedShootAngle, Vector3.forward) * playerDirection);
     }
 
     private Vector2 predictedPosition(Vector2 startPos, float projectileSpeed, Vector2 targetPos, Vector2 targetVelocity) {

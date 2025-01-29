@@ -10,17 +10,19 @@ public class Sword : MonoBehaviour {
     private float damage;
     private bool attacking;
     private bool canAttack;
+    private bool canHit;
     private float cdTimer;
     public float scale;
 
     void Start() {
         player = transform.parent;
         attacking = false;
+        canHit = false;
         damage = 10;
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
         canAttack = true;
-        scale = 0.1f;
+        scale = 0.07f;
         holdingClick = false;
 
         path = new Vector3[] {
@@ -64,6 +66,8 @@ public class Sword : MonoBehaviour {
                 }
 
                 attacking = true;
+                Invoke(nameof(StartAllowingHit), 0.1f);
+                Invoke(nameof(StopAllowingHit), 0.5f);
                 canAttack = false;
                 transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
 
@@ -80,13 +84,21 @@ public class Sword : MonoBehaviour {
         }
     }
 
+    void StartAllowingHit() {
+        canHit = true;
+    }
+
+    void StopAllowingHit() {
+        canHit = false;
+    }
+
     void StopAttacking() {
         attacking = false;
         cdTimer = stats.cooldown;
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
-        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
             enemy.TakeDamage(damage);
