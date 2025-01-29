@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a629eb2571a89e3469ec7675b8855665
+guid: a885c96a081a575429a2653123bfba85
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5952849151981791033
-    second: UIBarsFrame_0
+      213: 2990780038478959986
+    second: UIQuicktimeIndicator_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UIBarsFrame_0
+      name: UIQuicktimeIndicator_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 96
-        height: 16
+        width: 8
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7c8d3ae5c3b336da0800000000000000
-      internalID: -5952849151981791033
+      spriteID: 2751ed26992618920800000000000000
+      internalID: 2990780038478959986
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UIBarsFrame_0: -5952849151981791033
+      UIQuicktimeIndicator_0: 2990780038478959986
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
