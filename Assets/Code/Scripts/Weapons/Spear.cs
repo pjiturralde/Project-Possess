@@ -41,7 +41,9 @@ public class Spear : MonoBehaviour {
 
         if (!attacking) {
             // Rotate weapon towards mouse
-            transform.eulerAngles = new Vector3(0, 0, angleToMouse);
+            if ((mouseWorldPosition - (Vector2)transform.position).magnitude > 0.1f) {
+                transform.eulerAngles = new Vector3(0, 0, angleToMouse);
+            }
             // If holding left click
             if (Input.GetMouseButton(0) && !onCooldown) {
                 timeHeld += Time.deltaTime;

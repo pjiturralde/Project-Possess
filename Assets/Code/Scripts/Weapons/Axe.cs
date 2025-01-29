@@ -36,7 +36,7 @@ public class Axe : MonoBehaviour
         float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
 
         if (!attacking) {
-            if ((mousePosition - transform.position).magnitude > 0.05f) {
+            if ((mousePosition - transform.position).magnitude > 0.1f) {
                 transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             }
         }
