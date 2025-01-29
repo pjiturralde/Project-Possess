@@ -5,6 +5,11 @@ public class WeaponStats : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
     private DurabilityManager durabilityManager;
+    private GameObject playerParticles;
+
+    private SpriteRenderer spriteRenderer;
+    public Material defaultMaterial;
+    public Material damagedMaterial;
 
     // Core stats
     public int MaxDurability = 50;
@@ -23,9 +28,12 @@ public class WeaponStats : MonoBehaviour {
         durabilityManager = DurabilityManager.instance;
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
+        playerParticles = playerManager.transform.Find("PlayerParticles").gameObject;
         Durability = MaxDurability;
         Invulnerable = false;
         Damage = 10;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        defaultMaterial = spriteRenderer.material;
     }
 
     void Update() {
@@ -48,8 +56,14 @@ public class WeaponStats : MonoBehaviour {
             return;
         }
 
+        spriteRenderer.material = damagedMaterial;
+        Invoke(nameof(ResetMaterial), 0.1f);
+
         LoseDurability(damage);
         TriggerInvulnerability();
+    }
+    private void ResetMaterial() {
+        spriteRenderer.material = defaultMaterial;
     }
 
     private void TriggerInvulnerability() {
@@ -71,6 +85,7 @@ public class WeaponStats : MonoBehaviour {
         playerStats.transform.Find("Body").GetComponent<SpriteRenderer>().enabled = true; // pls don't change name of body
 
         durabilityManager.DeactivateDurabilityBar();
+        playerParticles.SetActive(true);
         Destroy(gameObject);
     }
 }

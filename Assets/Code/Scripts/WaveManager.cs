@@ -13,7 +13,7 @@ public class WaveManager : MonoBehaviour {
             armedEnemy.transform.position = new Vector2(i * 3, 0);
         }
 
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 3; i++) {
             GameObject rangedEnemy = rangedEnemyPool.GetInstance();
             rangedEnemy.transform.position = new Vector2(i * 3, 2);
         }

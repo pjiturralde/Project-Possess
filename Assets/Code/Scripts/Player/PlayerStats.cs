@@ -4,7 +4,11 @@ public class PlayerStats : MonoBehaviour {
     // Player controller reference
     public PlayerController controller;
 
-    // Current weapon reference
+    private SpriteRenderer spriteRenderer;
+    public Material defaultMaterial;
+    public Material damagedMaterial;
+
+    // Current weapon reference -- idk why i said this ignore
     // add later once weapons added
 
     // Core stats
@@ -25,6 +29,9 @@ public class PlayerStats : MonoBehaviour {
     private double invulnerabilityDuration = 0.2D;
 
     void Start() {
+        spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
+        defaultMaterial = spriteRenderer.material;
+
         // Initialize starting values
         Health = MaxHealth;
         Invulnerable = false;
@@ -73,8 +80,15 @@ public class PlayerStats : MonoBehaviour {
             return;
         }
 
+        spriteRenderer.material = damagedMaterial;
+        Invoke(nameof(ResetMaterial), 0.1f);
+
         LoseHealth(damage);
         TriggerInvulnerability();
+    }
+
+    private void ResetMaterial() {
+        spriteRenderer.material = defaultMaterial;
     }
 
     private void TriggerInvulnerability() {

@@ -14,6 +14,7 @@ public class Possession : MonoBehaviour {
     private QuickTimeEventManager quickTimeEventManager;
     private DurabilityManager durabilityManager;
     private Collider2D weaponToSteal;
+    public GameObject playerParticles;
 
     public GameObject playerAxe;
     public GameObject playerSword;
@@ -163,6 +164,7 @@ public class Possession : MonoBehaviour {
         currentHit = null;
         weaponToSteal = null;
 
+        playerParticles.SetActive(false);
         durabilityManager.ActivateDurabilityBar();
     }
 

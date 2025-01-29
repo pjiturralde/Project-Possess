@@ -126,7 +126,7 @@ public class EnemyStats : MonoBehaviour {
         if (dropRoll == 1) { // 25% chance to drop coins and 25% chance to drop weapon
             GameObject droppedCoin = Instantiate(coinPrefab);
             droppedCoin.transform.position = transform.position;
-        } else if (dropRoll > 1) {
+        } else if (dropRoll == 2) {
             if (gameObject.CompareTag("ArmedEnemy")) {
                 GameObject weapon = null;
 
