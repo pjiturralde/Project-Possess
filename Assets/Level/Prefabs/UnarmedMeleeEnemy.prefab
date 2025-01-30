@@ -116,9 +116,9 @@ MonoBehaviour:
   damagePopUpPrefab: {fileID: 2479314198948271041, guid: f0c8714accc6848488da1292dc0b49df, type: 3}
   damagedMaterial: {fileID: 2100000, guid: e1369597f1f14994cb6f774dbfe5605b, type: 2}
   coinPrefab: {fileID: 1432660832380886650, guid: 36ffbaaa8757b374e9b32eb9054673f8, type: 3}
-  axePrefab: {fileID: 0}
-  swordPrefab: {fileID: 0}
-  spearPrefab: {fileID: 0}
+  axePrefab: {fileID: 5760310850581508880, guid: 857aafcc38deee6459d0231f47e41166, type: 3}
+  swordPrefab: {fileID: 1937579591379324099, guid: 0bb6ba8e17fc3e341a0cc05a2d145310, type: 3}
+  spearPrefab: {fileID: 3594631428043831250, guid: f2c225467edeac549b1d37e0c01d2c18, type: 3}
   MaxHealth: 50
   Health: 0
   DamageMultiplier: 0

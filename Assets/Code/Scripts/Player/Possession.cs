@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.Burst.Intrinsics;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -15,8 +16,11 @@ public class Possession : MonoBehaviour {
     private QuickTimeEventManager quickTimeEventManager;
     private DurabilityManager durabilityManager;
     private Collider2D weaponToSteal;
+    private float possessionCooldown = 0;
     public CinemachineCamera cinemachineCamera;
     public GameObject playerParticles;
+    public TextMeshPro possessionTimer;
+    public TextMeshPro possessionTimerText;
 
     public GameObject playerAxe;
     public GameObject playerSword;
@@ -34,14 +38,67 @@ public class Possession : MonoBehaviour {
     }
 
     void Update() {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (possessionCooldown > 0) {
+            possessionCooldown -= Time.deltaTime / Time.timeScale; // just in case ^-^ yeah bud i know it does nothing.. no need to tell me..
 
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            possessionTimer.text = (Mathf.Round(possessionCooldown * 10) / 10).ToString();
+        } else {
+            if (possessionTimerText.gameObject.activeSelf) {
+                possessionTimerText.gameObject.SetActive(false);
+                possessionTimer.gameObject.SetActive(false);
+            }
 
-        if (!playerStats.isPossessing && weaponToSteal == null) {
-            if (currentHit != hit.collider) {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                if (currentHit != null) {
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            if (!playerStats.isPossessing && weaponToSteal == null) {
+                if (currentHit != hit.collider) {
+
+                    if (currentHit != null) {
+                        if (currentHit.CompareTag("FreeWeapon")) {
+                            currentWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
+
+                            currentWeaponSpriteRenderer.material = defaultMaterial;
+                        } else {
+                            foreach (Transform child in currentHit.transform) {
+                                if (child.CompareTag("EnemyWeapon")) {
+                                    currentWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
+
+                                    currentWeaponSpriteRenderer.material = defaultMaterial;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    currentHit = hit.collider;
+
+                    if (currentHit != null) {
+                        SpriteRenderer enemyWeaponSpriteRenderer;
+
+                        if (currentHit.CompareTag("FreeWeapon")) {
+                            enemyWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
+
+                            defaultMaterial = enemyWeaponSpriteRenderer.material;
+                            enemyWeaponSpriteRenderer.material = thickOutline;
+                        } else {
+                            if (hit.collider.CompareTag("ArmedEnemy")) {
+                                foreach (Transform child in hit.transform) {
+                                    if (child.CompareTag("EnemyWeapon")) {
+                                        enemyWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
+
+                                        defaultMaterial = enemyWeaponSpriteRenderer.material;
+                                        enemyWeaponSpriteRenderer.material = outline;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (currentHit != null && Input.GetMouseButtonDown(0) && (currentHit.CompareTag("ArmedEnemy") || currentHit.CompareTag("FreeWeapon"))) {
                     if (currentHit.CompareTag("FreeWeapon")) {
                         currentWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
 
@@ -56,58 +113,16 @@ public class Possession : MonoBehaviour {
                             }
                         }
                     }
+
+                    var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
+
+                    weaponToSteal = currentHit;
+                    cinemachineCamera.Follow = weaponToSteal.transform;
+                    composer.Damping.x = 0.3f;
+                    composer.Damping.y = 0.3f;
+                    Time.timeScale = 0.3f;
+                    quickTimeEventManager.Activate(0);
                 }
-
-                currentHit = hit.collider;
-
-                if (currentHit != null) {
-                    SpriteRenderer enemyWeaponSpriteRenderer;
-
-                    if (currentHit.CompareTag("FreeWeapon")) {
-                        enemyWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
-
-                        defaultMaterial = enemyWeaponSpriteRenderer.material;
-                        enemyWeaponSpriteRenderer.material = thickOutline;
-                    } else {
-                        if (hit.collider.CompareTag("ArmedEnemy")) {
-                            foreach (Transform child in hit.transform) {
-                                if (child.CompareTag("EnemyWeapon")) {
-                                    enemyWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
-
-                                    defaultMaterial = enemyWeaponSpriteRenderer.material;
-                                    enemyWeaponSpriteRenderer.material = outline;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (currentHit != null && Input.GetMouseButtonDown(0) && (currentHit.CompareTag("ArmedEnemy") || currentHit.CompareTag("FreeWeapon"))) {
-                if (currentHit.CompareTag("FreeWeapon")) {
-                    currentWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
-
-                    currentWeaponSpriteRenderer.material = defaultMaterial;
-                } else {
-                    foreach (Transform child in currentHit.transform) {
-                        if (child.CompareTag("EnemyWeapon")) {
-                            currentWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
-
-                            currentWeaponSpriteRenderer.material = defaultMaterial;
-                            break;
-                        }
-                    }
-                }
-
-                var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
-
-                weaponToSteal = currentHit;
-                cinemachineCamera.Follow = weaponToSteal.transform;
-                composer.Damping.x = 0.3f;
-                composer.Damping.y = 0.3f;
-                Time.timeScale = 0.3f;
-                quickTimeEventManager.Activate(0);
             }
         }
     }
@@ -208,6 +223,10 @@ public class Possession : MonoBehaviour {
 
     public void StopStealing() {
         var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
+        possessionCooldown = 5; // 5 second cooldown after attempting :] #punishment!
+
+        possessionTimer.gameObject.SetActive(true);
+        possessionTimerText.gameObject.SetActive(true);
 
         cinemachineCamera.Follow = playerManager.transform;
         composer.Damping.x = 0;
