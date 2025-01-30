@@ -6,6 +6,7 @@ public class QuickTimeEventManager : MonoBehaviour {
     public Transform pointB; // Reference to the ending point
     public RectTransform safeZone; // Reference to the safe zone RectTransform
     private float moveSpeed = 300f; // Speed of the pointer movement
+    private int difficulty = 0; // 0 is absolute easiest noobertson! 1 and up is spooky!
     private PlayerManager playerManager;
     private Possession possessionScript;
 
@@ -30,7 +31,13 @@ public class QuickTimeEventManager : MonoBehaviour {
         possessionScript = playerManager.GetComponent<Possession>();
     }
 
-    public void Activate() {
+    public void Activate(int difficulty) {
+        this.difficulty = difficulty;
+
+        if (difficulty == 0) {
+            safeZone.sizeDelta = new Vector2(50, safeZone.rect.height);
+        }
+
         foreach (Transform element in transform) {
             if (!element.gameObject.activeSelf) {
                 element.gameObject.SetActive(true);

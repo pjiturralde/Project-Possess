@@ -11,15 +11,14 @@ public class WaveManager : MonoBehaviour {
         for (int i = 0; i < 3; i++) {
             GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(i);
             armedEnemy.transform.position = new Vector2(i * 3, 0);
+
+            EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
+            enemyWeapon.isShiny = true;
         }
 
         for (int i = 0; i < 3; i++) {
             GameObject rangedEnemy = rangedEnemyPool.GetInstance();
             rangedEnemy.transform.position = new Vector2(i * 3, 2);
         }
-    }
-
-    void Update() {
-        
     }
 }

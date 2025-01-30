@@ -88,15 +88,17 @@ public class EnemyStats : MonoBehaviour {
             return;
         }
 
+        GameObject damagePopUp = Instantiate(damagePopUpPrefab);
+
+        TextMeshPro tmp = damagePopUp.GetComponent<TextMeshPro>();
+
         int critRoll = Random.Range(1, 100);
 
         if (critRoll <= playerStats.CritChance) {
             damage = damage * 2; // TIMES TWO DAMAGE!?!?!
+            tmp.color = Color.red;
         }
 
-        GameObject damagePopUp = Instantiate(damagePopUpPrefab);
-        
-        TextMeshPro tmp = damagePopUp.GetComponent<TextMeshPro>();
         tmp.text = damage.ToString();
 
         damagePopUp.transform.position = transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
@@ -158,11 +160,14 @@ public class EnemyStats : MonoBehaviour {
                 FreeWeaponStats weaponStats = weapon.GetComponent<FreeWeaponStats>();
                 weaponStats.damage = enemyWeapon.damage;
                 weaponStats.durability = enemyWeapon.durability;
+                weaponStats.isShiny = enemyWeapon.isShiny;
 
                 weapon.transform.position = transform.position;
                 weapon.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
             }
         }
+
+        TriggerInvulnerability();
 
         if (gameObject.CompareTag("RangedEnemy")) {
             rangedEnemyPool.DisableInstance(gameObject);

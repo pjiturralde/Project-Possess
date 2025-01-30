@@ -107,7 +107,7 @@ public class Possession : MonoBehaviour {
                 composer.Damping.x = 0.3f;
                 composer.Damping.y = 0.3f;
                 Time.timeScale = 0.3f;
-                quickTimeEventManager.Activate();
+                quickTimeEventManager.Activate(0);
             }
         }
     }
@@ -120,6 +120,7 @@ public class Possession : MonoBehaviour {
         int weaponIndex = 0;
         int damage = 0;
         int durability = 0;
+        bool isShiny = false;
 
         if (weaponToSteal.CompareTag("FreeWeapon")) {
             currentWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
@@ -128,6 +129,7 @@ public class Possession : MonoBehaviour {
             weaponIndex = freeWeapon.weaponIndex;
             damage = freeWeapon.damage;
             durability = freeWeapon.durability;
+            isShiny = freeWeapon.isShiny;
 
             currentWeaponSpriteRenderer.material = defaultMaterial;
 
@@ -143,6 +145,7 @@ public class Possession : MonoBehaviour {
                     weaponIndex = enemyWeapon.weaponIndex;
                     damage = enemyWeapon.damage;
                     durability = enemyWeapon.durability;
+                    isShiny = enemyWeapon.isShiny;
 
                     currentWeaponSpriteRenderer.material = defaultMaterial;
 
@@ -183,6 +186,7 @@ public class Possession : MonoBehaviour {
         weaponStats.Damage = damage;
         weaponStats.Durability = durability;
         weaponStats.MaxDurability = durability;
+        weaponStats.isShiny = isShiny;
         weaponStats.TriggerInvulnerability(0.5D);
 
         // IMPORTANT** CHANGE THE NEW ENEMIES HEALTH TO THE OLD ONES ALSO SET HP TO FULL WHEN SPAWNING IN THESE ENEMIES

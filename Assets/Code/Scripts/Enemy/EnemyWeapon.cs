@@ -18,9 +18,13 @@ public class EnemyWeapon : MonoBehaviour {
     private int xDirection;
     private Vector3[] path;
 
+    // ref
+    public GameObject sparkleParticles;
+
     // ACTUAL STATS!!
     public int damage;
     public int durability;
+    public bool isShiny = false;
 
     public bool isInitialized;
 
@@ -40,6 +44,17 @@ public class EnemyWeapon : MonoBehaviour {
 
             damage = 15;
             durability = 30;
+        }
+
+        GameObject shiny = transform.Find("ShinyParticles").gameObject;
+
+        if (isShiny) {
+            damage += 10;
+            shiny.SetActive(true);
+        } else {
+            if (shiny.activeSelf) {
+                shiny.SetActive(false);
+            }
         }
 
         path = GeneratePartCirclePoints(0.08f, 5);

@@ -18,6 +18,7 @@ public class WeaponStats : MonoBehaviour {
     // Current stats
     public float Durability;
     public float Damage;
+    public bool isShiny;
 
     // Cooldowns
     private bool Invulnerable;
@@ -32,6 +33,12 @@ public class WeaponStats : MonoBehaviour {
         Invulnerable = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
         defaultMaterial = spriteRenderer.material;
+
+        GameObject shiny = transform.Find("ShinyParticles").gameObject;
+
+        if (isShiny) {
+            shiny.SetActive(true);
+        }
     }
 
     void Update() {

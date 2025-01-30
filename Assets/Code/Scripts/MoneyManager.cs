@@ -5,13 +5,12 @@ public class MoneyManager : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
 
-    // mods! ban everyone
-    public GameObject text;
+    // mods! ban everyone -- references
     public TextMeshPro tmp;
 
-
     void Start () {
-        tmp = text.GetComponent<TextMeshPro>();
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
     }
 
     void Update() {
