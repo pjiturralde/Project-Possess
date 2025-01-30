@@ -141,8 +141,6 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
 
                 rb.linearVelocity = nearestWeaponDir * Speed + calculateSeperationForce(2, 3);
 
-                Debug.Log(nearestWeapon.name);
-
                 animator.SetFloat("Speed", 1);
 
                 if (nearestWeaponDistance <= 0.1f) {
@@ -153,6 +151,10 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
 
                     // copy all their stats over yo!
                     armedEnemy.GetComponent<EnemyStats>().Health = GetComponent<EnemyStats>().Health;
+
+                    EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
+                    enemyWeapon.damage = freeWeaponStats.damage;
+                    enemyWeapon.durability = freeWeaponStats.durability;
 
                     Destroy(nearestWeapon);
                     unarmedMeleeEnemyPool.DisableInstance(gameObject);

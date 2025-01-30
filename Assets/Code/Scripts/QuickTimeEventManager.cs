@@ -5,7 +5,7 @@ public class QuickTimeEventManager : MonoBehaviour {
     public Transform pointA; // Reference to the starting point
     public Transform pointB; // Reference to the ending point
     public RectTransform safeZone; // Reference to the safe zone RectTransform
-    private float moveSpeed = 100f; // Speed of the pointer movement
+    private float moveSpeed = 300f; // Speed of the pointer movement
     private PlayerManager playerManager;
     private Possession possessionScript;
 
@@ -53,7 +53,7 @@ public class QuickTimeEventManager : MonoBehaviour {
     void Update() {
         if (isActive) {
             // Move the pointer towards the target position
-            pointerTransform.localPosition = Vector3.MoveTowards(pointerTransform.localPosition, targetPosition, moveSpeed * Time.deltaTime);
+            pointerTransform.localPosition = Vector3.MoveTowards(pointerTransform.localPosition, targetPosition, moveSpeed * Time.deltaTime / Time.timeScale);
 
             // Change direction if the pointer reaches one of the points
             if (Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f) {

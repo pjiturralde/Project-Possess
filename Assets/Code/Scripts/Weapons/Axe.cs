@@ -7,7 +7,6 @@ public class Axe : MonoBehaviour
     private Vector3[] path = new Vector3[6];
     private Quaternion lookAtRotation;
     private WeaponStats stats;
-    private float damage;
     private bool attacking;
     private bool canHit;
     private bool canAttack;
@@ -18,7 +17,6 @@ public class Axe : MonoBehaviour
     void Start() {
         attacking = false;
         canHit = false;
-        damage = 10;
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
         canAttack = true;
@@ -102,7 +100,7 @@ public class Axe : MonoBehaviour
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(stats.Damage);
         }
     }
 

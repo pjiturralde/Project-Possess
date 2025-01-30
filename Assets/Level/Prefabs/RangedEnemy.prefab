@@ -220,6 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55d261f7cc62ad4f8d2921572291633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damagePopUpPrefab: {fileID: 2479314198948271041, guid: f0c8714accc6848488da1292dc0b49df, type: 3}
   damagedMaterial: {fileID: 2100000, guid: e1369597f1f14994cb6f774dbfe5605b, type: 2}
   coinPrefab: {fileID: 1432660832380886650, guid: 36ffbaaa8757b374e9b32eb9054673f8, type: 3}
   axePrefab: {fileID: 0}

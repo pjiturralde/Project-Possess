@@ -20,7 +20,7 @@ public class PlayerStats : MonoBehaviour {
     public float DamageMultiplier;
     public float AttackRate;
     public int Money;
-    public float CritChance;
+    public int CritChance;
     public bool isPossessing;
     // MAYBE ADD DEFENSE LATER (WHEN POSSESSING WEAPONS)
 
@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviour {
         Invulnerable = false;
         DamageMultiplier = 1;
         AttackRate = 1;
-        CritChance = 1;
+        CritChance = 5; // represents 5%
         isPossessing = false;
         Money = 0;
 

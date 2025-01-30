@@ -18,15 +18,28 @@ public class EnemyWeapon : MonoBehaviour {
     private int xDirection;
     private Vector3[] path;
 
+    // ACTUAL STATS!!
+    public int damage;
+    public int durability;
+
     public bool isInitialized;
 
-    public void Initialize() {
-        if (weaponIndex == 0) {
+    public void Initialize() { // BALANCE HERE LIKE IDK HOW TO BALANCE THIS GARBAGE!
+        if (weaponIndex == 0) { // AXE
             weaponOffset = Vector3.zero;
-        } else if (weaponIndex == 1) {
+
+            damage = 25;
+            durability = 100;
+        } else if (weaponIndex == 1) { // SWORD
             weaponOffset = new Vector3(-0.045f, 0.02f);
-        } else if (weaponIndex == 2) {
+
+            damage = 20;
+            durability = 50;
+        } else if (weaponIndex == 2) { // SPEAR
             weaponOffset = new Vector3(-0.045f, 0.02f);
+
+            damage = 15;
+            durability = 30;
         }
 
         path = GeneratePartCirclePoints(0.08f, 5);

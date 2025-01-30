@@ -1,4 +1,5 @@
 using Unity.Burst.Intrinsics;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Possession : MonoBehaviour {
@@ -14,6 +15,7 @@ public class Possession : MonoBehaviour {
     private QuickTimeEventManager quickTimeEventManager;
     private DurabilityManager durabilityManager;
     private Collider2D weaponToSteal;
+    public CinemachineCamera cinemachineCamera;
     public GameObject playerParticles;
 
     public GameObject playerAxe;
@@ -98,7 +100,13 @@ public class Possession : MonoBehaviour {
                     }
                 }
 
+                var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
+
                 weaponToSteal = currentHit;
+                cinemachineCamera.Follow = weaponToSteal.transform;
+                composer.Damping.x = 0.3f;
+                composer.Damping.y = 0.3f;
+                Time.timeScale = 0.3f;
                 quickTimeEventManager.Activate();
             }
         }
@@ -110,12 +118,16 @@ public class Possession : MonoBehaviour {
         playerStats.transform.Find("Body").GetComponent<SpriteRenderer>().enabled = false; // pls don't change name of body
 
         int weaponIndex = 0;
+        int damage = 0;
+        int durability = 0;
 
         if (weaponToSteal.CompareTag("FreeWeapon")) {
             currentWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
             FreeWeaponStats freeWeapon = currentHit.GetComponent<FreeWeaponStats>();
 
             weaponIndex = freeWeapon.weaponIndex;
+            damage = freeWeapon.damage;
+            durability = freeWeapon.durability;
 
             currentWeaponSpriteRenderer.material = defaultMaterial;
 
@@ -129,6 +141,8 @@ public class Possession : MonoBehaviour {
                     EnemyWeapon enemyWeapon = child.GetComponent<EnemyWeapon>();
 
                     weaponIndex = enemyWeapon.weaponIndex;
+                    damage = enemyWeapon.damage;
+                    durability = enemyWeapon.durability;
 
                     currentWeaponSpriteRenderer.material = defaultMaterial;
 
@@ -150,13 +164,26 @@ public class Possession : MonoBehaviour {
             armedMeleeEnemyPool.DisableInstance(armedEnemy);
         }
 
+        GameObject playerWeapon = null;
+
         if (weaponIndex == 0) {
-            Instantiate(playerAxe, playerManager.transform);
+            playerWeapon = Instantiate(playerAxe, playerManager.transform);
         } else if (weaponIndex == 1) {
-            Instantiate(playerSword, playerManager.transform);
+            playerWeapon = Instantiate(playerSword, playerManager.transform);
         } else {
-            Instantiate(playerSpear, playerManager.transform);
+            playerWeapon = Instantiate(playerSpear, playerManager.transform);
         }
+
+        WeaponStats weaponStats = null;
+
+        if (playerWeapon != null) {
+            weaponStats = playerWeapon.GetComponent<WeaponStats>();
+        }
+
+        weaponStats.Damage = damage;
+        weaponStats.Durability = durability;
+        weaponStats.MaxDurability = durability;
+        weaponStats.TriggerInvulnerability(0.5D);
 
         // IMPORTANT** CHANGE THE NEW ENEMIES HEALTH TO THE OLD ONES ALSO SET HP TO FULL WHEN SPAWNING IN THESE ENEMIES
 /*        quickTimeEventManager.Activate();*/
@@ -164,11 +191,25 @@ public class Possession : MonoBehaviour {
         currentHit = null;
         weaponToSteal = null;
 
+        var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
+
+        cinemachineCamera.Follow = playerManager.transform;
+        composer.Damping.x = 0;
+        composer.Damping.y = 0;
+        Time.timeScale = 1;
+
         playerParticles.SetActive(false);
         durabilityManager.ActivateDurabilityBar();
     }
 
     public void StopStealing() {
+        var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
+
+        cinemachineCamera.Follow = playerManager.transform;
+        composer.Damping.x = 0;
+        composer.Damping.y = 0;
+        Time.timeScale = 1;
+
         currentHit = null;
         weaponToSteal = null;
     }

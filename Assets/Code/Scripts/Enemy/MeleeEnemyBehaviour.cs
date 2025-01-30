@@ -10,6 +10,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
     public Transform playerTransform;
+    private EnemyWeapon enemyWeapon;
     public Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer shoulderSpriteRenderer;
@@ -41,6 +42,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         playerTransform = playerManager.transform;
+        enemyWeapon = transform.Find("Weapon").GetComponent<EnemyWeapon>();
         bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
         shoulderSpriteRenderer = transform.Find("Shoulder").GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
@@ -237,7 +239,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             }
 
             if (radius <= minDistance + 0.4f) {
-                playerStats.TakeDamage(10);
+                playerStats.TakeDamage(enemyWeapon.damage);
             }
         } else {
             GameObject playerWeapon = null;
@@ -257,7 +259,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                     weaponStats = playerWeapon.GetComponent<WeaponStats>();
                 }
 
-                weaponStats.TakeDamage(30);
+                weaponStats.TakeDamage(enemyWeapon.damage);
             }
         }
     }

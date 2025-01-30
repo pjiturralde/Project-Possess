@@ -7,7 +7,6 @@ public class Sword : MonoBehaviour {
     private Quaternion lookAtRotation;
     private WeaponStats stats;
     private bool holdingClick;
-    private float damage;
     private bool attacking;
     private bool canAttack;
     private bool canHit;
@@ -18,7 +17,6 @@ public class Sword : MonoBehaviour {
         player = transform.parent;
         attacking = false;
         canHit = false;
-        damage = 10;
         stats = GetComponent<WeaponStats>();
         cdTimer = 0;
         canAttack = true;
@@ -101,7 +99,9 @@ public class Sword : MonoBehaviour {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(stats.Damage);
+            Debug.Log("DAMAGE:");
+            Debug.Log(stats.Damage);
         }
     }
 }

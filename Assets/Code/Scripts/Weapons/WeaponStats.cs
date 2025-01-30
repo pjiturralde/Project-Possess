@@ -12,7 +12,7 @@ public class WeaponStats : MonoBehaviour {
     public Material damagedMaterial;
 
     // Core stats
-    public int MaxDurability = 50;
+    public int MaxDurability;
     public float cooldown;
 
     // Current stats
@@ -29,9 +29,7 @@ public class WeaponStats : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         playerParticles = playerManager.transform.Find("PlayerParticles").gameObject;
-        Durability = MaxDurability;
         Invulnerable = false;
-        Damage = 10;
         spriteRenderer = GetComponent<SpriteRenderer>();
         defaultMaterial = spriteRenderer.material;
     }
@@ -69,6 +67,11 @@ public class WeaponStats : MonoBehaviour {
     private void TriggerInvulnerability() {
         Invulnerable = true;
         invulnerabilityDuration = 0.2D;
+    }
+
+    public void TriggerInvulnerability(double invulnerableTime) {
+        Invulnerable = true;
+        invulnerabilityDuration = invulnerableTime;
     }
 
     private void LoseDurability(float amount) {

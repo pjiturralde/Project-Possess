@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class EnemyStats : MonoBehaviour {
@@ -6,7 +7,9 @@ public class EnemyStats : MonoBehaviour {
     private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
     private SpriteRenderer spriteRenderer;
     private PlayerManager playerManager;
+    private PlayerStats playerStats;
     private EnemyWeapon enemyWeapon;
+    public GameObject damagePopUpPrefab;
 
     private Material defaultMaterial;
     public Material damagedMaterial;
@@ -36,6 +39,7 @@ public class EnemyStats : MonoBehaviour {
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
         playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         defaultMaterial = spriteRenderer.material;
@@ -84,7 +88,20 @@ public class EnemyStats : MonoBehaviour {
             return;
         }
 
-        LoseHealth(damage);
+        int critRoll = Random.Range(1, 100);
+
+        if (critRoll <= playerStats.CritChance) {
+            damage = damage * 2; // TIMES TWO DAMAGE!?!?!
+        }
+
+        GameObject damagePopUp = Instantiate(damagePopUpPrefab);
+        
+        TextMeshPro tmp = damagePopUp.GetComponent<TextMeshPro>();
+        tmp.text = damage.ToString();
+
+        damagePopUp.transform.position = transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
+
+        LoseHealth(damage * playerStats.DamageMultiplier);
         TriggerInvulnerability();
     }
 
@@ -137,6 +154,10 @@ public class EnemyStats : MonoBehaviour {
                 } else if (enemyWeapon.weaponIndex == 2) {
                     weapon = Instantiate(spearPrefab);
                 }
+
+                FreeWeaponStats weaponStats = weapon.GetComponent<FreeWeaponStats>();
+                weaponStats.damage = enemyWeapon.damage;
+                weaponStats.durability = enemyWeapon.durability;
 
                 weapon.transform.position = transform.position;
                 weapon.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
