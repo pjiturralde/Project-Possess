@@ -24,6 +24,7 @@ public class EnemyWeapon : MonoBehaviour {
     // ACTUAL STATS!!
     public int damage;
     public int durability;
+    public int difficulty;
     public bool isShiny = false;
 
     public bool isInitialized;
@@ -34,16 +35,19 @@ public class EnemyWeapon : MonoBehaviour {
 
             damage = 25;
             durability = 100;
+            difficulty = 1;
         } else if (weaponIndex == 1) { // SWORD
             weaponOffset = new Vector3(-0.045f, 0.02f);
 
             damage = 25;
-            durability = 50;
+            durability = 75;
+            difficulty = 1;
         } else if (weaponIndex == 2) { // SPEAR
             weaponOffset = new Vector3(-0.045f, 0.02f);
 
             damage = 30;
-            durability = 30;
+            durability = 50;
+            difficulty = 1;
         }
 
         GameObject shiny = transform.Find("ShinyParticles").gameObject;

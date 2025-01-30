@@ -15,7 +15,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     public Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer shoulderSpriteRenderer;
-    private EnemyWeapon weapon;
+    private EnemyWeapon weapon; // two references, why? idk but im not gonna brick it so i aint touching it
+    private EnemyStats stats;
 
     public float Speed = 5;
     private Vector2 playerDirection;
@@ -41,9 +42,13 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     public void Initialize() {
         enemies = new List<GameObject>();
 
+        Speed = 5;
+
         enemies.AddRange(GameObject.FindGameObjectsWithTag("ArmedEnemy"));
         enemies.AddRange(GameObject.FindGameObjectsWithTag("UnarmedEnemy"));
         enemies.AddRange(GameObject.FindGameObjectsWithTag("RangedEnemy"));
+
+        stats = GetComponent<EnemyStats>();
 
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
@@ -66,6 +71,10 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     void Update() {
+        if (Speed != stats.MovementSpeed + stats.ExtraSpeed - stats.ReducedSpeed) {
+            Speed = stats.MovementSpeed + stats.ExtraSpeed - stats.ReducedSpeed;
+        }
+
         enemies = new List<GameObject>();
 
         enemies.AddRange(GameObject.FindGameObjectsWithTag("ArmedEnemy"));

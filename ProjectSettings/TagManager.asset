@@ -12,6 +12,7 @@ TagManager:
   - RangedEnemy
   - FreeWeapon
   - Projectile
+  - Item
   layers:
   - Default
   - TransparentFX

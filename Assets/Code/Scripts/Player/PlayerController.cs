@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     public SpriteRenderer bodySpriteRenderer;
-    public float moveSpeed;
+    private float moveSpeed;
     Vector2 inputDir;
     Rigidbody2D rb;
 
@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour {
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        if (moveSpeed != GetComponent<PlayerStats>().MovementSpeed) {
+            moveSpeed = GetComponent<PlayerStats>().MovementSpeed;
+        }
+
         if (mousePos.x < transform.position.x) {
             bodySpriteRenderer.flipX = true;
         } else {
@@ -25,6 +29,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        rb.linearVelocity = inputDir * moveSpeed;
+        rb.linearVelocity = inputDir * (moveSpeed + GetComponent<PlayerStats>().ExtraSpeed);
     }
 }

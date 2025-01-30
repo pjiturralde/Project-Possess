@@ -6,6 +6,8 @@ public class WaveManager : MonoBehaviour {
     ArmedMeleeEnemyPool armedMeleeEnemyPool;
     RangedEnemyPool rangedEnemyPool;
 
+
+
     void Start() {
         playerManager = PlayerManager.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
@@ -34,7 +36,7 @@ public class WaveManager : MonoBehaviour {
 
         int weaponIndex = Random.Range(0, 3);
 
-        GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(weaponIndex);
+        GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(weaponIndex, 50);
         armedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
 
         int shinyRoll = Random.Range(0, 5); // 1 in 5 is shiny?
@@ -51,7 +53,7 @@ public class WaveManager : MonoBehaviour {
 
         Vector3 enemySpawnOffset = Quaternion.AngleAxis(angle, Vector3.forward) * Vector2.up * radius;
 
-        GameObject rangedEnemy = rangedEnemyPool.GetInstance();
+        GameObject rangedEnemy = rangedEnemyPool.GetInstance(50);
         rangedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
     }
 }

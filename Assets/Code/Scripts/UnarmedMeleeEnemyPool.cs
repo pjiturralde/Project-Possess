@@ -25,7 +25,7 @@ public class UnarmedMeleeEnemyPool : MonoBehaviour {
         }
     }
 
-    public GameObject GetInstance() {
+    public GameObject GetInstance(float health) {
         for (int i = 0; i < pool.Count; i++) {
             if (!pool[i].activeSelf) {
                 EnableInstance(pool[i]);
@@ -33,10 +33,8 @@ public class UnarmedMeleeEnemyPool : MonoBehaviour {
                 UnarmedMeleeEnemyBehaviour enemyBehaviour = pool[i].GetComponent<UnarmedMeleeEnemyBehaviour>();
                 EnemyStats enemyStats = pool[i].GetComponent<EnemyStats>();
 
-                if (!enemyBehaviour.isInitialized) {
-                    enemyBehaviour.Initialize();
-                    enemyStats.Initialize();
-                }
+                enemyBehaviour.Initialize();
+                enemyStats.Initialize(health);
 
                 return pool[i];
             }

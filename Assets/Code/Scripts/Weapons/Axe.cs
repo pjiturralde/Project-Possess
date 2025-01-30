@@ -2,8 +2,10 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Axe : MonoBehaviour
-{
+public class Axe : MonoBehaviour {
+    private PlayerManager playerManager;
+    private PlayerStats playerStats;
+    private ItemManager itemManager;
     private Vector3[] path = new Vector3[6];
     private Quaternion lookAtRotation;
     private WeaponStats stats;
@@ -22,6 +24,9 @@ public class Axe : MonoBehaviour
         canAttack = true;
         holdingClick = false;
         radius = 0.1f;
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
+        itemManager = playerManager.GetComponent<ItemManager>();
 
         path = GenerateCirclePoints(radius, 10);
     }
@@ -93,14 +98,26 @@ public class Axe : MonoBehaviour
 
     void StopAttacking() {
         attacking = false;
-        cdTimer = stats.cooldown;
+        cdTimer = stats.cooldown - (stats.cooldown * playerStats.AttackRate);
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
-            enemy.TakeDamage(stats.Damage);
+            if (enemy.TakeDamage(stats.Damage)) {
+                if (itemManager.HasItem("GlassBlade")) {
+                    stats.Durability -= 2; // a flat 2 damage per hit hmm
+                }
+
+                if (itemManager.HasItem("FrighteningFlame")) {
+                    enemy.SetOnFire();
+                }
+
+                if (itemManager.HasItem("PetrifyingPebble")) {
+                    enemy.Petrify();
+                }
+            }
         }
     }
 

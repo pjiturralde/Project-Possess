@@ -1,9 +1,11 @@
 using DG.Tweening;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Spear : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
+    private ItemManager itemManager;
     private WeaponStats weaponStats;
     private LineRenderer line;
 
@@ -18,11 +20,12 @@ public class Spear : MonoBehaviour {
     void Start() {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
+        itemManager = playerManager.GetComponent<ItemManager>();
         weaponStats = GetComponent<WeaponStats>();
         line = GetComponent<LineRenderer>();
 
         ATTACK_RANGE = 5;
-        attackTime = 1 / playerStats.AttackRate;
+        attackTime = 1 - playerStats.AttackRate;
         timeHeld = 0;
         attacking = false;
         onCooldown = false;
@@ -32,8 +35,8 @@ public class Spear : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         // Establish variables
-        attackTime = 1 / playerStats.AttackRate;
-        float charge = Mathf.Clamp(timeHeld * playerStats.AttackRate, 0, 1); // how charged up the attack is (0%->100%)
+        attackTime = 1 - playerStats.AttackRate;
+        float charge = Mathf.Clamp(timeHeld * (1 + playerStats.AttackRate), 0, 1); // how charged up the attack is (0%->100%)
         Vector2 weaponPosition = transform.position;
         Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 distanceToMouse = mouseWorldPosition - weaponPosition;
@@ -70,18 +73,42 @@ public class Spear : MonoBehaviour {
         }
     }
 
-    // OnTriggerStay2D is called when a collider stays within trigger -- PISCES IMA TRY THIS WAY!
+    // OnTriggerStay2D is called when a collider stays within trigger -- PISCES IMA TRY THIS WAY! LOL WHY IS THERE TWO!?!
     private void OnTriggerExit2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
-            enemy.TakeDamage(weaponStats.Damage);
+            if (enemy.TakeDamage(weaponStats.Damage)) {
+                if (itemManager.HasItem("GlassBlade")) {
+                    weaponStats.Durability -= 2; // a flat 2 damage per hit hmm
+                }
+
+                if (itemManager.HasItem("FrighteningFlame")) {
+                    enemy.SetOnFire();
+                }
+
+                if (itemManager.HasItem("PetrifyingPebble")) {
+                    enemy.Petrify();
+                }
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
-            enemy.TakeDamage(weaponStats.Damage);
+            if (enemy.TakeDamage(weaponStats.Damage)) {
+                if (itemManager.HasItem("GlassBlade")) {
+                    weaponStats.Durability -= 2; // a flat 2 damage per hit hmm
+                }
+
+                if (itemManager.HasItem("FrighteningFlame")) {
+                    enemy.SetOnFire();
+                }
+
+                if (itemManager.HasItem("PetrifyingPebble")) {
+                    enemy.Petrify();
+                }
+            }
         }
     }
 

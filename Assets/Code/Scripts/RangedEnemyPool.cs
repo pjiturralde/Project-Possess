@@ -25,7 +25,7 @@ public class RangedEnemyPool : MonoBehaviour {
         }
     }
 
-    public GameObject GetInstance() {
+    public GameObject GetInstance(float health) {
         for (int i = 0; i < pool.Count; i++) {
             if (!pool[i].activeSelf) {
                 EnableInstance(pool[i]);
@@ -34,11 +34,9 @@ public class RangedEnemyPool : MonoBehaviour {
                 EnemyStats enemyStats = pool[i].GetComponent<EnemyStats>();
                 RangedEnemyAttack enemyAttack = pool[i].GetComponent<RangedEnemyAttack>();
 
-                if (!enemyBehaviour.isInitialized) {
-                    enemyBehaviour.Initialize();
-                    enemyStats.Initialize();
-                    enemyAttack.Initialize();
-                }
+                enemyBehaviour.Initialize();
+                enemyStats.Initialize(health);
+                enemyAttack.Initialize();
 
                 return pool[i];
             }

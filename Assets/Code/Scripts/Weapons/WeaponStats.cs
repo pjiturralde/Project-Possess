@@ -6,6 +6,7 @@ public class WeaponStats : MonoBehaviour {
     private PlayerStats playerStats;
     private DurabilityManager durabilityManager;
     private GameObject playerParticles;
+    private ItemManager itemManager;
 
     private SpriteRenderer spriteRenderer;
     public Material defaultMaterial;
@@ -29,6 +30,7 @@ public class WeaponStats : MonoBehaviour {
         durabilityManager = DurabilityManager.instance;
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
+        itemManager = playerManager.GetComponent<ItemManager>();
         playerParticles = playerManager.transform.Find("PlayerParticles").gameObject;
         Invulnerable = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -61,6 +63,12 @@ public class WeaponStats : MonoBehaviour {
             return;
         }
 
+        if (itemManager.HasItem("EscapePlan")) {
+            if (playerStats.ExtraSpeed == 0) {
+                playerStats.ExtraSpeed = 0.5f;
+            }
+        }
+
         spriteRenderer.material = damagedMaterial;
         Invoke(nameof(ResetMaterial), 0.1f);
 
@@ -82,7 +90,7 @@ public class WeaponStats : MonoBehaviour {
     }
 
     private void LoseDurability(float amount) {
-        Durability -= amount;
+        Durability -= amount - (amount * playerStats.Defense); // Defense 0.1 is 10% damage reduction
 
         if (Durability <= 0) {
             Break();

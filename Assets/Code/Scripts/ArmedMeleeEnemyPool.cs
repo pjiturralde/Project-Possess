@@ -25,7 +25,7 @@ public class ArmedMeleeEnemyPool : MonoBehaviour {
         }
     }
 
-    public GameObject GetInstance(int weaponIndex) {
+    public GameObject GetInstance(int weaponIndex, float health) {
         for (int i = 0; i < pool.Count; i++) {
             if (!pool[i].activeSelf) {
                 EnableInstance(pool[i]);
@@ -35,7 +35,7 @@ public class ArmedMeleeEnemyPool : MonoBehaviour {
                 EnemyWeapon enemyWeapon = pool[i].transform.Find("Weapon").GetComponent<EnemyWeapon>();
 
                 enemyBehaviour.Initialize();
-                enemyStats.Initialize();
+                enemyStats.Initialize(health);
                 enemyWeapon.Initialize();
 
                 enemyWeapon.SetWeapon(weaponIndex);

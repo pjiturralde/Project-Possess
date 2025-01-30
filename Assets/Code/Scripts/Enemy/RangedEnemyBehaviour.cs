@@ -7,9 +7,10 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     private Transform playerTransform;
     public Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
+    private EnemyStats stats;
     public Animator animator;
 
-    public float Speed = 5;
+    public float Speed;
     private Vector2 playerDirection;
     private float timer; // Timer to roll to retreat
     private float runTime; // HOW LONG THE MAGE HAS BEEN RUNNING!
@@ -29,6 +30,7 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     public void Initialize() {
         playerManager = PlayerManager.instance;
         playerTransform = playerManager.transform;
+        stats = GetComponent<EnemyStats>();
 
         enemies = new List<GameObject>();
 
@@ -55,6 +57,10 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     }
 
     void Update() {
+        if (Speed != stats.MovementSpeed + stats.ExtraSpeed - stats.ReducedSpeed) {
+            Speed = stats.MovementSpeed + stats.ExtraSpeed - stats.ReducedSpeed;
+        }
+
         playerDirection = (playerTransform.position - transform.position).normalized;
         float playerDistance = (playerTransform.position - transform.position).magnitude;
 

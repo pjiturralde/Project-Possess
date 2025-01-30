@@ -7,6 +7,7 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
     private PlayerManager playerManager;
     private Transform playerTransform;
     public Rigidbody2D rb;
+    private EnemyStats stats;
     private SpriteRenderer bodySpriteRenderer;
     public Animator animator;
 
@@ -30,6 +31,7 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
     public void Initialize() {
         playerManager = PlayerManager.instance;
         playerTransform = playerManager.transform;
+        stats = GetComponent<EnemyStats>();
 
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
@@ -52,7 +54,11 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
         Initialize();
     }
 
-    void Update() {
+void Update() {
+        if (Speed != stats.MovementSpeed + stats.ExtraSpeed - stats.ReducedSpeed) {
+            Speed = stats.MovementSpeed + stats.ExtraSpeed - stats.ReducedSpeed;
+        }
+
         playerDirection = (playerTransform.position - transform.position).normalized;
         float playerDistance = (playerTransform.position - transform.position).magnitude;
 
@@ -156,14 +162,12 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
                 if (nearestWeaponDistance <= 0.1f) {
                     FreeWeaponStats freeWeaponStats = nearestWeapon.GetComponent<FreeWeaponStats>();
 
-                    GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(freeWeaponStats.weaponIndex);
+                    GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(freeWeaponStats.weaponIndex, GetComponent<EnemyStats>().Health);
                     armedEnemy.transform.position = transform.position;
-
-                    // copy all their stats over yo!
-                    armedEnemy.GetComponent<EnemyStats>().Health = GetComponent<EnemyStats>().Health;
 
                     EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
                     enemyWeapon.damage = freeWeaponStats.damage;
+                    enemyWeapon.difficulty = freeWeaponStats.difficulty;
                     enemyWeapon.durability = freeWeaponStats.durability;
 
                     Destroy(nearestWeapon);

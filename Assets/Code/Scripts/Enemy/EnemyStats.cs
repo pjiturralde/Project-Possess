@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class EnemyStats : MonoBehaviour {
@@ -7,6 +8,7 @@ public class EnemyStats : MonoBehaviour {
     private UnarmedMeleeEnemyPool unarmedMeleeEnemyPool;
     private SpriteRenderer spriteRenderer;
     private PlayerManager playerManager;
+    private ItemManager itemManager;
     private PlayerStats playerStats;
     private EnemyWeapon enemyWeapon;
     public GameObject damagePopUpPrefab;
@@ -21,12 +23,21 @@ public class EnemyStats : MonoBehaviour {
     public GameObject spearPrefab;
 
     // Core stats
-    public int MaxHealth = 50;
+    public float MaxHealth = 50;
 
     // Current stats
     public float Health;
     public float DamageMultiplier;
     public float AttackRate;
+    public float MovementSpeed;
+    public float ExtraSpeed;
+    public float ReducedSpeed;
+    public float Defense;
+    public bool isOnFire;
+    public bool isPetrified;
+
+    private float fireTimer;
+    private float petrifiedTimer;
 
     // Cooldowns
     private bool Invulnerable;
@@ -34,16 +45,27 @@ public class EnemyStats : MonoBehaviour {
 
     public bool isInitialized;
 
-    public void Initialize() {
+    public void Initialize(float health) {
+        MovementSpeed = 5;
+        ExtraSpeed = 0;
+        ReducedSpeed = 0;
+        Defense = 0;
+        isOnFire = false;
+        isPetrified = false;
+        petrifiedTimer = 0;
+        fireTimer = 0;
+
         rangedEnemyPool = RangedEnemyPool.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
+        itemManager = playerManager.GetComponent<ItemManager>();
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         defaultMaterial = new Material(Shader.Find("Sprites/Default"));
 
+        MaxHealth = health;
         Health = MaxHealth;
         Invulnerable = false;
         DamageMultiplier = 1;
@@ -65,10 +87,62 @@ public class EnemyStats : MonoBehaviour {
 
     void Start() {
         // Initialize starting values
-        Initialize();
+        Initialize(MaxHealth);
+    }
+
+    public void SetOnFire() {
+        if (!isOnFire) {
+            isOnFire = true;
+            fireTimer = 3; // 3 seconds on fire!
+
+            for (int i = 0; i < 3; i++) {
+                Invoke(nameof(FireTick), 1 + i);
+            }
+        }
+    }
+
+    public void FireTick() {
+        LoseHealth(2);
+    }
+
+    public void Petrify() {
+        if (!isPetrified) {
+            isPetrified = true;
+            petrifiedTimer = 3; // 3 seconds petrified! O:
+        }
     }
 
     void Update() {
+        if (isOnFire) {
+            ExtraSpeed = 0.5f;
+
+            if (fireTimer > 0) {
+                fireTimer -= Time.deltaTime;
+
+                if (fireTimer < 0) {
+                    isOnFire = false;
+                }
+            }
+        } else {
+            ExtraSpeed = 0;
+        }
+
+        if (isPetrified) {
+            ReducedSpeed = 0.5f;
+            Defense = 0.1f; // enemy now takes 10% less damage! D:
+
+            if (petrifiedTimer > 0) {
+                petrifiedTimer -= Time.deltaTime;
+
+                if (petrifiedTimer < 0) {
+                    isPetrified = false;
+                }
+            }
+        } else {
+            ReducedSpeed = 0;
+            Defense = 0;
+        }
+
         // Checks if invulnerability frames are up
         HandleInvulnerability();
     }
@@ -82,11 +156,25 @@ public class EnemyStats : MonoBehaviour {
         }
     }
 
-    public void TakeDamage(float damage) {
+    public bool TakeDamage(float damage) {
         if (Invulnerable) {
             Debug.Log("Player Invulnerable");
-            return;
+            return false;
         }
+
+        LoseHealth(damage * playerStats.DamageMultiplier);
+        TriggerInvulnerability();
+
+        return true;
+    }
+
+    private void TriggerInvulnerability() {
+        Invulnerable = true;
+        invulnerabilityDuration = 0.5D;
+    }
+
+    private void LoseHealth(float amount) {
+        float damage = amount;
 
         GameObject damagePopUp = Instantiate(damagePopUpPrefab);
 
@@ -103,17 +191,7 @@ public class EnemyStats : MonoBehaviour {
 
         damagePopUp.transform.position = transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
 
-        LoseHealth(damage * playerStats.DamageMultiplier);
-        TriggerInvulnerability();
-    }
-
-    private void TriggerInvulnerability() {
-        Invulnerable = true;
-        invulnerabilityDuration = 0.5D;
-    }
-
-    private void LoseHealth(float amount) {
-        Health -= amount;
+        Health -= (damage - (damage * Defense));
 
         spriteRenderer.material = damagedMaterial;
         Invoke(nameof(ResetMaterial), 0.1f);
@@ -140,12 +218,12 @@ public class EnemyStats : MonoBehaviour {
 
     private void Die() {
         Debug.Log("Enemy has died");
-        int dropRoll = Random.Range(1, 4);
+        int dropRoll = Random.Range(1, 101);
 
-        if (dropRoll == 1) { // 25% chance to drop coins and 25% chance to drop weapon
+        if (dropRoll <= 25 + playerStats.Luck) { // 25% chance to drop coins + Luck and 25% chance to drop weapon -- Luck caps out :)
             GameObject droppedCoin = Instantiate(coinPrefab);
             droppedCoin.transform.position = transform.position;
-        } else if (dropRoll == 2) {
+        } else if (dropRoll >= 75 - playerStats.WeaponLuck) {
             if (gameObject.CompareTag("ArmedEnemy")) {
                 GameObject weapon = null;
 
@@ -160,10 +238,30 @@ public class EnemyStats : MonoBehaviour {
                 FreeWeaponStats weaponStats = weapon.GetComponent<FreeWeaponStats>();
                 weaponStats.damage = enemyWeapon.damage;
                 weaponStats.durability = enemyWeapon.durability;
+                weaponStats.difficulty = enemyWeapon.difficulty;
                 weaponStats.isShiny = enemyWeapon.isShiny;
 
                 weapon.transform.position = transform.position;
                 weapon.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
+            }
+        }
+
+        WeaponStats playerWeapon = null;
+
+        foreach (Transform child in playerManager.transform) {
+            if (child.CompareTag("PlayerWeapon")) {
+                playerWeapon = child.GetComponent<WeaponStats>();
+                break;
+            }
+        }
+
+        if (itemManager.HasItem("VampireFangs")) {
+            if (playerWeapon != null) {
+                if (playerWeapon.Durability + 2 < playerWeapon.MaxDurability) { // adds 2 durability every kill, a pretty good deal huh
+                    playerWeapon.Durability += 2;
+                } else {
+                    playerWeapon.Durability = playerWeapon.MaxDurability;
+                }
             }
         }
 

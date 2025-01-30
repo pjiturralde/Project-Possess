@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour {
     private Transform player;
+    private PlayerManager playerManager;
+    private PlayerStats playerStats;
+    private ItemManager itemManager;
     private Vector3[] path = new Vector3[6];
     private Quaternion lookAtRotation;
     private WeaponStats stats;
@@ -22,6 +25,9 @@ public class Sword : MonoBehaviour {
         canAttack = true;
         scale = 0.07f;
         holdingClick = false;
+        playerManager = PlayerManager.instance;
+        playerStats = playerManager.GetComponent<PlayerStats>();
+        itemManager = playerManager.GetComponent<ItemManager>();
 
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
@@ -71,6 +77,8 @@ public class Sword : MonoBehaviour {
 
                 Invoke(nameof(StopAttacking), 0.6f);
             }
+
+            Debug.Log(canAttack);
         }
 
         if (cdTimer > 0) {
@@ -92,16 +100,26 @@ public class Sword : MonoBehaviour {
 
     void StopAttacking() {
         attacking = false;
-        cdTimer = stats.cooldown;
+        cdTimer = stats.cooldown - (stats.cooldown * playerStats.AttackRate);
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
 
-            enemy.TakeDamage(stats.Damage);
-            Debug.Log("DAMAGE:");
-            Debug.Log(stats.Damage);
+            if (enemy.TakeDamage(stats.Damage)) {
+                if (itemManager.HasItem("GlassBlade")) {
+                    stats.Durability -= 2; // a flat 2 damage per hit hmm
+                }
+
+                if (itemManager.HasItem("FrighteningFlame")) {
+                    enemy.SetOnFire();
+                }
+
+                if (itemManager.HasItem("PetrifyingPebble")) {
+                    enemy.Petrify();
+                }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.Burst.Intrinsics;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Possession : MonoBehaviour {
@@ -30,6 +31,7 @@ public class Possession : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         currentWeaponSpriteRenderer = null;
+        currentHit = null;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
         quickTimeEventManager = QuickTimeEventManager.instance;
@@ -99,16 +101,32 @@ public class Possession : MonoBehaviour {
                 }
 
                 if (currentHit != null && Input.GetMouseButtonDown(0) && (currentHit.CompareTag("ArmedEnemy") || currentHit.CompareTag("FreeWeapon"))) {
+                    int difficulty = 0;
+
                     if (currentHit.CompareTag("FreeWeapon")) {
                         currentWeaponSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
 
                         currentWeaponSpriteRenderer.material = defaultMaterial;
+
+                        FreeWeaponStats weaponStats = currentHit.GetComponent<FreeWeaponStats>();
+                        if (!weaponStats.isShiny) {
+                            difficulty = (int)Mathf.Clamp(weaponStats.difficulty - 1, 0f, 2f);
+                        } else {
+                            difficulty = weaponStats.difficulty;
+                        }
                     } else {
                         foreach (Transform child in currentHit.transform) {
                             if (child.CompareTag("EnemyWeapon")) {
                                 currentWeaponSpriteRenderer = child.GetComponent<SpriteRenderer>();
 
                                 currentWeaponSpriteRenderer.material = defaultMaterial;
+
+                                EnemyWeapon weaponStats = child.GetComponent<EnemyWeapon>();
+                                difficulty = weaponStats.difficulty;
+
+                                if (weaponStats.isShiny) {
+                                    difficulty = (int)Mathf.Clamp(difficulty + 1, 0f, 2f);
+                                }
                                 break;
                             }
                         }
@@ -119,7 +137,7 @@ public class Possession : MonoBehaviour {
                     weaponToSteal = currentHit;
                     cinemachineCamera.Follow = weaponToSteal.transform;
                     Time.timeScale = 0.3f;
-                    quickTimeEventManager.Activate(0);
+                    quickTimeEventManager.Activate(difficulty);
                 }
             }
         }
@@ -171,11 +189,10 @@ public class Possession : MonoBehaviour {
             meleeEnemyBehaviour.CancelInvoke();
 
             GameObject armedEnemy = weaponToSteal.gameObject;
-            GameObject unarmedEnemy = unarmedMeleeEnemyPool.GetInstance();
+            GameObject unarmedEnemy = unarmedMeleeEnemyPool.GetInstance(armedEnemy.GetComponent<EnemyStats>().Health);
             unarmedEnemy.transform.position = armedEnemy.transform.position;
 
             // copy over all their stats yo!
-            unarmedEnemy.GetComponent<EnemyStats>().Health = armedEnemy.GetComponent<EnemyStats>().Health;
 
             armedMeleeEnemyPool.DisableInstance(armedEnemy);
         }
