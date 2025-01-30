@@ -42,8 +42,8 @@ public class EnemyStats : MonoBehaviour {
         playerStats = playerManager.GetComponent<PlayerStats>();
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
-        defaultMaterial = spriteRenderer.material;
-        
+        defaultMaterial = new Material(Shader.Find("Sprites/Default"));
+
         Health = MaxHealth;
         Invulnerable = false;
         DamageMultiplier = 1;
@@ -92,7 +92,7 @@ public class EnemyStats : MonoBehaviour {
 
         TextMeshPro tmp = damagePopUp.GetComponent<TextMeshPro>();
 
-        int critRoll = Random.Range(1, 100);
+        int critRoll = Random.Range(1, 101);
 
         if (critRoll <= playerStats.CritChance) {
             damage = damage * 2; // TIMES TWO DAMAGE!?!?!

@@ -42,11 +42,11 @@ public class QuickTimeEventManager : MonoBehaviour {
         this.difficulty = difficulty;
 
         if (difficulty == 0) { // zero is the noobest difficulty
-            baseMoveSpeed = 300f;
+            baseMoveSpeed = 400f;
             safeZone.sizeDelta = new Vector2(50, safeZone.rect.height);
             numWinsNeeded = 2;
         } else if (difficulty == 1) {
-            baseMoveSpeed = 450f;
+            baseMoveSpeed = 500f;
             safeZone.sizeDelta = new Vector2(35, safeZone.rect.height);
             numWinsNeeded = 3;
         } else if (difficulty == 2) {

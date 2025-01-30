@@ -20,7 +20,7 @@ public class RangedEnemyAttack : MonoBehaviour {
         poolManager = ProjectilePoolManager.instance;
         playerManager = PlayerManager.instance;
         projectileSpeed = 7;
-        cooldown = 2f;
+        cooldown = 3f;
         isInitialized = true;
     }
 
@@ -45,7 +45,7 @@ public class RangedEnemyAttack : MonoBehaviour {
     }
 
     private void Cast() {
-        cooldown = 2f;
+        cooldown = 3f;
         Vector2 playerPosition = playerManager.transform.position;
         Vector2 enemyPosition = transform.position;
 

@@ -37,12 +37,12 @@ public class EnemyWeapon : MonoBehaviour {
         } else if (weaponIndex == 1) { // SWORD
             weaponOffset = new Vector3(-0.045f, 0.02f);
 
-            damage = 20;
+            damage = 25;
             durability = 50;
         } else if (weaponIndex == 2) { // SPEAR
             weaponOffset = new Vector3(-0.045f, 0.02f);
 
-            damage = 15;
+            damage = 30;
             durability = 30;
         }
 
@@ -75,6 +75,8 @@ public class EnemyWeapon : MonoBehaviour {
         weaponArray[2] = "EnemySpear";
 
         weaponSpriteRenderer.sprite = spriteManager.GetSprite(weaponArray[weaponIndex]);
+
+        Invoke(nameof(ChangeDirection), 0.1f);
         isInitialized = true;
     }
 

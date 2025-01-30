@@ -11,6 +11,7 @@ public class Spear : MonoBehaviour {
     private float attackTime; // how long it takes for the attack animation to complete
     private float timeHeld; // how long left click is held down
     private bool attacking; // whether the attack animation is playing or not
+    private bool canHit;
     private bool onCooldown; // whether the attack is on cooldown or not
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,6 +26,7 @@ public class Spear : MonoBehaviour {
         timeHeld = 0;
         attacking = false;
         onCooldown = false;
+        canHit = false;
     }
 
     // Update is called once per frame
@@ -56,11 +58,13 @@ public class Spear : MonoBehaviour {
             // If left click is released
             else if (timeHeld != 0) {
                 timeHeld = 0;
+                attacking = true;
                 onCooldown = true;
                 line.enabled = false;
                 playerManager.transform.DOMove(targetPosition, attackTime).SetEase(Ease.InOutBack);
-                Invoke(nameof(StartAttacking), 0.2f);
-                Invoke(nameof(StopAttacking), attackTime - 0.1f);
+                Invoke(nameof(AllowHit), 0.3f);
+                Invoke(nameof(StopHit), attackTime - 0.1f);
+                Invoke(nameof(StopAttacking), attackTime);
                 Invoke(nameof(EndCooldown),weaponStats.cooldown);
             }
         }
@@ -68,21 +72,25 @@ public class Spear : MonoBehaviour {
 
     // OnTriggerStay2D is called when a collider stays within trigger -- PISCES IMA TRY THIS WAY!
     private void OnTriggerExit2D(Collider2D collision) {
-        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
             enemy.TakeDamage(weaponStats.Damage);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && attacking) {
+        if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
             enemy.TakeDamage(weaponStats.Damage);
         }
     }
 
-    private void StartAttacking() {
-        attacking = true;
+    private void AllowHit() {
+        canHit = true;
+    }
+
+    private void StopHit() {
+        canHit = false;
     }
 
     private void StopAttacking() {

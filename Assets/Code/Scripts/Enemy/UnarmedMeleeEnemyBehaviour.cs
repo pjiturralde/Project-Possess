@@ -139,9 +139,19 @@ public class UnarmedMeleeEnemyBehaviour : MonoBehaviour {
                 Vector2 nearestWeaponDir = (nearestWeapon.transform.position - transform.position).normalized;
                 float nearestWeaponDistance = (nearestWeapon.transform.position - transform.position).magnitude;
 
-                rb.linearVelocity = nearestWeaponDir * Speed + calculateSeperationForce(2, 3);
+                bool isClosest = true;
 
-                animator.SetFloat("Speed", 1);
+                GameObject[] unarmedEnemies = GameObject.FindGameObjectsWithTag("UnarmedEnemy");
+
+                foreach (GameObject enemy in unarmedEnemies) {
+                    if (nearestWeaponDistance > (nearestWeapon.transform.position - enemy.transform.position).magnitude) {
+                        isClosest = false; break;
+                    }
+                }
+                if (isClosest) {
+                    rb.linearVelocity = nearestWeaponDir * Speed + calculateSeperationForce(2, 3);
+                    animator.SetFloat("Speed", 1);
+                }
 
                 if (nearestWeaponDistance <= 0.1f) {
                     FreeWeaponStats freeWeaponStats = nearestWeapon.GetComponent<FreeWeaponStats>();

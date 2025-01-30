@@ -118,8 +118,6 @@ public class Possession : MonoBehaviour {
 
                     weaponToSteal = currentHit;
                     cinemachineCamera.Follow = weaponToSteal.transform;
-                    composer.Damping.x = 0.3f;
-                    composer.Damping.y = 0.3f;
                     Time.timeScale = 0.3f;
                     quickTimeEventManager.Activate(0);
                 }
@@ -213,8 +211,6 @@ public class Possession : MonoBehaviour {
         var composer = cinemachineCamera.GetComponent<CinemachinePositionComposer>();
 
         cinemachineCamera.Follow = playerManager.transform;
-        composer.Damping.x = 0;
-        composer.Damping.y = 0;
         Time.timeScale = 1;
 
         playerParticles.SetActive(false);
@@ -229,8 +225,6 @@ public class Possession : MonoBehaviour {
         possessionTimerText.gameObject.SetActive(true);
 
         cinemachineCamera.Follow = playerManager.transform;
-        composer.Damping.x = 0;
-        composer.Damping.y = 0;
         Time.timeScale = 1;
 
         currentHit = null;

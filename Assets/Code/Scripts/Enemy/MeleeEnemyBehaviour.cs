@@ -27,7 +27,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private bool isWindingUp; // is he winding up for the attack?
     private Transform blockingObject; // Any object that blocks the path of this enemy
     private int numEnemies; // Number of enemies surrounding player that are within minimum distance
-    private int maxEnemies = 8; // Max number of enemies allowed to surround player before enemies stop
+    private int maxEnemies = 5; // Max number of enemies allowed to surround player before enemies stop
     private bool isStunned;
 
     // Augment behaviour
@@ -150,7 +150,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                             }
                         }
 
-                        rb.linearVelocity = playerDirection * Speed + seperationForce * 3;
+                        rb.linearVelocity = playerDirection * Speed + seperationForce * 1.5f;
                     } else {
                         rb.linearVelocity = Vector2.zero;
                         changeCirclingDirTimer = 0;
@@ -233,7 +233,6 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     private void startAttack() {
-        Debug.Log("NOOBIDII");
         float radius = (playerTransform.position - transform.position).magnitude;
 
         isWindingUp = false;
