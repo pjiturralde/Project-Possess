@@ -11,6 +11,7 @@ TagManager:
   - ArmedEnemy
   - RangedEnemy
   - FreeWeapon
+  - Projectile
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour {
     private Camera mainCamera;
     private PlayerManager playerManager;
     private PlayerStats playerStats;
+    private float timer;
     public bool isInitialized;
 
     public void Initialize() {
@@ -45,7 +46,15 @@ public class Projectile : MonoBehaviour {
         if (viewportPosition.x < -0.5f || viewportPosition.x > 1.5f ||
             viewportPosition.y < -0.5f || viewportPosition.y > 1.5f) {
             // Send back to le pool
-            poolManager.DisableInstance(gameObject);
+            if (timer > 0) {
+                timer -= Time.deltaTime;
+
+                if (timer <= 0) {
+                    poolManager.DisableInstance(gameObject);
+                }
+            }
+        } else {
+            timer = 1;
         }
     }
 

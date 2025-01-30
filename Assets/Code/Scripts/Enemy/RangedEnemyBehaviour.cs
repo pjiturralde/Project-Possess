@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
@@ -23,13 +24,18 @@ public class RangedEnemyBehaviour : MonoBehaviour {
 
     public bool isInitialized;
 
-    private GameObject[] enemies;
+    private List<GameObject> enemies;
 
     public void Initialize() {
         playerManager = PlayerManager.instance;
         playerTransform = playerManager.transform;
 
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        enemies = new List<GameObject>();
+
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("ArmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("UnarmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("RangedEnemy"));
+
         rb = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>(); // DO NOT CHANGE THESE NAMES D:
         timer = timerStart;
@@ -133,7 +139,11 @@ public class RangedEnemyBehaviour : MonoBehaviour {
     }
 
     private Vector2 calculateSeperationForce(float applyForceDistance, float seperationFactor) {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        enemies = new List<GameObject>();
+
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("ArmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("UnarmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("RangedEnemy"));
 
         Vector2 seperationForce = Vector2.zero;
 

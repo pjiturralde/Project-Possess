@@ -56,10 +56,10 @@ public class Spear : MonoBehaviour {
             // If left click is released
             else if (timeHeld != 0) {
                 timeHeld = 0;
-                attacking = true;
                 onCooldown = true;
                 line.enabled = false;
                 playerManager.transform.DOMove(targetPosition, attackTime).SetEase(Ease.InOutBack);
+                Invoke(nameof(StartAttacking), 0.2f);
                 Invoke(nameof(StopAttacking), attackTime - 0.1f);
                 Invoke(nameof(EndCooldown),weaponStats.cooldown);
             }
@@ -79,6 +79,10 @@ public class Spear : MonoBehaviour {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
             enemy.TakeDamage(weaponStats.Damage);
         }
+    }
+
+    private void StartAttacking() {
+        attacking = true;
     }
 
     private void StopAttacking() {

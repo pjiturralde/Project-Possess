@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -35,10 +36,15 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     private bool isCircling;
     private int perpendicularDir;
 
-    private GameObject[] enemies;
+    private List<GameObject> enemies;
 
     public void Initialize() {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        enemies = new List<GameObject>();
+
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("ArmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("UnarmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("RangedEnemy"));
+
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         playerTransform = playerManager.transform;
@@ -60,7 +66,11 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     void Update() {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        enemies = new List<GameObject>();
+
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("ArmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("UnarmedEnemy"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("RangedEnemy"));
 
         playerDirection = (playerTransform.position - transform.position).normalized;
         numEnemies = 0;
