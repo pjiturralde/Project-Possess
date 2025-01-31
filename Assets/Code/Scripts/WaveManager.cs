@@ -108,9 +108,9 @@ public class WaveManager : MonoBehaviour {
         GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(weaponIndex, 50);
         armedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
 
-        int shinyRoll = Random.Range(0, 5); // 1 in 5 is shiny?
+        int shinyRoll = Random.Range(0, 10); // 1 in 5 is shiny?
 
-        if (shinyRoll == 5) {
+        if (shinyRoll == 0) {
             EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
             enemyWeapon.isShiny = true;
         }
