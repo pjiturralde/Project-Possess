@@ -64,7 +64,7 @@ public class ItemManager : MonoBehaviour {
         if (currentHit != hit.collider) {
 
             if (currentHit != null) {
-                if (currentHit.CompareTag("Item")) {
+                if (currentHit.CompareTag("Item") || currentHit.CompareTag("Wizard")) {
                     currentItemSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
 
                     currentItemSpriteRenderer.material = defaultMaterial;
@@ -76,7 +76,7 @@ public class ItemManager : MonoBehaviour {
             if (currentHit != null) {
                 SpriteRenderer enemyWeaponSpriteRenderer;
 
-                if (hit.collider.CompareTag("Item")) {
+                if (hit.collider.CompareTag("Item") || hit.collider.CompareTag("Wizard")) {
                     enemyWeaponSpriteRenderer = hit.collider.GetComponent<SpriteRenderer>();
 
                     defaultMaterial = enemyWeaponSpriteRenderer.material;
@@ -133,15 +133,18 @@ public class ItemManager : MonoBehaviour {
 
                         bool ableToEquip = false;
 
+                        int index = 0;
+
                         while (ableToEquip == false) {
                             int randomIndex = Random.Range(0, allItemNames.Count);
 
                             if (CountItemOccurrences(allItemNames[randomIndex]) < allItems[allItemNames[randomIndex]]) {
                                 ableToEquip = true;
+                                index = randomIndex;
                             }
-
-                            itemName = allItemNames[randomIndex];
                         }
+
+                        itemName = allItemNames[index];
                     }
 
                     currentItems.Add(itemName);

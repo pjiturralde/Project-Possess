@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour {
     private Camera mainCamera;
     private PlayerManager playerManager;
     private PlayerStats playerStats;
+    public int damage;
     private float timer;
     public bool isInitialized;
 
@@ -19,6 +20,7 @@ public class Projectile : MonoBehaviour {
         playerStats = playerManager.GetComponent<PlayerStats>();
         direction = Vector2.zero;
         mainCamera = Camera.main;
+        damage = 20;
         isInitialized = true;
     }
 
@@ -79,7 +81,7 @@ public class Projectile : MonoBehaviour {
                 weaponStats = playerWeapon.GetComponent<WeaponStats>();
             }
 
-            weaponStats.TakeDamage(5);
+            weaponStats.TakeDamage(damage);
             poolManager.DisableInstance(gameObject);
         }
     }

@@ -67,6 +67,8 @@ public class InfiniteTilemap : MonoBehaviour {
         TeleportAllEnemies(offset);
         TeleportAllProjectiles(offset);
         TeleportAllWeapons(offset);
+        TeleportAllItems(offset);
+        TeleportWizard(offset);
     }
 
     public void TeleportAllEnemies(Vector3 offset) {
@@ -102,5 +104,21 @@ public class InfiniteTilemap : MonoBehaviour {
 
             weaponTransform.position = weaponTransform.position + offset;
         }
+    }
+
+    public void TeleportAllItems(Vector3 offset) {
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+
+        foreach (GameObject item in items) {
+            Transform itemTransform = item.transform;
+
+            itemTransform.position = itemTransform.position + offset;
+        }
+    }
+
+    public void TeleportWizard(Vector3 offset) {
+        GameObject wizard = GameObject.FindGameObjectWithTag("Wizard");
+
+        wizard.transform.position = wizard.transform.position + offset;
     }
 }

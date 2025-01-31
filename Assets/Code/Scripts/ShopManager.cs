@@ -5,6 +5,7 @@ public class ShopManager : MonoBehaviour {
     public static ShopManager instance { get; private set; }
 
     private PlayerManager playerManager;
+    private WaveManager waveManager;
 
     public GameObject wizardPrefab;
     public GameObject[] passivePrefabs;
@@ -25,6 +26,7 @@ public class ShopManager : MonoBehaviour {
 
     private void Start() {
         playerManager = PlayerManager.instance;
+        waveManager = WaveManager.instance;
     }
 
     public void SpawnWizard() {
@@ -97,6 +99,8 @@ public class ShopManager : MonoBehaviour {
         for (int i = 0; i < items.Length; i++) {
             Destroy(items[i]);
         }
+
+        waveManager.isInRecess = false;
     }
 
     private bool HasItem(GameObject prefab, GameObject[] currentItems) {
