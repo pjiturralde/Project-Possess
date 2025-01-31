@@ -12,7 +12,7 @@ public class WaveManager : MonoBehaviour {
         playerManager = PlayerManager.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         rangedEnemyPool = RangedEnemyPool.instance;
-        spawnTimer = 1f;
+        spawnTimer = 10f;
     }
 
     private void Update() {

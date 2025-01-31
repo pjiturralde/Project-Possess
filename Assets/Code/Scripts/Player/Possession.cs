@@ -22,6 +22,7 @@ public class Possession : MonoBehaviour {
     public GameObject playerParticles;
     public TextMeshPro possessionTimer;
     public TextMeshPro possessionTimerText;
+    private ItemManager itemManager;
 
     public GameObject playerAxe;
     public GameObject playerSword;
@@ -36,6 +37,7 @@ public class Possession : MonoBehaviour {
         unarmedMeleeEnemyPool = UnarmedMeleeEnemyPool.instance;
         quickTimeEventManager = QuickTimeEventManager.instance;
         durabilityManager = DurabilityManager.instance;
+        itemManager = playerManager.GetComponent<ItemManager>();
         weaponToSteal = null;
     }
 
@@ -137,6 +139,11 @@ public class Possession : MonoBehaviour {
                     weaponToSteal = currentHit;
                     cinemachineCamera.Follow = weaponToSteal.transform;
                     Time.timeScale = 0.3f;
+
+                    if (itemManager.HasItem("SpiritConductor")) {
+                        difficulty = (int)Mathf.Clamp(difficulty - 1, 0f, 2f);
+                    }
+
                     quickTimeEventManager.Activate(difficulty);
                 }
             }

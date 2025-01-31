@@ -47,7 +47,7 @@ public class PlayerStats : MonoBehaviour {
         AttackRate = 0; // 0.1 is 10% less cooldown, yes i know very confusing idk
         CritChance = 5; // represents 5%
         isPossessing = false;
-        Money = 0;
+        Money = 1000;
         Luck = 0;
         ExtraSpeed = 0;
         WeaponLuck = 0;
