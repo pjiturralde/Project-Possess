@@ -12,7 +12,7 @@ public class Spear : MonoBehaviour {
     private float ATTACK_RANGE; // how far the attack should go
     private float attackTime; // how long it takes for the attack animation to complete
     private float timeHeld; // how long left click is held down
-    private bool attacking; // whether the attack animation is playing or not
+    public bool attacking; // whether the attack animation is playing or not
     private bool canHit;
     private bool onCooldown; // whether the attack is on cooldown or not
 

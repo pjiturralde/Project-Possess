@@ -1,30 +1,68 @@
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour {
+    public static WaveManager instance { get; private set; }
+
+    private ShopManager shopManager;
+
     private float spawnTimer;
+    public int enemiesKilled;
+    private int enemiesToKill;
+    private int totalCurrentEnemies;
+    private int totalEnemies;
+    private int waveDifficulty;
+    private int waveNumber;
+    private bool isInRecess;
     PlayerManager playerManager;
     ArmedMeleeEnemyPool armedMeleeEnemyPool;
     RangedEnemyPool rangedEnemyPool;
 
+    void Awake() {
+        if (instance != null && instance != this) {
+            Destroy(gameObject);
+            return;
+        }
 
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start() {
+        waveDifficulty = 1;
         playerManager = PlayerManager.instance;
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         rangedEnemyPool = RangedEnemyPool.instance;
-        spawnTimer = 10f;
+        shopManager = ShopManager.instance;
+        totalEnemies = 0;
+        enemiesKilled = 0;
+        totalCurrentEnemies = 0;
+        spawnTimer = 1000000f;
+
+        Invoke(nameof(YoLeaveHerAlone), 1);
+    }
+
+    public void YoLeaveHerAlone() {
+        shopManager.SpawnWizard();
     }
 
     private void Update() {
-        if (spawnTimer > 0) {
-            spawnTimer -= Time.deltaTime;
+        enemiesToKill = 100;
+        totalCurrentEnemies = totalEnemies;
 
-            if (spawnTimer <= 0) {
-                spawnTimer = 5f;
+        Debug.Log(totalCurrentEnemies);
+        if (enemiesKilled <= enemiesToKill) {
+            if (spawnTimer > 0) {
+                spawnTimer -= Time.deltaTime;
 
-                SpawnArmedEnemy();
-                SpawnRangedEnemy();
+                if (spawnTimer <= 0) {
+                    spawnTimer = 5f;
+
+                    SpawnArmedEnemy();
+                    SpawnRangedEnemy();
+                }
             }
+        } else {
+            isInRecess = true;
         }
     }
 
@@ -45,6 +83,8 @@ public class WaveManager : MonoBehaviour {
             EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
             enemyWeapon.isShiny = true;
         }
+
+        totalEnemies++;
     }
 
     private void SpawnRangedEnemy() {
@@ -55,5 +95,7 @@ public class WaveManager : MonoBehaviour {
 
         GameObject rangedEnemy = rangedEnemyPool.GetInstance(50);
         rangedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
+
+        totalEnemies++;
     }
 }

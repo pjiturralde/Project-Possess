@@ -158,8 +158,10 @@ public class RangedEnemyBehaviour : MonoBehaviour {
                 Vector2 direction = transform.position - enemy.transform.position;
                 float distance = direction.magnitude;
 
-                if (distance < applyForceDistance) {
-                    seperationForce += direction.normalized / distance;
+                if (distance >= 0.1f) {
+                    if (distance < applyForceDistance) {
+                        seperationForce += direction.normalized / distance;
+                    }
                 }
             }
         }

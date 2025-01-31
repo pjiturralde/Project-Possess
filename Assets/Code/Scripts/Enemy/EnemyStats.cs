@@ -11,6 +11,7 @@ public class EnemyStats : MonoBehaviour {
     private ItemManager itemManager;
     private PlayerStats playerStats;
     private EnemyWeapon enemyWeapon;
+    private WaveManager waveManager;
     public GameObject damagePopUpPrefab;
 
     private Material defaultMaterial;
@@ -21,6 +22,8 @@ public class EnemyStats : MonoBehaviour {
     public GameObject axePrefab;
     public GameObject swordPrefab;
     public GameObject spearPrefab;
+
+    public GameObject fireParticles;
 
     // Core stats
     public float MaxHealth = 50;
@@ -61,6 +64,7 @@ public class EnemyStats : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         itemManager = playerManager.GetComponent<ItemManager>();
+        waveManager = WaveManager.instance;
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         defaultMaterial = new Material(Shader.Find("Sprites/Default"));
@@ -93,6 +97,7 @@ public class EnemyStats : MonoBehaviour {
     public void SetOnFire() {
         if (!isOnFire) {
             isOnFire = true;
+            fireParticles.SetActive(true);
             fireTimer = 3; // 3 seconds on fire!
 
             for (int i = 0; i < 3; i++) {
@@ -102,7 +107,20 @@ public class EnemyStats : MonoBehaviour {
     }
 
     public void FireTick() {
-        LoseHealth(2);
+        float damage = 2;
+
+        GameObject damagePopUp = Instantiate(damagePopUpPrefab);
+
+        TextMeshPro tmp = damagePopUp.GetComponent<TextMeshPro>();
+
+        tmp.text = damage.ToString();
+
+        damagePopUp.transform.position = transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
+
+        Health -= (damage - (damage * Defense));
+
+        spriteRenderer.material = damagedMaterial;
+        Invoke(nameof(ResetMaterial), 0.1f);
     }
 
     public void Petrify() {
@@ -121,6 +139,7 @@ public class EnemyStats : MonoBehaviour {
 
                 if (fireTimer < 0) {
                     isOnFire = false;
+                    fireParticles.SetActive(false);
                 }
             }
         } else {
@@ -274,5 +293,7 @@ public class EnemyStats : MonoBehaviour {
         } else if (gameObject.CompareTag("UnarmedEnemy")) {
             unarmedMeleeEnemyPool.DisableInstance(gameObject);
         }
+
+        waveManager.enemiesKilled++;
     }
 }

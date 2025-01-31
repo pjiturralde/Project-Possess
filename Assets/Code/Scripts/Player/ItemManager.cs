@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +8,7 @@ using UnityEngine.UI;
 public class ItemManager : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
+    private ShopManager shopManager;
     private Collider2D currentHit;
     private SpriteRenderer currentItemSpriteRenderer;
 
@@ -16,12 +19,20 @@ public class ItemManager : MonoBehaviour {
     private List<string> currentItems;
     private List<string> allItemNames;
 
+    public GameObject itemSummary;
+    public TextMeshPro itemWorthText;
+    public TextMeshPro itemDescriptionText;
+    public TextMeshPro itemTitleText;
+    public GameObject damageIndicator;
+
+
     void Start() {
         currentItemSpriteRenderer = null;
         currentHit = null;
         currentItems = new List<string>();
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
+        shopManager = ShopManager.instance;
 
         allItems = new Dictionary<string, int> {
             {"SharpeningStone", 5},
@@ -74,17 +85,43 @@ public class ItemManager : MonoBehaviour {
             }
         }
 
+        if (hit.collider == null) {
+            if (itemSummary.activeSelf) {
+                itemSummary.SetActive(false);
+            }
+        } else {
+            if (hit.collider.CompareTag("Item")) {
+                if (!itemSummary.activeSelf) {
+                    itemSummary.SetActive(true);
+                }
+                itemSummary.transform.position = mousePos + new Vector2(0, 2);
+
+                Item item = hit.collider.GetComponent<Item>();
+
+                itemWorthText.text = item.Cost.ToString();
+                itemDescriptionText.text = item.Description.ToString();
+
+                string itemTitle = Regex.Replace(item.Name, "(?<!^)([A-Z])", " $1");
+
+                itemTitleText.text = itemTitle;
+            }
+        }
+
         if (currentHit != null && Input.GetMouseButtonDown(0)) {
+            if (currentHit.CompareTag("Wizard")) {
+                shopManager.DespawnWizard();
+            }
+
             if (currentHit.CompareTag("Item")) {
-                currentItemSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
-
-                currentItemSpriteRenderer.material = defaultMaterial;
-
                 Item item = currentHit.GetComponent<Item>();
 
                 string itemName = item.Name;
 
                 if (item.Cost <= playerStats.Money || HasItem("ForgedDeed")) {
+                    currentItemSpriteRenderer = currentHit.GetComponent<SpriteRenderer>();
+
+                    currentItemSpriteRenderer.material = defaultMaterial;
+
                     if (HasItem("ForgedDeed")) {
                         RemoveItem("ForgedDeed"); 
                     } else {
@@ -129,12 +166,19 @@ public class ItemManager : MonoBehaviour {
                     }
 
                     Destroy(currentHit.gameObject);
+                } else {
+                    GameObject dmgIndInstance = Instantiate(damageIndicator);
+                    dmgIndInstance.transform.position = mousePos;
+
+                    TextMeshPro label = dmgIndInstance.GetComponent<TextMeshPro>();
+                    label.text = "You're Broke";
+                    label.color = Color.red;
                 }
             }
         }
     }
 
-    private int CountItemOccurrences(string name) {
+    public int CountItemOccurrences(string name) {
         int count = 0;
 
         for (int i = 0; i < currentItems.Count; i++) {

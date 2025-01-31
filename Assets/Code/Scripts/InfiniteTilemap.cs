@@ -24,28 +24,42 @@ public class InfiniteTilemap : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (player.position.y >= mapSizeY / 2) {
-            rb.linearVelocity = Vector3.zero;
-            player.position = new Vector3(player.position.x, player.position.y - mapSizeY, 0);
-            TeleportEverything(new Vector3(0, -mapSizeY, 0));
+        bool isSpearAttacking = false; // spear literally breaks this
+
+        foreach (Transform child in player) {
+            if (child.gameObject.CompareTag("PlayerWeapon")) {
+                if (child.GetComponent<Spear>() != null) {
+                    Spear spear = child.GetComponent<Spear>();
+
+                    isSpearAttacking = spear.attacking;
+                }
+            }
         }
 
-        if (player.position.y <= -mapSizeY / 2) {
-            rb.linearVelocity = Vector3.zero;
-            player.position = new Vector3(player.position.x, player.position.y + mapSizeY, 0);
-            TeleportEverything(new Vector3(0, mapSizeY, 0));
-        }
+        if (!isSpearAttacking) {
+            if (player.position.y >= mapSizeY / 2) {
+                rb.linearVelocity = Vector3.zero;
+                player.position = new Vector3(player.position.x, player.position.y - mapSizeY, 0);
+                TeleportEverything(new Vector3(0, -mapSizeY, 0));
+            }
 
-        if (player.position.x >= mapSizeX / 2) {
-            rb.linearVelocity = Vector3.zero;
-            player.position = new Vector3(player.position.x - mapSizeX, player.position.y, 0);
-            TeleportEverything(new Vector3(-mapSizeX, 0, 0));
-        }
+            if (player.position.y <= -mapSizeY / 2) {
+                rb.linearVelocity = Vector3.zero;
+                player.position = new Vector3(player.position.x, player.position.y + mapSizeY, 0);
+                TeleportEverything(new Vector3(0, mapSizeY, 0));
+            }
 
-        if (player.position.x <= -mapSizeX / 2) {
-            rb.linearVelocity = Vector3.zero;
-            player.position = new Vector3(player.position.x + mapSizeX, player.position.y, 0);
-            TeleportEverything(new Vector3(mapSizeX, 0, 0));
+            if (player.position.x >= mapSizeX / 2) {
+                rb.linearVelocity = Vector3.zero;
+                player.position = new Vector3(player.position.x - mapSizeX, player.position.y, 0);
+                TeleportEverything(new Vector3(-mapSizeX, 0, 0));
+            }
+
+            if (player.position.x <= -mapSizeX / 2) {
+                rb.linearVelocity = Vector3.zero;
+                player.position = new Vector3(player.position.x + mapSizeX, player.position.y, 0);
+                TeleportEverything(new Vector3(mapSizeX, 0, 0));
+            }
         }
     }
 
