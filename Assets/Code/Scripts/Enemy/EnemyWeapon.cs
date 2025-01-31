@@ -50,6 +50,8 @@ public class EnemyWeapon : MonoBehaviour {
             difficulty = 1;
         }
 
+        isShiny = false;
+
         GameObject shiny = transform.Find("ShinyParticles").gameObject;
 
         if (isShiny) {

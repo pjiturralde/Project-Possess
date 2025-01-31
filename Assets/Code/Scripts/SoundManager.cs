@@ -12,7 +12,12 @@ public enum SoundType {
 public class SoundManager : MonoBehaviour {
     public static SoundManager instance { get; private set; }
 
-    private AudioSource audioSource;
+    public AudioSource SFXSource;
+    public AudioSource musicSource;
+
+    public AudioClip music1;
+    public AudioClip music2;
+    public AudioClip music3;
     [SerializeField] private AudioClip[] soundList;
 
     void Awake() {
@@ -22,10 +27,15 @@ public class SoundManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
-    public static void PlaySound(SoundType sound, float volume = 1) {
-        instance.audioSource.PlayOneShot(instance.soundList[(int)sound], volume);
+    private void Start() {
+        musicSource.clip = music1;
+        musicSource.Play();
+    }
+
+    public static void PlaySound(SoundType sound, float pitchBase, float volume = 1) {
+        instance.SFXSource.pitch = pitchBase + (float)Random.Range(-10, 15) / 100;
+        instance.SFXSource.PlayOneShot(instance.soundList[(int)sound], volume);
     }
 }

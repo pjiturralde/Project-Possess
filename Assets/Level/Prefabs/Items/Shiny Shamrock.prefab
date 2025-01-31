@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: ShinyShamrock
   Description: Increases gold drop chance.
-  Cost: 15
+  Cost: 7
 --- !u!61 &7459441331056722498
 BoxCollider2D:
   m_ObjectHideFlags: 0

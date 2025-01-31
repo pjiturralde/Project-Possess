@@ -90,6 +90,7 @@ public class Axe : MonoBehaviour {
 
     void StartAllowingHit() {
         canHit = true;
+        SoundManager.PlaySound(SoundType.AXE, 1, 0.1f);
     }
 
     void StopAllowingHit() {

@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: SwiftBoot
   Description: Increases movement speed.
-  Cost: 15
+  Cost: 10
 --- !u!61 &6939468183510642386
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -16,7 +16,6 @@ public class RangedEnemyPool : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
 
         for (int i = 0; i < poolSize; i++) {
             GameObject RangedEnemyInstance = Instantiate(RangedEnemyPrefab, transform);

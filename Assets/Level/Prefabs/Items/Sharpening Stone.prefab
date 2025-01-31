@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: SharpeningStone
   Description: Increases attack damage.
-  Cost: 15
+  Cost: 7
 --- !u!61 &2497692972100391806
 BoxCollider2D:
   m_ObjectHideFlags: 0

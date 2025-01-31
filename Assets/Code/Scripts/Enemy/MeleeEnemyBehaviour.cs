@@ -282,6 +282,8 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
                 weaponStats.TakeDamage(enemyWeapon.damage);
             }
         }
+
+        SoundManager.PlaySound(SoundType.SWORD, 1.1f, 0.3f);
     }
 
     private void stopAttacking() { // sets isAttacking to false

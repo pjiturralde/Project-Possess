@@ -17,7 +17,6 @@ public class ProjectilePoolManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
 
         for (int i = 0; i < poolSize; i++) {
             GameObject projectileInstance = Instantiate(projectilePrefab, transform);

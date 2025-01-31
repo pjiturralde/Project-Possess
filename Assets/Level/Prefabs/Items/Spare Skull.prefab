@@ -104,8 +104,7 @@ MonoBehaviour:
   Name: SpareSkull
   Description: Returns you to maximum health upon reaching minimum health. Consumed
     on use.
-  Cost: 15
-  Consumable: 1
+  Cost: 7
 --- !u!61 &2362129890934000831
 BoxCollider2D:
   m_ObjectHideFlags: 0

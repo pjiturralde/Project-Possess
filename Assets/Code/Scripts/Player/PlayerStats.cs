@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour {
@@ -8,6 +9,11 @@ public class PlayerStats : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
     public Material defaultMaterial;
     public Material damagedMaterial;
+    
+    private WaveManager waveManager;
+
+    public GameObject loseScreen;
+    public TextMeshPro killCount;
 
     // Current weapon reference -- idk why i said this ignore
     // add later once weapons added
@@ -53,6 +59,7 @@ public class PlayerStats : MonoBehaviour {
         WeaponLuck = 0;
         Defense = 0;
         itemManager = GetComponent<ItemManager>();
+        waveManager = WaveManager.instance;
         extraSpeedTimer = 2; // Escape plan item will run for 2 seconds when hit
     }
 
@@ -108,6 +115,8 @@ public class PlayerStats : MonoBehaviour {
             }
         }
 
+        SoundManager.PlaySound(SoundType.BONE_IMPACT, 1, 0.1f);
+
         spriteRenderer.material = damagedMaterial;
         Invoke(nameof(ResetMaterial), 0.1f);
 
@@ -140,6 +149,9 @@ public class PlayerStats : MonoBehaviour {
             itemManager.RemoveItem("SpareSkull");
             Health = MaxHealth;
         } else {
+            loseScreen.SetActive(true);
+            killCount.text = "You killed " + waveManager.totalEnemiesKilled.ToString() + " enemies";
+            gameObject.SetActive(false);
             // DIE!
         }
     }

@@ -10,13 +10,16 @@ public class WaveManager : MonoBehaviour {
     public int enemiesKilled;
     private int enemiesToKill;
     private int totalCurrentEnemies;
+    public int totalEnemiesKilled;
     private int totalEnemies;
     private int waveDifficulty;
-    private int waveNumber;
+    public int waveNumber;
     public bool isInRecess;
     PlayerManager playerManager;
     ArmedMeleeEnemyPool armedMeleeEnemyPool;
     RangedEnemyPool rangedEnemyPool;
+
+    private float mageOnlyTimer; // timer when only mages are on the scene
 
     private int baseEnemiesToKill;
     private float baseTimer;
@@ -28,7 +31,6 @@ public class WaveManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start() {
@@ -36,17 +38,19 @@ public class WaveManager : MonoBehaviour {
         armedMeleeEnemyPool = ArmedMeleeEnemyPool.instance;
         rangedEnemyPool = RangedEnemyPool.instance;
         shopManager = ShopManager.instance;
-        baseEnemiesToKill = 20;
+        baseEnemiesToKill = 10;
         baseTimer = 4f;
         totalEnemies = 0;
+        totalEnemiesKilled = 0;
         enemiesKilled = 0;
         totalCurrentEnemies = 0;
         waveNumber = 0;
         spawnTimer = baseTimer;
+        mageOnlyTimer = 3;
     }
 
     private void Update() {
-        enemiesToKill = baseEnemiesToKill + waveNumber * 10;
+        enemiesToKill = baseEnemiesToKill + waveNumber * 7;
         totalCurrentEnemies = totalEnemies - enemiesKilled;
 
         if (!isInRecess) {
@@ -57,7 +61,7 @@ public class WaveManager : MonoBehaviour {
                     if (spawnTimer <= 0) {
                         spawnTimer = baseTimer - waveNumber * 0.3f;
 
-                        int random = Random.Range(0, 3);
+                        int random = Random.Range(0, 2);
 
                         if (random == 0) {
                             SpawnArmedEnemy();
@@ -65,6 +69,22 @@ public class WaveManager : MonoBehaviour {
                             SpawnRangedEnemy();
                         }
                     }
+
+                    GameObject[] armedEnemies = GameObject.FindGameObjectsWithTag("ArmedEnemy");
+                    GameObject[] rangedEnemies = GameObject.FindGameObjectsWithTag("RangedEnemy");
+
+                    if (armedEnemies.Length == 0 && rangedEnemies.Length >= 0) {
+                        if (mageOnlyTimer > 0) {
+                            mageOnlyTimer -= Time.deltaTime;
+
+                            if (mageOnlyTimer <= 0) {
+                                SpawnArmedEnemy();
+                            }
+                        }
+                    } else {
+                        mageOnlyTimer = 3;
+                    }
+
                 }
             } else {
                 isInRecess = true;
@@ -72,26 +92,20 @@ public class WaveManager : MonoBehaviour {
                 waveNumber++;
                 shopManager.SpawnWizard();
 
-                GameObject[] weapons = GameObject.FindGameObjectsWithTag("FreeWeapon");
-
-                for (int i = 0; i < weapons.Length; i++) {
-                    Destroy(weapons[i]);
-                }
-
                 GameObject[] armedEnemies = GameObject.FindGameObjectsWithTag("ArmedEnemy");
                 GameObject[] unarmedEnemies = GameObject.FindGameObjectsWithTag("UnarmedEnemy");
                 GameObject[] rangedEnemies = GameObject.FindGameObjectsWithTag("RangedEnemy");
 
                 for (int i = 0; i < armedEnemies.Length; i++) {
-                    Destroy(armedEnemies[i]);
+                    armedMeleeEnemyPool.DisableInstance(armedEnemies[i]);
                 }
 
                 for (int i = 0; i < unarmedEnemies.Length; i++) {
-                    Destroy(unarmedEnemies[i]);
+                    armedMeleeEnemyPool.DisableInstance(unarmedEnemies[i]);
                 }
 
                 for (int i = 0; i < rangedEnemies.Length; i++) {
-                    Destroy(rangedEnemies[i]);
+                    rangedEnemyPool.DisableInstance(rangedEnemies[i]);
                 }
             }
         }

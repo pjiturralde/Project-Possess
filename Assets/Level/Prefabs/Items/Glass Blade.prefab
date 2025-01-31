@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336975ca2911fc6479b9244974e06141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: FrighteningFlame
+  Name: GlassBlade
   Description: Drastically increases attack damage. Attacking reduces weapon durability.
   Cost: 15
 --- !u!61 &8473367228745290988

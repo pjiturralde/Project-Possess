@@ -21,7 +21,6 @@ public class ShopManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start() {
@@ -37,12 +36,24 @@ public class ShopManager : MonoBehaviour {
         GameObject wizardInstance = Instantiate(wizardPrefab);
         wizardInstance.transform.position = wizardPos;
 
+        GameObject healthPotionInstance = Instantiate(healthPotion);
+
+        healthPotionInstance.transform.position = wizardPos + new Vector3(10, 0, 0);
+
+        Item healthItem = healthPotionInstance.GetComponent<Item>();
+        healthItem.Cost += 5 * (waveManager.waveNumber - 1);
+
+
+
         for (int i = 0; i < 3; i++) {
             bool reroll = true;
 
             GameObject passivePrefab = null;
 
+            int timesRolled = 0;
+
             while (reroll) {
+                timesRolled++;
                 int randomItem = Random.Range(0, passivePrefabs.Length);
 
                 Item item = passivePrefabs[randomItem].GetComponent<Item>();
@@ -56,12 +67,25 @@ public class ShopManager : MonoBehaviour {
                         reroll = false;
                     }
                 }
+
+                if (timesRolled >= 10) {
+                    break;
+                }
+            }
+
+            if (timesRolled >= 10) {
+                break;
             }
 
             GameObject passiveInstance = Instantiate(passivePrefab);
 
             passiveInstance.transform.position = wizardPos + new Vector3(6 + i, 0, 0);
+
+            Item passiveItem = passiveInstance.GetComponent<Item>();
+            passiveItem.Cost += 5 * (waveManager.waveNumber - 1);
         }
+
+        int timesRolled2 = 0;
 
         for (int i = 0; i < 2; i++) {
             bool reroll = true;
@@ -69,6 +93,7 @@ public class ShopManager : MonoBehaviour {
             GameObject consumablePrefab = null;
 
             while (reroll) {
+                timesRolled2++;
                 int randomItem = Random.Range(0, consumablePrefabs.Length);
 
                 Item item = consumablePrefabs[randomItem].GetComponent<Item>();
@@ -82,11 +107,22 @@ public class ShopManager : MonoBehaviour {
                         reroll = false;
                     }
                 }
+
+                if (timesRolled2 >= 10) {
+                    break;
+                }
+            }
+
+            if (timesRolled2 >= 10) {
+                break;
             }
 
             GameObject consumableInstance = Instantiate(consumablePrefab);
 
             consumableInstance.transform.position = wizardPos + new Vector3(3 + i, 0, 0);
+
+            Item consumableItem = consumableInstance.GetComponent<Item>();
+            consumableItem.Cost += 5 * (waveManager.waveNumber - 1);
         }
     }
 
@@ -98,6 +134,12 @@ public class ShopManager : MonoBehaviour {
 
         for (int i = 0; i < items.Length; i++) {
             Destroy(items[i]);
+        }
+
+        GameObject[] weapons = GameObject.FindGameObjectsWithTag("FreeWeapon");
+
+        for (int i = 0; i < weapons.Length; i++) {
+            Destroy(weapons[i]);
         }
 
         waveManager.isInRecess = false;

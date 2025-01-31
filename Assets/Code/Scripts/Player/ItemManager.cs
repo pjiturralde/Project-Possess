@@ -46,9 +46,9 @@ public class ItemManager : MonoBehaviour {
             {"VampireFangs", 1},
             {"SwiftBoot", 10},
             {"EscapePlan", 1},
-            {"ShinyShamrock", 12},
+            {"ShinyShamrock", 5},
             {"ForgedDeed", 1},
-            {"MilitaryMagnet", 12},
+            {"MilitaryMagnet", 5},
             {"SpiritConductor", 2},
             {"TransmutationDevice", 1}
         };
@@ -147,25 +147,29 @@ public class ItemManager : MonoBehaviour {
                         itemName = allItemNames[index];
                     }
 
-                    currentItems.Add(itemName);
+                    if (!(itemName == "HealthPotion")) {
+                        currentItems.Add(itemName);
+                    }
 
                     if (itemName == "SharpeningStone") {
                         playerStats.DamageMultiplier += 0.1f; // adds 10% damage :]
                     } else if (itemName == "HarpyFeather") {
-                        playerStats.AttackRate += 0.05f; // lowers cooldown by 5%
+                        playerStats.AttackRate += 0.1f; // lowers cooldown by 10%
                     } else if (itemName == "RabbitFoot") {
                         playerStats.CritChance += 3; // 3% increase in crit chance
                     } else if (itemName == "GrassBlade") {
                         playerStats.DamageMultiplier += 0.5f; // adds a whopping 50% damage O::: but careful you get hurt when you attack now!
                     } else if (itemName == "SwiftBoot") {
-                        playerStats.MovementSpeed += 0.1f; // flat increase of 0.1 :0:
+                        playerStats.MovementSpeed += 0.15f; // flat increase of 0.15 :0:
                     } else if (itemName == "TurtleShell") {
-                        playerStats.Defense += 0.1f; // 10% damage reduction (in weapon form) :]
+                        playerStats.Defense += 0.15f; // 15% damage reduction (in weapon form) :]
                         playerStats.MovementSpeed -= 0.05f; // flat decrease of 0.05 ;)
                     } else if (itemName == "ShinyShamrock") {
-                        playerStats.Luck += 2; // adds 2% higher chance for gold to drop :]
+                        playerStats.Luck += 5; // adds 5% higher chance for gold to drop :]
                     } else if (itemName == "MilitaryMagnet") {
-                        playerStats.WeaponLuck += 2; // adds 2% chance for weapon to drop :D
+                        playerStats.WeaponLuck += 5; // adds 2% chance for weapon to drop :D
+                    } else if (itemName == "HealthPotion") {
+                        playerStats.Heal(10000);
                     }
 
                     Destroy(currentHit.gameObject);

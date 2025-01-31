@@ -70,6 +70,8 @@ public class RangedEnemyAttack : MonoBehaviour {
         float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
         projectile.transform.rotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
         projectile.SetDirection(Quaternion.AngleAxis(randomizedShootAngle, Vector3.forward) * playerDirection);
+
+        SoundManager.PlaySound(SoundType.PROJECTILE, 0.7f, 0.3f);
     }
 
     private Vector2 predictedPosition(Vector2 startPos, float projectileSpeed, Vector2 targetPos, Vector2 targetVelocity) {

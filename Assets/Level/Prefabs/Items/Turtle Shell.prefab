@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: TurtleShell
   Description: Increases weapon durability. Slightly reduces movement speed.
-  Cost: 15
+  Cost: 10
 --- !u!61 &6485491178408264162
 BoxCollider2D:
   m_ObjectHideFlags: 0

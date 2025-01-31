@@ -117,8 +117,10 @@ public class InfiniteTilemap : MonoBehaviour {
     }
 
     public void TeleportWizard(Vector3 offset) {
-        GameObject wizard = GameObject.FindGameObjectWithTag("Wizard");
+        if (GameObject.FindGameObjectWithTag("Wizard") != null) {
+            GameObject wizard = GameObject.FindGameObjectWithTag("Wizard");
 
-        wizard.transform.position = wizard.transform.position + offset;
+            wizard.transform.position = wizard.transform.position + offset;
+        }
     }
 }

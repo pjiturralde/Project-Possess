@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: HarpyFeather
   Description: Increases attack speed.
-  Cost: 15
+  Cost: 10
 --- !u!61 &1461542297550698646
 BoxCollider2D:
   m_ObjectHideFlags: 0

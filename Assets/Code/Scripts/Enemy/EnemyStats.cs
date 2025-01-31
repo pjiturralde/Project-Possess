@@ -65,6 +65,7 @@ public class EnemyStats : MonoBehaviour {
         playerStats = playerManager.GetComponent<PlayerStats>();
         itemManager = playerManager.GetComponent<ItemManager>();
         waveManager = WaveManager.instance;
+        fireParticles.SetActive(false);
 
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         defaultMaterial = new Material(Shader.Find("Sprites/Default"));
@@ -181,6 +182,8 @@ public class EnemyStats : MonoBehaviour {
             return false;
         }
 
+        SoundManager.PlaySound(SoundType.METAL_IMPACT, 1, 0.1f);
+
         LoseHealth(damage * playerStats.DamageMultiplier);
         TriggerInvulnerability();
 
@@ -295,5 +298,6 @@ public class EnemyStats : MonoBehaviour {
         }
 
         waveManager.enemiesKilled++;
+        waveManager.totalEnemiesKilled++;
     }
 }

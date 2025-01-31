@@ -16,7 +16,6 @@ public class ArmedMeleeEnemyPool : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
 
         for (int i = 0; i < poolSize; i++) {
             GameObject ArmedMeleeEnemyInstance = Instantiate(ArmedMeleeEnemyPrefab, transform);

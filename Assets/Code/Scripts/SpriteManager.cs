@@ -13,7 +13,6 @@ public class SpriteManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public Sprite GetSprite(string name) {

@@ -76,6 +76,8 @@ public class Sword : MonoBehaviour {
                 transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
 
                 Invoke(nameof(StopAttacking), 0.6f);
+
+                SoundManager.PlaySound(SoundType.SWORD, 1.3f, 0.1f);
             }
 
             Debug.Log(canAttack);

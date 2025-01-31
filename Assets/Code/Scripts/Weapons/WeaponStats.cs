@@ -72,6 +72,8 @@ public class WeaponStats : MonoBehaviour {
         spriteRenderer.material = damagedMaterial;
         Invoke(nameof(ResetMaterial), 0.1f);
 
+        SoundManager.PlaySound(SoundType.METAL_IMPACT, 1.1f, 0.1f);
+
         LoseDurability(damage);
         TriggerInvulnerability();
     }

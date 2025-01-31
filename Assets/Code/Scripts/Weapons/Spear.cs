@@ -6,6 +6,7 @@ public class Spear : MonoBehaviour {
     private PlayerManager playerManager;
     private PlayerStats playerStats;
     private ItemManager itemManager;
+    private SoundManager soundManager;
     private WeaponStats weaponStats;
     private LineRenderer line;
 
@@ -114,6 +115,7 @@ public class Spear : MonoBehaviour {
 
     private void AllowHit() {
         canHit = true;
+        SoundManager.PlaySound(SoundType.SPEAR, 1, 0.1f);
     }
 
     private void StopHit() {

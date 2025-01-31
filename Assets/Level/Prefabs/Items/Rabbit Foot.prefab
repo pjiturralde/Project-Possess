@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: RabbitFoot
   Description: Increases critical hit chance.
-  Cost: 15
+  Cost: 10
 --- !u!61 &8744516407354402043
 BoxCollider2D:
   m_ObjectHideFlags: 0

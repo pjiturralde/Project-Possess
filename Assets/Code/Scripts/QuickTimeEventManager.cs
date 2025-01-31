@@ -27,7 +27,6 @@ public class QuickTimeEventManager : MonoBehaviour {
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start() {
@@ -43,14 +42,14 @@ public class QuickTimeEventManager : MonoBehaviour {
 
         if (difficulty == 0) { // zero is the noobest difficulty
             baseMoveSpeed = 400f;
-            safeZone.sizeDelta = new Vector2(50, safeZone.rect.height);
+            safeZone.sizeDelta = new Vector2(60, safeZone.rect.height);
             numWinsNeeded = 2;
         } else if (difficulty == 1) {
             baseMoveSpeed = 450f;
-            safeZone.sizeDelta = new Vector2(40, safeZone.rect.height);
+            safeZone.sizeDelta = new Vector2(45, safeZone.rect.height);
             numWinsNeeded = 3;
         } else if (difficulty == 2) {
-            baseMoveSpeed = 600f;
+            baseMoveSpeed = 500f;
             safeZone.sizeDelta = new Vector2(25, safeZone.rect.height);
             numWinsNeeded = 3;
         }
