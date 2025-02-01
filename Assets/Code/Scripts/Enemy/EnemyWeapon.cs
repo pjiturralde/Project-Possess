@@ -1,7 +1,5 @@
 using DG.Tweening;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class EnemyWeapon : MonoBehaviour {
     private PlayerManager playerManager;

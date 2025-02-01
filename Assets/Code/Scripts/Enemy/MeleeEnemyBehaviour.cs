@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using Unity.Jobs;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MeleeEnemyBehaviour : MonoBehaviour {
     // References
