@@ -7,7 +7,7 @@ public class Spear : MonoBehaviour {
     private PlayerStats playerStats;
     private ItemManager itemManager;
     private SoundManager soundManager;
-    private WeaponStats weaponStats;
+    private WeaponStats stats;
     private LineRenderer line;
 
     private float ATTACK_RANGE; // how far the attack should go
@@ -22,7 +22,7 @@ public class Spear : MonoBehaviour {
         playerManager = PlayerManager.instance;
         playerStats = playerManager.GetComponent<PlayerStats>();
         itemManager = playerManager.GetComponent<ItemManager>();
-        weaponStats = GetComponent<WeaponStats>();
+        stats = GetComponent<WeaponStats>();
         line = GetComponent<LineRenderer>();
 
         ATTACK_RANGE = 5;
@@ -31,6 +31,8 @@ public class Spear : MonoBehaviour {
         attacking = false;
         onCooldown = false;
         canHit = false;
+
+        stats.Speed = 0.8f;
     }
 
     // Update is called once per frame
@@ -65,11 +67,11 @@ public class Spear : MonoBehaviour {
                 attacking = true;
                 onCooldown = true;
                 line.enabled = false;
-                playerManager.transform.DOMove(targetPosition, attackTime).SetEase(Ease.InOutBack);
-                Invoke(nameof(AllowHit), 0.3f);
-                Invoke(nameof(StopHit), attackTime - 0.1f);
-                Invoke(nameof(StopAttacking), attackTime);
-                Invoke(nameof(EndCooldown),weaponStats.cooldown);
+                playerManager.transform.DOMove(targetPosition, attackTime * stats.Speed).SetEase(Ease.InOutBack);
+                Invoke(nameof(AllowHit), 0.3f * stats.Speed);
+                Invoke(nameof(StopHit), (attackTime - 0.1f) * stats.Speed);
+                Invoke(nameof(StopAttacking), attackTime * stats.Speed);
+                Invoke(nameof(EndCooldown),stats.cooldown);
             }
         }
     }
@@ -78,17 +80,9 @@ public class Spear : MonoBehaviour {
     private void OnTriggerExit2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
-            if (enemy.TakeDamage(weaponStats.Damage)) {
+            if (enemy.TakeDamage(stats.Damage)) {
                 if (itemManager.HasItem("GlassBlade")) {
-                    weaponStats.Durability -= 2; // a flat 2 damage per hit hmm
-                }
-
-                if (itemManager.HasItem("FrighteningFlame")) {
-                    enemy.SetOnFire();
-                }
-
-                if (itemManager.HasItem("PetrifyingPebble")) {
-                    enemy.Petrify();
+                    stats.LoseDurability(2); // a flat 2 damage per hit hmm
                 }
             }
         }
@@ -97,9 +91,9 @@ public class Spear : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision) {
         if ((collision.CompareTag("ArmedEnemy") || collision.CompareTag("RangedEnemy") || collision.CompareTag("UnarmedEnemy")) && canHit) {
             EnemyStats enemy = collision.GetComponent<EnemyStats>();
-            if (enemy.TakeDamage(weaponStats.Damage)) {
+            if (enemy.TakeDamage(stats.Damage)) {
                 if (itemManager.HasItem("GlassBlade")) {
-                    weaponStats.Durability -= 2; // a flat 2 damage per hit hmm
+                    stats.Durability -= 2; // a flat 2 damage per hit hmm
                 }
 
                 if (itemManager.HasItem("FrighteningFlame")) {

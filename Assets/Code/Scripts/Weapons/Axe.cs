@@ -28,6 +28,7 @@ public class Axe : MonoBehaviour {
         playerStats = playerManager.GetComponent<PlayerStats>();
         itemManager = playerManager.GetComponent<ItemManager>();
 
+        stats.Speed = 0.8f;
         path = GenerateCirclePoints(radius, 10);
     }
 
@@ -58,24 +59,23 @@ public class Axe : MonoBehaviour {
             if (canAttack) {
                 for (int i = 0; i < path.Length; i++) {
                     newPath[i] = Quaternion.AngleAxis(angle - 90, Vector3.forward) * path[i];
-                    //path[i] = new Vector3(path[i].x * -1, path[i].y, 0);
                 }
 
                 attacking = true;
                 canAttack = false;
-                Invoke(nameof(StartAllowingHit), 0.3f);
-                Invoke(nameof(StopAllowingHit), 0.9f);
+                Invoke(nameof(StartAllowingHit), 0.4f * stats.Speed);
+                Invoke(nameof(StopAllowingHit), 0.8f * stats.Speed);
 
                 Sequence sequence1 = DOTween.Sequence();
-                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, -radius, 0), 0.3f));
-                sequence1.Append(transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom));
-                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, 0, 0), 0.3f));
+                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, -radius, 0), 0.3f * stats.Speed));
+                sequence1.Append(transform.DOLocalPath(newPath, 0.6f * stats.Speed, PathType.CatmullRom));
+                sequence1.Append(transform.DOLocalMove(Quaternion.AngleAxis(angle - 90, Vector3.forward) * new Vector3(0, 0, 0), 0.3f * stats.Speed));
 
                 Sequence sequence2 = DOTween.Sequence();
-                sequence2.AppendInterval(0.3f);
-                sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 360), 0.6f, RotateMode.LocalAxisAdd));
+                sequence2.AppendInterval(0.3f * stats.Speed);
+                sequence2.Append(transform.DOLocalRotate(new Vector3(0, 0, 360), 0.6f * stats.Speed, RotateMode.LocalAxisAdd));
 
-                Invoke(nameof(StopAttacking), 1.2f);
+                Invoke(nameof(StopAttacking), 1.2f * stats.Speed);
             }
         }
 
@@ -108,15 +108,7 @@ public class Axe : MonoBehaviour {
 
             if (enemy.TakeDamage(stats.Damage)) {
                 if (itemManager.HasItem("GlassBlade")) {
-                    stats.Durability -= 2; // a flat 2 damage per hit hmm
-                }
-
-                if (itemManager.HasItem("FrighteningFlame")) {
-                    enemy.SetOnFire();
-                }
-
-                if (itemManager.HasItem("PetrifyingPebble")) {
-                    enemy.Petrify();
+                    stats.LoseDurability(2); // a flat 2 damage per hit hmm
                 }
             }
         }

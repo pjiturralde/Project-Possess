@@ -29,6 +29,8 @@ public class Sword : MonoBehaviour {
         playerStats = playerManager.GetComponent<PlayerStats>();
         itemManager = playerManager.GetComponent<ItemManager>();
 
+        stats.Speed = 0.8f;
+
         path = new Vector3[] {
             new Vector3(-0.5f, 0, 0),
             new Vector3(-1f, 1.5f, 0),
@@ -70,12 +72,12 @@ public class Sword : MonoBehaviour {
                 }
 
                 attacking = true;
-                Invoke(nameof(StartAllowingHit), 0.1f);
-                Invoke(nameof(StopAllowingHit), 0.5f);
+                Invoke(nameof(StartAllowingHit), 0.1f * stats.Speed);
+                Invoke(nameof(StopAllowingHit), 0.5f * stats.Speed);
                 canAttack = false;
-                transform.DOLocalPath(newPath, 0.6f, PathType.CatmullRom);
+                transform.DOLocalPath(newPath, 0.6f * stats.Speed, PathType.CatmullRom);
 
-                Invoke(nameof(StopAttacking), 0.6f);
+                Invoke(nameof(StopAttacking), 0.6f * stats.Speed);
 
                 SoundManager.PlaySound(SoundType.SWORD, 1.3f, 0.1f);
             }
@@ -111,15 +113,7 @@ public class Sword : MonoBehaviour {
 
             if (enemy.TakeDamage(stats.Damage)) {
                 if (itemManager.HasItem("GlassBlade")) {
-                    stats.Durability -= 2; // a flat 2 damage per hit hmm
-                }
-
-                if (itemManager.HasItem("FrighteningFlame")) {
-                    enemy.SetOnFire();
-                }
-
-                if (itemManager.HasItem("PetrifyingPebble")) {
-                    enemy.Petrify();
+                    stats.LoseDurability(2); // a flat 2 damage per hit hmm
                 }
             }
         }

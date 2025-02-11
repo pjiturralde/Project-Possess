@@ -155,7 +155,7 @@ public class WaveManager : MonoBehaviour {
 
         Vector3 enemySpawnOffset = Quaternion.AngleAxis(angle, Vector3.forward) * Vector2.up * radius;
 
-        GameObject rangedEnemy = rangedEnemyPool.GetInstance(50);
+        GameObject rangedEnemy = rangedEnemyPool.GetInstance(25);
         rangedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
 
         totalEnemies++;

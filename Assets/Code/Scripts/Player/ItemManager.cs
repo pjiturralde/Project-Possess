@@ -157,7 +157,7 @@ public class ItemManager : MonoBehaviour {
                         playerStats.AttackRate += 0.1f; // lowers cooldown by 10%
                     } else if (itemName == "RabbitFoot") {
                         playerStats.CritChance += 3; // 3% increase in crit chance
-                    } else if (itemName == "GrassBlade") {
+                    } else if (itemName == "GlassBlade") {
                         playerStats.DamageMultiplier += 0.5f; // adds a whopping 50% damage O::: but careful you get hurt when you attack now!
                     } else if (itemName == "SwiftBoot") {
                         playerStats.MovementSpeed += 0.15f; // flat increase of 0.15 :0:

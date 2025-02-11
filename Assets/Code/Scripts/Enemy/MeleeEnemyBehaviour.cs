@@ -284,7 +284,6 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
     }
 
     private void stopAttacking() { // sets isAttacking to false
-        Debug.Log("SCROBIDI");
         isAttacking = false;
     }
 

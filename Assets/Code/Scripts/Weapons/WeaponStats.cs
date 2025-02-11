@@ -20,6 +20,7 @@ public class WeaponStats : MonoBehaviour {
     public float Durability;
     public float Damage;
     public bool isShiny;
+    public float Speed;
 
     // Cooldowns
     private bool Invulnerable;
@@ -91,7 +92,7 @@ public class WeaponStats : MonoBehaviour {
         invulnerabilityDuration = invulnerableTime;
     }
 
-    private void LoseDurability(float amount) {
+    public void LoseDurability(float amount) {
         Durability -= amount - (amount * playerStats.Defense); // Defense 0.1 is 10% damage reduction
 
         if (Durability <= 0) {

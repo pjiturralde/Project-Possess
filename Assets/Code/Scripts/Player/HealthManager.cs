@@ -18,11 +18,9 @@ public class HealthManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (!playerStats.isPossessing) {
-            if (playerStats.Health != healthAmount) {
-                healthAmount = playerStats.Health;
-                health.fillAmount = healthAmount / playerStats.MaxHealth;
-            }
+        if (playerStats.Health != healthAmount) {
+            healthAmount = playerStats.Health;
+            health.fillAmount = healthAmount / playerStats.MaxHealth;
         }
     }
 }

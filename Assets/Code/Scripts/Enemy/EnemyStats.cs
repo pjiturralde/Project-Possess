@@ -127,6 +127,10 @@ public class EnemyStats : MonoBehaviour {
     public void Petrify() {
         if (!isPetrified) {
             isPetrified = true;
+
+            ReducedSpeed = 1f;
+            Defense = 0.1f; // enemy now takes 10% less damage! D:
+
             petrifiedTimer = 3; // 3 seconds petrified! O:
         }
     }
@@ -148,9 +152,6 @@ public class EnemyStats : MonoBehaviour {
         }
 
         if (isPetrified) {
-            ReducedSpeed = 0.5f;
-            Defense = 0.1f; // enemy now takes 10% less damage! D:
-
             if (petrifiedTimer > 0) {
                 petrifiedTimer -= Time.deltaTime;
 
@@ -182,6 +183,14 @@ public class EnemyStats : MonoBehaviour {
             return false;
         }
 
+        if (itemManager.HasItem("FrighteningFlame")) {
+            SetOnFire();
+        }
+
+        if (itemManager.HasItem("PetrifyingPebble")) {
+            Petrify();
+        }
+
         SoundManager.PlaySound(SoundType.METAL_IMPACT, 1, 0.1f);
 
         LoseHealth(damage * playerStats.DamageMultiplier);
@@ -209,11 +218,13 @@ public class EnemyStats : MonoBehaviour {
             tmp.color = Color.red;
         }
 
+        damage = damage - (damage * Defense);
+
         tmp.text = damage.ToString();
 
         damagePopUp.transform.position = transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
 
-        Health -= (damage - (damage * Defense));
+        Health -= (damage);
 
         spriteRenderer.material = damagedMaterial;
         Invoke(nameof(ResetMaterial), 0.1f);
@@ -240,6 +251,7 @@ public class EnemyStats : MonoBehaviour {
 
     private void Die() {
         Debug.Log("Enemy has died");
+
         int dropRoll = Random.Range(1, 101);
 
         if (dropRoll <= 25 + playerStats.Luck) { // 25% chance to drop coins + Luck and 25% chance to drop weapon -- Luck caps out :)
@@ -291,10 +303,24 @@ public class EnemyStats : MonoBehaviour {
 
         if (gameObject.CompareTag("RangedEnemy")) {
             rangedEnemyPool.DisableInstance(gameObject);
+
+            RangedEnemyBehaviour rangedEnemyBehaviour = gameObject.GetComponent<RangedEnemyBehaviour>();
+            RangedEnemyAttack rangedEnemyAttack = gameObject.GetComponent<RangedEnemyAttack>();
+
+            rangedEnemyBehaviour.CancelInvoke();
+            rangedEnemyAttack.CancelInvoke();
         } else if (gameObject.CompareTag("ArmedEnemy")) {
             armedMeleeEnemyPool.DisableInstance(gameObject);
+
+            MeleeEnemyBehaviour meleeEnemyBehaviour = gameObject.GetComponent<MeleeEnemyBehaviour>();
+
+            meleeEnemyBehaviour.CancelInvoke();
         } else if (gameObject.CompareTag("UnarmedEnemy")) {
             unarmedMeleeEnemyPool.DisableInstance(gameObject);
+
+            UnarmedMeleeEnemyBehaviour unarmedMeleeEnemyBehaviour = gameObject.GetComponent<UnarmedMeleeEnemyBehaviour>();
+
+            unarmedMeleeEnemyBehaviour.CancelInvoke();
         }
 
         waveManager.enemiesKilled++;
