@@ -82,15 +82,7 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
         numEnemies = 0;
 
         if (!isAttacking && !isWindingUp) {
-            if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
-                bodySpriteRenderer.flipX = true;
-                shoulderSpriteRenderer.flipX = true;
-                weapon.ChangeDirection();
-            } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
-                bodySpriteRenderer.flipX = false;
-                shoulderSpriteRenderer.flipX = false;
-                weapon.ChangeDirection();
-            }
+            UpdateXDirection();
         }
 
         foreach (GameObject enemy in enemies) {
@@ -121,6 +113,18 @@ public class MeleeEnemyBehaviour : MonoBehaviour {
             if (changeCirclingDirTimer > 0) {
                 changeCirclingDirTimer -= Time.deltaTime;
             }
+        }
+    }
+
+    public void UpdateXDirection() {
+        if (playerDirection.x < 0 && !bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = true;
+            shoulderSpriteRenderer.flipX = true;
+            weapon.ChangeDirection();
+        } else if (playerDirection.x >= 0 && bodySpriteRenderer.flipX) {
+            bodySpriteRenderer.flipX = false;
+            shoulderSpriteRenderer.flipX = false;
+            weapon.ChangeDirection();
         }
     }
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -313,8 +314,12 @@ public class EnemyStats : MonoBehaviour {
             armedMeleeEnemyPool.DisableInstance(gameObject);
 
             MeleeEnemyBehaviour meleeEnemyBehaviour = gameObject.GetComponent<MeleeEnemyBehaviour>();
+            EnemyWeapon enemyWeapon = gameObject.GetComponentInChildren<EnemyWeapon>();
 
             meleeEnemyBehaviour.CancelInvoke();
+            enemyWeapon.CancelInvoke();
+            enemyWeapon.ResetZOrder();
+            DOTween.Kill(enemyWeapon.transform);
         } else if (gameObject.CompareTag("UnarmedEnemy")) {
             unarmedMeleeEnemyPool.DisableInstance(gameObject);
 
@@ -322,6 +327,10 @@ public class EnemyStats : MonoBehaviour {
 
             unarmedMeleeEnemyBehaviour.CancelInvoke();
         }
+
+        CancelInvoke();
+
+        ResetMaterial();
 
         waveManager.enemiesKilled++;
         waveManager.totalEnemiesKilled++;

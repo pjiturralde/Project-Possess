@@ -196,7 +196,21 @@ public class Possession : MonoBehaviour {
             meleeEnemyBehaviour.CancelInvoke();
 
             GameObject armedEnemy = weaponToSteal.gameObject;
-            GameObject unarmedEnemy = unarmedMeleeEnemyPool.GetInstance(armedEnemy.GetComponent<EnemyStats>().Health);
+            EnemyStats armedEnemyStats = armedEnemy.GetComponent<EnemyStats>();
+
+            GameObject unarmedEnemy = unarmedMeleeEnemyPool.GetInstance(armedEnemyStats.Health);
+            EnemyStats unarmedEnemyStats = unarmedEnemy.GetComponent<EnemyStats>();
+
+/*            if (armedEnemyStats.isOnFire) {
+                unarmedEnemyStats.SetOnFire();
+            }
+
+            if (armedEnemyStats.isPetrified) {
+                unarmedEnemyStats.Petrify();
+            }
+            unarmedEnemyStats.isOnFire = armedEnemyStats.isOnFire;
+            unarmedEnemyStats.isPetrified = armedEnemyStats.isPetrified;*/ // TRANSITIVITY FOR PETRIFICATION AND ON FIRE!!
+
             unarmedEnemy.transform.position = armedEnemy.transform.position;
 
             // copy over all their stats yo!

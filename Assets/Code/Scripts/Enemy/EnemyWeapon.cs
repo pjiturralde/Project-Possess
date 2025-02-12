@@ -80,7 +80,7 @@ public class EnemyWeapon : MonoBehaviour {
 
         weaponSpriteRenderer.sprite = spriteManager.GetSprite(weaponArray[weaponIndex]);
 
-        Invoke(nameof(ChangeDirection), 0.1f);
+        ChangeDirection();
         isInitialized = true;
     }
 
@@ -128,6 +128,7 @@ public class EnemyWeapon : MonoBehaviour {
     }
 
     private void UpdateSwingPosition() {
+        meleeEnemyBehaviour.UpdateXDirection();
         xDirection = GetXDirection();
 
         transform.localPosition = new Vector2((0.07f + weaponOffset.x) * xDirection, 0.02f + weaponOffset.y);
@@ -190,6 +191,12 @@ public class EnemyWeapon : MonoBehaviour {
         }
 
         return xDirection;
+    }
+
+    public void ResetZOrder() {
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+
+        renderer.sortingOrder = 0;
     }
 
     private void ReverseZOrder() {
