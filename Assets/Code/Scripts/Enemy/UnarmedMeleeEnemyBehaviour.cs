@@ -169,6 +169,10 @@ void Update() {
                     enemyWeapon.difficulty = freeWeaponStats.difficulty;
                     enemyWeapon.durability = freeWeaponStats.durability;
 
+                    if (freeWeaponStats.isShiny) {
+                        enemyWeapon.MakeShiny();
+                    }
+
                     Destroy(nearestWeapon);
                     unarmedMeleeEnemyPool.DisableInstance(gameObject);
                 }

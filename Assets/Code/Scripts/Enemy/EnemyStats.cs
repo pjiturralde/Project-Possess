@@ -274,7 +274,10 @@ public class EnemyStats : MonoBehaviour {
                 weaponStats.damage = enemyWeapon.damage;
                 weaponStats.durability = enemyWeapon.durability;
                 weaponStats.difficulty = enemyWeapon.difficulty;
-                weaponStats.isShiny = enemyWeapon.isShiny;
+
+                if (enemyWeapon.isShiny) {
+                    weaponStats.MakeShiny();
+                }
 
                 weapon.transform.position = transform.position;
                 weapon.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);

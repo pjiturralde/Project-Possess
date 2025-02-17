@@ -66,9 +66,11 @@ public class RangedEnemyAttack : MonoBehaviour {
 
         // set speed before direction
         projectile.SetSpeed(projectileSpeed);
-        Vector3 targetDir = Quaternion.AngleAxis(randomizedShootAngle + Random.Range(1, 3) * 90, Vector3.forward) * playerDirection;
+        /*Vector3 targetDir = Quaternion.AngleAxis(randomizedShootAngle + Random.Range(1, 3) * 90, Vector3.forward) * playerDirection;*/
+        Vector3 targetDir = Quaternion.AngleAxis(randomizedShootAngle - 90, Vector3.forward) * playerDirection;
         float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
-        projectile.transform.rotation = Quaternion.Euler(0, 0, Random.Range(1, 360));
+        projectile.transform.rotation = Quaternion.Euler(0, 0, targetAngle);
+        /*projectile.transform.rotation = Quaternion.Euler(0, 0, Random.Range(1, 360));*/
         projectile.SetDirection(Quaternion.AngleAxis(randomizedShootAngle, Vector3.forward) * playerDirection);
 
         SoundManager.PlaySound(SoundType.PROJECTILE, 0.7f, 0.3f);

@@ -111,7 +111,15 @@ public class QuickTimeEventManager : MonoBehaviour {
         numWins++;
 
         // Check if the pointer is within the safe zone
-        if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerTransform.position, null)) {
+        Vector2 pointerScreenPos = RectTransformUtility.WorldToScreenPoint(null, pointerTransform.position);
+
+        float widthInScreen = Vector2.Distance(
+            RectTransformUtility.WorldToScreenPoint(null, pointerTransform.TransformPoint(new Vector3(pointerTransform.rect.width, 0, 0))),
+            RectTransformUtility.WorldToScreenPoint(null, pointerTransform.TransformPoint(Vector3.zero))
+        );
+
+        if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerScreenPos - new Vector2(widthInScreen / 2, 0), null) 
+            || RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerScreenPos + new Vector2(widthInScreen / 2, 0), null)) {
             if (numWins == numWinsNeeded) {
                 possessionScript.StealWeapon();
                 Deactivate();

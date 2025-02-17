@@ -9,11 +9,9 @@ public class FreeWeaponStats : MonoBehaviour {
     public int difficulty = 0;
     public int weaponIndex; // 0 axe, 1 sword, 2 spear
 
-    private void Start() {
+    public void MakeShiny() {
         GameObject shiny = transform.Find("ShinyParticles").gameObject;
-
-        if (isShiny) {
-            shiny.SetActive(true);
-        }
+        shiny.SetActive(true);
+        isShiny = true;
     }
 }

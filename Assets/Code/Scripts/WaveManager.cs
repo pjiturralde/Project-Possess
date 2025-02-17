@@ -64,7 +64,13 @@ public class WaveManager : MonoBehaviour {
                         int random = Random.Range(0, 2);
 
                         if (random == 0) {
-                            SpawnArmedEnemy();
+                            int shinyRoll = Random.Range(0, 1); // 1 in 5 is shiny?
+
+                            if (shinyRoll == 0) {
+                                SpawnShinyArmedEnemy();
+                            } else {
+                                SpawnArmedEnemy();
+                            }
                         } else {
                             SpawnRangedEnemy();
                         }
@@ -122,13 +128,6 @@ public class WaveManager : MonoBehaviour {
         GameObject armedEnemy = armedMeleeEnemyPool.GetInstance(weaponIndex, 50);
         armedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
 
-        int shinyRoll = Random.Range(0, 10); // 1 in 5 is shiny?
-
-        if (shinyRoll == 0) {
-            EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
-            enemyWeapon.isShiny = true;
-        }
-
         totalEnemies++;
     }
 
@@ -144,7 +143,8 @@ public class WaveManager : MonoBehaviour {
         armedEnemy.transform.position = playerManager.transform.position + enemySpawnOffset;
 
         EnemyWeapon enemyWeapon = armedEnemy.transform.Find("Weapon").GetComponent<EnemyWeapon>();
-        enemyWeapon.isShiny = true;
+        enemyWeapon.MakeShiny();
+        enemyWeapon.damage += 10;
 
         totalEnemies++;
     }

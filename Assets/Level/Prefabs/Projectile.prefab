@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 101
-  m_Sprite: {fileID: -2431959938248434726, guid: 90b886406e22f6d4cb923ef9a647da39, type: 3}
+  m_Sprite: {fileID: -3685640182042435801, guid: f0b95459dbaf93d4dbd63082e1ca4b42, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 902965303b29f934fb66555c0cdc6b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
   isInitialized: 0
 --- !u!58 &6428464638696415628
 CircleCollider2D:
@@ -184,7 +185,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4533717359588365355
 Transform:
   m_ObjectHideFlags: 0

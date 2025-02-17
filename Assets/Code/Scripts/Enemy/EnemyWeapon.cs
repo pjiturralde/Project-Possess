@@ -50,17 +50,6 @@ public class EnemyWeapon : MonoBehaviour {
 
         isShiny = false;
 
-        GameObject shiny = transform.Find("ShinyParticles").gameObject;
-
-        if (isShiny) {
-            damage += 10;
-            shiny.SetActive(true);
-        } else {
-            if (shiny.activeSelf) {
-                shiny.SetActive(false);
-            }
-        }
-
         path = GeneratePartCirclePoints(0.08f, 5);
 
         spriteManager = SpriteManager.instance;
@@ -82,6 +71,12 @@ public class EnemyWeapon : MonoBehaviour {
 
         ChangeDirection();
         isInitialized = true;
+    }
+
+    public void MakeShiny() {
+        GameObject shiny = transform.Find("ShinyParticles").gameObject;
+        shiny.SetActive(true);
+        isShiny = true;
     }
 
     public void SetWeapon(int weaponIndex) {
