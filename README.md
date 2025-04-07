@@ -1,2 +1,1 @@
-Created for Pirate Software - Game Jam 16
-dripknight.itch.io/project-possess
+Created for Pirate Software - Game Jam 16, LINK: https://dripknight.itch.io/project-possess
